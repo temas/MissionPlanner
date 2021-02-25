@@ -1365,11 +1365,10 @@ namespace MissionPlanner.GCSViews
 
                     lbl_distance.Text = rm.GetString("lbl_distance.Text") + ": " +
                                                        FormatDistance((
-                                                                          overlay.route.Points.Select(a => (PointLatLngAlt)a)
-                                                                              .Aggregate(0.0, (d, p1, p2) => d + p1.GetDistance(p2)) +
-                                                                          overlay.homeroute.Points.Select(a => (PointLatLngAlt)a)
-                                                                              .Aggregate(0.0, (d, p1, p2) => d + p1.GetDistance(p2))) /
-                                                                      1000.0, false);
+                                                                          overlay.overlay.Routes.SelectMany(a=>a.Points)
+                                                                              .Select(a => (PointLatLngAlt)a)
+                                                                              .Aggregate(0.0, (d, p1, p2) => d + p1.GetDistance(p2))
+                                                           ) / 1000.0, false);
 
                     setgradanddistandaz(overlay.pointlist, home);
 
@@ -3370,6 +3369,29 @@ namespace MissionPlanner.GCSViews
             }
         }
 
+        void DoGeofencePointsUpload(IProgressReporterDialogue PRD)
+        {
+            // points + return + close
+            byte pointcount = (byte)(drawnpolygon.Points.Count + 2);
+
+            byte a = 0;
+            // add return loc
+            PRD.UpdateProgressAndStatus(0, "Sending return location");
+            MainV2.comPort.setFencePoint(a, new PointLatLngAlt(geofenceoverlay.Markers[0].Position), pointcount);
+            a++;
+            // add points
+            foreach (var pll in drawnpolygon.Points)
+            {
+                PRD.UpdateProgressAndStatus(a / pointcount * 100, "Sending polygon points");
+                MainV2.comPort.setFencePoint(a, new PointLatLngAlt(pll), pointcount);
+                a++;
+            }
+
+            // add polygon close
+            PRD.UpdateProgressAndStatus(a / pointcount * 100, "Sending polygon close");
+            MainV2.comPort.setFencePoint(a, new PointLatLngAlt(drawnpolygon.Points[0]), pointcount);
+        }
+
         public void GeoFenceuploadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             polygongridmode = false;
@@ -3488,19 +3510,17 @@ namespace MissionPlanner.GCSViews
 
             try
             {
-                byte a = 0;
-                // add return loc
-                MainV2.comPort.setFencePoint(a, new PointLatLngAlt(geofenceoverlay.Markers[0].Position), pointcount);
-                a++;
-                // add points
-                foreach (var pll in drawnpolygon.Points)
+                IProgressReporterDialogue frmProgressReporter = new ProgressReporterDialogue
                 {
-                    MainV2.comPort.setFencePoint(a, new PointLatLngAlt(pll), pointcount);
-                    a++;
-                }
+                    StartPosition = FormStartPosition.CenterScreen,
+                    Text = "Sending fence points"
+                };
 
-                // add polygon close
-                MainV2.comPort.setFencePoint(a, new PointLatLngAlt(drawnpolygon.Points[0]), pointcount);
+                frmProgressReporter.DoWork += DoGeofencePointsUpload;
+                frmProgressReporter.UpdateProgressAndStatus(-1, "Sending fence points");
+                ThemeManager.ApplyThemeTo(frmProgressReporter);
+                frmProgressReporter.RunBackgroundOperationAsync();
+                frmProgressReporter.Dispose();
 
                 try
                 {
@@ -5919,14 +5939,19 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
             InputBox.Show("Enter String", "Enter String (requires 1CamBam_Stick_3 font)", ref text);
             string size = "5";
             InputBox.Show("Enter size", "Enter size", ref size);
-
+            string rotation = "0";
+            InputBox.Show("Enter rotation", "Enter rotation", ref rotation);
+            
             using (Font font = new System.Drawing.Font("1CamBam_Stick_3", float.Parse(size) * 1.35f, FontStyle.Regular))
             using (GraphicsPath gp = new GraphicsPath())
             using (StringFormat sf = new StringFormat())
+            using (System.Drawing.Drawing2D.Matrix tr = new System.Drawing.Drawing2D.Matrix())
             {
                 sf.Alignment = StringAlignment.Near;
                 sf.LineAlignment = StringAlignment.Near;
                 gp.AddString(text, font.FontFamily, (int)font.Style, font.Size, new PointF(0, 0), sf);
+                tr.Rotate(float.Parse(rotation));
+                gp.Transform(tr);
 
                 utmpos basepos = new utmpos(MouseDownStart);
 

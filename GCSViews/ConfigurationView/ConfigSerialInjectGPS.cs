@@ -426,7 +426,11 @@ namespace MissionPlanner.GCSViews.ConfigurationView
                 ubx_m8p.SetupM8P(comPort, chk_m8p_130p.Checked, chk_movingbase.Checked);
 
                 if (basepos != PointLatLngAlt.Zero)
+                {
+                    ubx_m8p.SetupBasePos(comPort, basepos, 0, 0, true, chk_movingbase.Checked);
+
                     ubx_m8p.SetupBasePos(comPort, basepos, 0, 0, false, chk_movingbase.Checked);
+                }
 
                 CMB_baudrate.Text = "460800";
 
@@ -976,13 +980,40 @@ namespace MissionPlanner.GCSViews.ConfigurationView
             }
         }
 
+        /// <summary>
+        /// Returns true if everything in the list is using the same mavlink version, else false.
+        /// </summary>
+        /// <param name="ML">The list.</param>
+        /// <returns></returns>
+        private static bool GetAreAllUsingSameMavlinkVersion(Mavlink.MAVList ML)
+        {
+            return !ML.Any(M => M.mavlinkv2 != ML.First().mavlinkv2);
+        }
+
+        /// <summary>
+        /// Returns true if the gps data can just be sent once, otherwise false.
+        /// </summary>
+        /// <param name="ML">The mav list.</param>
+        /// <returns>true if can send once, otherwise false.</returns>
+        private static bool GetCanJustSendOnce(Mavlink.MAVList ML)
+        {
+            //RTCM message has no target id so only needs to be sent once.
+            return rtcm_msg && GetAreAllUsingSameMavlinkVersion(ML);
+        }
+
         private static void sendData(byte[] data, ushort length)
         {
             foreach (var port in MainV2.Comports)
             {
+                bool CanJustSendOnce = GetCanJustSendOnce(port.MAVlist);
+
                 foreach (var MAV in port.MAVlist)
                 {
                     port.InjectGpsData(MAV.sysid, MAV.compid, data, length, rtcm_msg);
+                    if (CanJustSendOnce)
+                    {
+                        break;
+                    }
                 }
             }
         }

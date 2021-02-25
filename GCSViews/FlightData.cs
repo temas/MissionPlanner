@@ -138,6 +138,18 @@ namespace MissionPlanner.GCSViews
 
         string updateBindingSourceThreadName = "";
 
+        public enum actions
+        {
+            Loiter_Unlim,
+            Return_To_Launch,
+            Preflight_Calibration,
+            Mission_Start,
+            Preflight_Reboot_Shutdown,
+            Trigger_Camera,
+            System_Time,
+            Battery_Reset
+        }
+
         public FlightData()
         {
             log.Info("Ctor Start");
@@ -226,23 +238,7 @@ namespace MissionPlanner.GCSViews
                 }
             }
 
-
-            List<string> list = new List<string>();
-
-            {
-                list.Add("LOITER_UNLIM");
-                list.Add("RETURN_TO_LAUNCH");
-                list.Add("PREFLIGHT_CALIBRATION");
-                list.Add("MISSION_START");
-                list.Add("PREFLIGHT_REBOOT_SHUTDOWN");
-                list.Add("Trigger Camera NOW");
-                list.Add("SYSTEM_TIME");
-                //DO_SET_SERVO
-                //DO_REPEAT_SERVO
-            }
-
-
-            CMB_action.DataSource = list;
+            CMB_action.DataSource = Enum.GetNames(typeof(actions));
 
             CMB_modes.DataSource = ArduPilot.Common.getModesList(MainV2.comPort.MAV.cs.firmware);
             CMB_modes.ValueMember = "Key";
@@ -476,6 +472,10 @@ namespace MissionPlanner.GCSViews
             {
                 hud1.batteryon = false;
             }
+
+            //Check if we want to display calculated battery cell voltage
+            hud1.displayCellVoltage = Settings.Instance.GetBoolean("HUD_showbatterycell", false);
+            hud1.batterycellcount = Settings.Instance.GetInt32("HUD_batterycellcount", 0);
         }
 
         public void CreateChart(ZedGraphControl zgc)
@@ -1543,7 +1543,7 @@ namespace MissionPlanner.GCSViews
         {
             try
             {
-                if (CMB_action.Text == "Trigger Camera NOW")
+                if (CMB_action.Text == actions.Trigger_Camera.ToString())
                 {
                     MainV2.comPort.setDigicamControl(true);
                     return;
@@ -1555,7 +1555,7 @@ namespace MissionPlanner.GCSViews
                 return;
             }
 
-            if (CMB_action.Text == "SYSTEM_TIME")
+            if (CMB_action.Text == actions.System_Time.ToString())
             {
                 var now = DateTime.UtcNow;
                 var epoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
@@ -1583,29 +1583,38 @@ namespace MissionPlanner.GCSViews
                     ((Control) sender).Enabled = false;
 
                     int param1 = 0;
+                    int param2 = 0;
                     int param3 = 1;
 
                     // request gyro
-                    if (CMB_action.Text == "PREFLIGHT_CALIBRATION")
+                    if (CMB_action.Text == actions.Preflight_Calibration.ToString())
                     {
                         if (MainV2.comPort.MAV.cs.firmware == Firmwares.ArduCopter2)
                             param1 = 1; // gyro
                         param3 = 1; // baro / airspeed
                     }
 
-                    if (CMB_action.Text == "PREFLIGHT_REBOOT_SHUTDOWN")
+                    if (CMB_action.Text == actions.Preflight_Reboot_Shutdown.ToString())
                     {
                         param1 = 1; // reboot
                     }
 
-                    if (MainV2.comPort.doCommand((MAVLink.MAV_CMD) Enum.Parse(typeof(MAVLink.MAV_CMD), CMB_action.Text),
-                        param1, 0, param3, 0, 0, 0, 0))
+                    if (CMB_action.Text == actions.Battery_Reset.ToString())
+                    {
+                        param1 = 0xff; // batt 1
+                        param2 = 100; // 100%
+                        param3 = 0;
+                    }
+
+                    var cmd = (MAVLink.MAV_CMD) Enum.Parse(typeof(MAVLink.MAV_CMD), CMB_action.Text.ToUpper());
+
+                    if (MainV2.comPort.doCommand(cmd, param1, param2, param3, 0, 0, 0, 0))
                     {
 
                     }
                     else
                     {
-                        CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
+                        CustomMessageBox.Show(Strings.CommandFailed + " " + cmd, Strings.ERROR);
                     }
                 }
                 catch
@@ -2057,6 +2066,7 @@ namespace MissionPlanner.GCSViews
 
         void dropout_FormClosed(object sender, FormClosedEventArgs e)
         {
+            (sender as Form).SaveStartupLocation();
             //GetFormFromGuid(GetOrCreateGuid("fd_hud_guid")).Controls.Add(hud1);
             SubMainLeft.Panel1.Controls.Add(hud1);
             SubMainLeft.Panel1Collapsed = false;
@@ -2159,17 +2169,24 @@ namespace MissionPlanner.GCSViews
             }
 
             //Remove it later, do not need
-            //groundColorToolStripMenuItem.Checked = Settings.Instance.GetBoolean("groundColorToolStripMenuItem");
-            //groundColorToolStripMenuItem_Click(null, null);
+            groundColorToolStripMenuItem.Checked = Settings.Instance.GetBoolean("groundColorToolStripMenuItem");
+            groundColorToolStripMenuItem_Click(null, null);
 
             hud1.doResize();
 
             prop = new Propagation(gMapControl1);
 
-            thisthread = new Thread(mainloop);
-            thisthread.Name = "FD Mainloop";
-            thisthread.IsBackground = true;
-            thisthread.Start();
+            try
+            {
+                thisthread = new Thread(mainloop);
+                thisthread.Name = "FD Mainloop";
+                thisthread.IsBackground = true;
+                thisthread.Start();
+            }
+            catch (NotSupportedException)
+            {
+                mainloop();
+            }
         }
 
         private void FlightData_ParentChanged(object sender, EventArgs e)
@@ -2686,11 +2703,13 @@ namespace MissionPlanner.GCSViews
 
             SubMainLeft.Panel1Collapsed = true;
             Form dropout = new Form();
+            dropout.Text = "HUD Dropout";
             dropout.Size = new Size(hud1.Width, hud1.Height + 20);
             SubMainLeft.Panel1.Controls.Remove(hud1);
             dropout.Controls.Add(hud1);
             dropout.Resize += dropout_Resize;
             dropout.FormClosed += dropout_FormClosed;
+            dropout.RestoreStartupLocation();
             dropout.Show();
             huddropout = true;
         }
@@ -2698,6 +2717,8 @@ namespace MissionPlanner.GCSViews
         private void hud1_ekfclick(object sender, EventArgs e)
         {
             EKFStatus frm = new EKFStatus();
+            frm.RestoreStartupLocation();
+            frm.FormClosed += (a, e2) => frm.SaveStartupLocation();
             frm.TopMost = true;
             frm.Show();
         }
@@ -2717,6 +2738,8 @@ namespace MissionPlanner.GCSViews
         private void hud1_vibeclick(object sender, EventArgs e)
         {
             Vibration frm = new Vibration();
+            frm.RestoreStartupLocation();
+            frm.FormClosed += (a, e2) => frm.SaveStartupLocation();
             frm.TopMost = true;
             frm.Show();
         }
@@ -3011,7 +3034,7 @@ namespace MissionPlanner.GCSViews
                     // update opengltest
                     if (OpenGLtest.instance != null)
                     {
-                        OpenGLtest.instance.rpy = new OpenTK.Vector3(MainV2.comPort.MAV.cs.roll,
+                        OpenGLtest.instance.rpy = new Vector3(MainV2.comPort.MAV.cs.roll,
                             MainV2.comPort.MAV.cs.pitch,
                             MainV2.comPort.MAV.cs.yaw);
                         OpenGLtest.instance.LocationCenter = new PointLatLngAlt(MainV2.comPort.MAV.cs.lat,
@@ -3022,7 +3045,7 @@ namespace MissionPlanner.GCSViews
                     // update opengltest2
                     if (OpenGLtest2.instance != null)
                     {
-                        OpenGLtest2.instance.rpy = new OpenTK.Vector3(MainV2.comPort.MAV.cs.roll,
+                        OpenGLtest2.instance.rpy = new Vector3(MainV2.comPort.MAV.cs.roll,
                             MainV2.comPort.MAV.cs.pitch,
                             MainV2.comPort.MAV.cs.yaw);
                         OpenGLtest2.instance.LocationCenter = new PointLatLngAlt(MainV2.comPort.MAV.cs.lat,
@@ -3477,7 +3500,7 @@ namespace MissionPlanner.GCSViews
                                     adsbplane.ToolTipText = "ICAO: " + pllau.Tag + "\n" +
                                                             "CallSign: " + pllau.CallSign + "\n" +
                                                             "Squawk: " + Convert.ToString(pllau.Squawk) + "\n" +
-                                                            "Alt: " + pllau.Alt.ToString("0") + "\n" +
+                                                            "Alt: " + (pllau.Alt * CurrentState.multiplieralt).ToString("0") + "\n" +
                                                             "Speed: " + pllau.Speed.ToString("0") + "\n" +
                                                             "Heading: " + pllau.Heading.ToString("0");
                                     adsbplane.ToolTipMode = MarkerTooltipMode.OnMouseOver;
@@ -4078,7 +4101,14 @@ namespace MissionPlanner.GCSViews
                     }
                 }
 
-                GStreamer.StartA(url);
+                try
+                {
+                    GStreamer.StartA(url);
+                }
+                catch (Exception ex)
+                {
+                    CustomMessageBox.Show(ex.ToString(), Strings.ERROR);
+                }
             }
             else
             {
@@ -5181,6 +5211,33 @@ namespace MissionPlanner.GCSViews
             {
                // contextMenuStripMap.Show(gMapControl1, e.Location);
             }
+        }
+
+        private void setBatteryCellCountToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (hud1.displayCellVoltage)
+            {
+                hud1.displayCellVoltage = false;
+                Settings.Instance["HUD_showbatterycell"] = false.ToString();
+                return;
+            }
+
+            string CellCount = "4";
+            int iCellCount;
+
+            if (DialogResult.Cancel == InputBox.Show("Battery Cell Count", "Cell Count", ref CellCount))
+                return;
+            
+            if (!int.TryParse(CellCount, out iCellCount))
+            {
+                CustomMessageBox.Show("Bad Radius");
+                return;
+            }
+            Settings.Instance["HUD_batterycellcount"] = iCellCount.ToString();
+            Settings.Instance["HUD_showbatterycell"] = true.ToString();
+
+            hud1.displayCellVoltage = true;
+            hud1.batterycellcount = iCellCount;
         }
     }
 }

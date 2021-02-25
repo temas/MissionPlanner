@@ -96,11 +96,10 @@ GRBackendRenderTargetDesc backendRenderTargetDescription = new GRBackendRenderTa
 
         public Matrix Transform
         {
-            get => new Matrix(_image.TotalMatrix.ScaleX,_image.TotalMatrix.SkewY, _image.TotalMatrix.SkewX, 
+            get => new Matrix(_image.TotalMatrix.ScaleX,_image.TotalMatrix.SkewX, _image.TotalMatrix.SkewY, 
                 _image.TotalMatrix.ScaleY, _image.TotalMatrix.TransX, _image.TotalMatrix.TransY);
             set
             {
-                var values = value.Data;
                 _image.SetMatrix(new SKMatrix(value.M11, value.M12, value.OffsetX,
                     value.M21, value.M22, value.OffsetY,
                     0, 0, 1));
@@ -655,18 +654,25 @@ GRBackendRenderTargetDesc backendRenderTargetDescription = new GRBackendRenderTa
             //Save the original pen dash style in case we need to change it
             var originalPenDashStyle = pen.DashStyle;
 
-            PointF last = PointF.Empty;
-            foreach (var pathPathPoint in path.PathPoints)
+            path.Flatten();
+
+            int startIndex = 0;
+            int endIndex = 0;
+            bool isClosed = false;
+            var pathData = path.PathData;
+            var iterator = new GraphicsPathIterator(path);
+            var subPaths = iterator.SubpathCount;
+            for (int sp = 0; sp < subPaths; sp++)
             {
-                if (last == PointF.Empty)
-                {
-                    last = pathPathPoint;
-                    continue;
-                }
+                var numOfPoints = iterator.NextSubpath(out startIndex, out endIndex, out isClosed);
 
-                DrawLine(pen, last, pathPathPoint);
+                var subPoints = pathData.Points.Skip(startIndex).Take(numOfPoints).ToList();
+                if (isClosed && numOfPoints > 0)
+                    subPoints.Add(subPoints.First());
 
-                last = pathPathPoint;
+                var subTypes = pathData.Types.Skip(startIndex).Take(numOfPoints).ToArray();
+
+                DrawLines(pen, subPoints.Select(a => new PointF(a.X, a.Y)).ToArray());
             }
 
             pen.DashStyle = originalPenDashStyle;
@@ -819,6 +825,11 @@ GRBackendRenderTargetDesc backendRenderTargetDescription = new GRBackendRenderTa
             {
                 s = AddNewLinesToText(s, (int) (layoutRectangle.Width / MeasureString("A", font).Width));
                 textBounds = MeasureString(s, font);
+            }
+
+            if (format.Trimming == StringTrimming.EllipsisCharacter)
+            {
+                textBounds = layoutRectangle.Size;
             }
 
             pnt.TextSize = fnt.TextSize;
@@ -996,7 +1007,9 @@ GRBackendRenderTargetDesc backendRenderTargetDescription = new GRBackendRenderTa
 
         public void FillPath(Brush brush, GraphicsPath path)
         {
-            FillPolygon(brush, path.PathPoints);
+            path.Flatten();
+
+            _image.DrawPath(path, brush.ToSKPaint());
         }
 
         public void FillPie(Brush brush, Rectangle rect, float startAngle, float sweepAngle)
@@ -1194,7 +1207,10 @@ GRBackendRenderTargetDesc backendRenderTargetDescription = new GRBackendRenderTa
 
         public SizeF MeasureString(string text, Font font, int width, StringFormat format)
         {
-            return MeasureString(text, font, PointF.Empty, StringFormat.GenericDefault);
+            var size = MeasureString(text, font, PointF.Empty, StringFormat.GenericDefault);
+            if (size.Width > width && width != 0)
+                return new Size(width, (int) (Math.Ceiling((size.Width / width) + 1) * font.Height));
+            return size;
         }
 
         public SizeF MeasureString(string text, Font font, SizeF layoutArea, StringFormat stringFormat,
@@ -1248,19 +1264,19 @@ GRBackendRenderTargetDesc backendRenderTargetDescription = new GRBackendRenderTa
 
         public void RotateTransform(float angle)
         {
-            _image.RotateDegrees(angle);
+            RotateTransform(angle, MatrixOrder.Prepend);
         }
 
         public void RotateTransform(float angle, MatrixOrder order)
         {
             if (order == MatrixOrder.Prepend)
-                _image.RotateDegrees(angle);
+                _image.RotateDegrees(angle, 0, 0);
 
             if (order == MatrixOrder.Append)
             {
                 //checkthis
                 var old = _image.TotalMatrix;
-                var extra = SKMatrix.MakeRotation(angle);
+                var extra = SKMatrix.MakeRotation(angle * 0.0174533f);
                 SKMatrix.PreConcat(ref old, extra);
                 _image.SetMatrix(old);
             }

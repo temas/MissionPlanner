@@ -129,6 +129,9 @@ namespace MissionPlanner.Controls
         [System.ComponentModel.Browsable(true), DefaultValue(true)]
         public bool displayAOASSA { get; set; }
 
+        [System.ComponentModel.Browsable(true), DefaultValue(true)]
+        public bool displayCellVoltage { get; set; }
+
         private static ImageCodecInfo ici = GetImageCodec("image/jpeg");
         private static EncoderParameters eps = new EncoderParameters(1);
 
@@ -185,6 +188,7 @@ namespace MissionPlanner.Controls
         private bool _lowairspeed = false;
         private float _targetspeed = 0;
         private float _batterylevel = 0;
+        private int _batterycellcount = 0;
         private float _current = 0;
         private float _batteryremaining = 0;
         private float _gpsfix = 0;
@@ -199,6 +203,7 @@ namespace MissionPlanner.Controls
         private float _linkqualitygcs = 0;
         private DateTime _datetime;
         private string _mode = "Manual";
+        private DateTime _modechanged = DateTime.MinValue;
         private int _wpno = 0;
 
         float _AOA = 0;
@@ -412,6 +417,20 @@ namespace MissionPlanner.Controls
         }
 
         [System.ComponentModel.Browsable(true), System.ComponentModel.Category("Values")]
+        public int batterycellcount
+        {
+            get { return _batterycellcount; }
+            set
+            {
+                if (_batterycellcount != value)
+                {
+                    _batterycellcount = value;
+                    this.Invalidate();
+                }
+            }
+        }
+
+        [System.ComponentModel.Browsable(true), System.ComponentModel.Category("Values")]
         public float batteryremaining
         {
             get { return _batteryremaining; }
@@ -519,6 +538,7 @@ namespace MissionPlanner.Controls
                 if (_mode != value)
                 {
                     _mode = value;
+                    _modechanged = datetime;
                     this.Invalidate();
                 }
             }
@@ -787,6 +807,7 @@ namespace MissionPlanner.Controls
         private Color _hudcolor = Color.White;
         private Pen _whitePen = new Pen(Color.White, 2);
         private readonly SolidBrush _whiteBrush = new SolidBrush(Color.White);
+        private readonly SolidBrush _redBrush = new SolidBrush(Color.Red);
 
         private static readonly SolidBrush SolidBrush = new SolidBrush(Color.FromArgb(0x55, 0xff, 0xff, 0xff));
 
@@ -894,7 +915,7 @@ namespace MissionPlanner.Controls
                 try
                 {
 
-                    OpenTK.Graphics.GraphicsMode test = this.GraphicsMode;
+                    OpenTK.Graphics.GraphicsMode test = base.GraphicsMode;
                     // log.Info(test.ToString());
                     log.Info("Vendor: " + GL.GetString(StringName.Vendor));
                     log.Info("Version: " + GL.GetString(StringName.Version));
@@ -1075,7 +1096,7 @@ namespace MissionPlanner.Controls
                 if (opengl)
                 {
                     // make this gl window and thread current
-                    if (!Context.IsCurrent || DateTime.Now.Second % 5 == 0)
+                    if (!base.Context.IsCurrent || DateTime.Now.Second % 5 == 0)
                         MakeCurrent();
 
                     GL.Clear(ClearBufferMask.ColorBufferBit);
@@ -2454,8 +2475,17 @@ namespace MissionPlanner.Controls
                     graphicsObject.ResetTransform();
 
                     // mode and wp dist and wp
-                    drawstring(_mode, font, fontsize, _whiteBrush, scrollbg.Left - 30,
-                        scrollbg.Bottom + 5);
+                    if (_modechanged.AddSeconds(2) > datetime)
+                    {
+                        drawstring(_mode, font, fontsize, _redBrush, scrollbg.Left - 30,
+                            scrollbg.Bottom + 5);
+                    }
+                    else
+                    {
+                        drawstring(_mode, font, fontsize, _whiteBrush, scrollbg.Left - 30,
+                            scrollbg.Bottom + 5);
+                    }
+
                     drawstring((int) _disttowp + distunit + ">" + _wpno, font, fontsize, _whiteBrush,
                         scrollbg.Left - 30, scrollbg.Bottom + fontsize + 2 + 10);
                 }
@@ -2539,23 +2569,31 @@ namespace MissionPlanner.Controls
 
                     string text = HUDT.Bat + _batterylevel.ToString("0.00v") + " " + _current.ToString("0.0 A");
 
-                    text = HUDT.Bat + _batterylevel.ToString("0.00v") + " " + _current.ToString("0.0 A") + " " +
-                           (_batteryremaining) + "%";
+                    text = HUDT.Bat + _batterylevel.ToString("0.00v") + " " + _current.ToString("0.0 A") + " " + (_batteryremaining) + "%";
 
                     if (criticalvoltagealert)
                     {
                         drawstring(text, font, fontsize + 2, (SolidBrush) Brushes.Red, fontsize,
                             this.Height - ((fontsize + 2) * 3) - fontoffset);
+
+                        if (displayCellVoltage & (_batterycellcount != 0))
+                            drawstring(HUDT.Cell + " " + (_batterylevel / _batterycellcount).ToString("0.00v"), font, fontsize + 2, _whiteBrush, fontsize, this.Height - (fontsize * 2) - fontoffset);
                     }
                     else if (lowvoltagealert)
                     {
                         drawstring(text, font, fontsize + 2, (SolidBrush)Brushes.Orange, fontsize,
                             this.Height - ((fontsize + 2) * 3) - fontoffset);
+
+                        if (displayCellVoltage & (_batterycellcount != 0))
+                            drawstring(HUDT.Cell + " " + (_batterylevel / _batterycellcount).ToString("0.00v"), font, fontsize + 2, _whiteBrush, fontsize, this.Height - (fontsize * 2) - fontoffset);
                     }
                     else
                     {
                         drawstring(text, font, fontsize + 2, _whiteBrush, fontsize,
                             this.Height - ((fontsize + 2) * 3) - fontoffset);
+
+                        if (displayCellVoltage & (_batterycellcount!=0)) 
+                            drawstring(HUDT.Cell + " " + (_batterylevel / _batterycellcount).ToString("0.00v"),font, fontsize + 2, _whiteBrush, fontsize, this.Height - (fontsize * 2) - fontoffset);
                     }
                 }
 
@@ -2871,6 +2909,18 @@ namespace MissionPlanner.Controls
 
             return fontsize;
         }
+
+        int NextPowerOf2(int n)
+        {
+            n |= (n >> 16);
+            n |= (n >> 8);
+            n |= (n >> 4);
+            n |= (n >> 2);
+            n |= (n >> 1);
+            ++n;
+            return n;
+        }
+
         void drawstring(string text, Font font, float fontsize, SolidBrush brush, float x, float y)
         {
             if (!opengl)
@@ -2899,30 +2949,43 @@ namespace MissionPlanner.Controls
 
                 if (!charDict.ContainsKey(charid))
                 {
-                    charDict[charid] = new character()
-                    {
-                        bitmap = new Bitmap(128, 128, System.Drawing.Imaging.PixelFormat.Format32bppArgb),
-                        size = (int) fontsize
-                    };
-
-                    charDict[charid].bitmap.MakeTransparent(Color.Transparent);
-
                     //charbitmaptexid
 
                     float maxx = this.Width / 150; // for space
 
+                    var pth = new GraphicsPath();
+
+                    if (text != null)
+                        pth.AddString(cha + "", font.FontFamily, 0, fontsize + 5, new Point((int) 0, (int) 0),
+                            StringFormat.GenericTypographic);
+
+                    if (pth.PointCount > 0)
+                    {
+                        foreach (PointF pnt in pth.PathPoints)
+                        {
+                            if (pnt.X > maxx)
+                                maxx = pnt.X;
+
+                            if (pnt.Y > maxy)
+                                maxy = pnt.Y;
+                        }
+                    }
+
+                    var larger = maxx > maxy ? (int) maxx + 1 : (int) maxy + 1;
+
+                    charDict[charid] = new character()
+                    {
+                        bitmap = new Bitmap(NextPowerOf2(larger), NextPowerOf2(larger),
+                            System.Drawing.Imaging.PixelFormat.Format32bppArgb),
+                        size = (int) fontsize,
+                        pth = pth
+                    };
+
+                    charDict[charid].bitmap.MakeTransparent(Color.Transparent);
 
                     // create bitmap
                     using (var gfx = Graphics.FromImage(charDict[charid].bitmap))
                     {
-                        var pth = new GraphicsPath();
-
-                        if (text != null)
-                            pth.AddString(cha + "", font.FontFamily, 0, fontsize + 5, new Point((int) 0, (int) 0),
-                                StringFormat.GenericTypographic);
-
-                        charDict[charid].pth = pth;
-
                         gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
                         gfx.DrawPath(this._p, pth);
@@ -2930,19 +2993,6 @@ namespace MissionPlanner.Controls
                         //Draw the face
 
                         gfx.FillPath(brush, pth);
-
-
-                        if (pth.PointCount > 0)
-                        {
-                            foreach (PointF pnt in pth.PathPoints)
-                            {
-                                if (pnt.X > maxx)
-                                    maxx = pnt.X;
-
-                                if (pnt.Y > maxy)
-                                    maxy = pnt.Y;
-                            }
-                        }
                     }
 
                     charDict[charid].width = (int) (maxx + 2);
@@ -3037,30 +3087,43 @@ namespace MissionPlanner.Controls
 
                 if (!charDict.ContainsKey(charid))
                 {
-                    charDict[charid] = new character()
-                    {
-                        bitmap = new Bitmap(128, 128, System.Drawing.Imaging.PixelFormat.Format32bppArgb),
-                        size = (int) fontsize
-                    };
-
-                    charDict[charid].bitmap.MakeTransparent(Color.Transparent);
-
                     //charbitmaptexid
 
                     float maxx = this.Width / 150; // for space
 
+                    var pth = new GraphicsPath();
+
+                    if (text != null)
+                        pth.AddString(cha + "", font.FontFamily, 0, fontsize + 5, new Point((int) 0, (int) 0),
+                            StringFormat.GenericTypographic);
+
+                    if (pth.PointCount > 0)
+                    {
+                        foreach (PointF pnt in pth.PathPoints)
+                        {
+                            if (pnt.X > maxx)
+                                maxx = pnt.X;
+
+                            if (pnt.Y > maxy)
+                                maxy = pnt.Y;
+                        }
+                    }
+
+                    var larger = maxx > maxy ? (int) maxx + 1 : (int) maxy + 1;
+
+                    charDict[charid] = new character()
+                    {
+                        bitmap = new Bitmap(NextPowerOf2(larger), NextPowerOf2(larger),
+                            System.Drawing.Imaging.PixelFormat.Format32bppArgb),
+                        size = (int) fontsize,
+                        pth = pth
+                    };
+
+                    charDict[charid].bitmap.MakeTransparent(Color.Transparent);
 
                     // create bitmap
                     using (var gfx = Graphics.FromImage(charDict[charid].bitmap))
                     {
-                        var pth = new GraphicsPath();
-
-                        if (text != null)
-                            pth.AddString(cha + "", font.FontFamily, 0, fontsize + 5, new Point((int) 0, (int) 0),
-                                StringFormat.GenericTypographic);
-
-                        charDict[charid].pth = pth;
-
                         gfx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
                         gfx.DrawPath(this._p, pth);
@@ -3068,19 +3131,6 @@ namespace MissionPlanner.Controls
                         //Draw the face
 
                         gfx.FillPath(brush, pth);
-
-
-                        if (pth.PointCount > 0)
-                        {
-                            foreach (PointF pnt in pth.PathPoints)
-                            {
-                                if (pnt.X > maxx)
-                                    maxx = pnt.X;
-
-                                if (pnt.Y > maxy)
-                                    maxy = pnt.Y;
-                            }
-                        }
                     }
 
                     charDict[charid].width = (int) (maxx + 2);
