@@ -576,61 +576,6 @@
     </None>
     <None Include="MissionPlanner.GCSViews.ConfigurationView.ConfigGPSOrder+GPSCAN.datasource" />
     <None Include="MissionPlanner.GCSViews.ConfigurationView.ConfigHWCompass2+CompassDeviceInfo.datasource" />
-    <Compile Include="plugins\example2-menu.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="plugins\example3-fencedist.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="plugins\example4-herelink.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="plugins\example5-latencytracker.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="plugins\example6-mapicondesc.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="plugins\example7-canrtcm.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <None Include="plugins\InitialParamsCalculator.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Compile Include="plugins\example8-modechange.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <None Include="plugins\generator.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>UserControl</SubType>
-    </None>
-    <None Include="plugins\example.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="plugins\example2.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="plugins\example3.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="plugins\example4.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="plugins\example5.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="plugins\example6.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="plugins\example7.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="plugins\example8.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <Compile Include="plugins\example9-hudonoff.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Radio\Models.cs" />
     <Compile Include="ResEdit.Designer.cs">
@@ -657,7 +602,6 @@
     <Compile Include="UserPanel\UserPanel.Designer.cs">
       <DependentUpon>UserPanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\AltitudeAngel\MissionPlannerStateAdapter.cs" />
     <Compile Include="Utilities\NativeLibrary.cs" />
     <Compile Include="Utilities\Speech.cs" />
     <Compile Include="Utilities\SSHTerminal.cs" />
@@ -1249,13 +1193,6 @@
     <Compile Include="Utilities\GStreamerUI.cs" />
     <Compile Include="Utilities\Update.cs" />
     <Compile Include="Utilities\Win32DeviceMgnt.cs" />
-    <Compile Include="Utilities\AltitudeAngel\AASettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Utilities\AltitudeAngel\AltitudeAngel.cs" />
-    <Compile Include="Utilities\AltitudeAngel\MapAdapter.cs" />
-    <Compile Include="Utilities\AltitudeAngel\MissionPlannerAdaptor.cs" />
-    <Compile Include="Utilities\AltitudeAngel\OverlayAdapter.cs" />
     <Compile Include="Utilities\XMLColor.cs" />
     <Compile Include="Warnings\WarningControl.cs">
       <SubType>UserControl</SubType>
@@ -1565,9 +1502,6 @@
     <Compile Include="Controls\fftui.Designer.cs">
       <DependentUpon>fftui.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utilities\AltitudeAngel\AASettings.Designer.cs">
-      <DependentUpon>AASettings.cs</DependentUpon>
-    </Compile>
     <Compile Include="Warnings\WarningsManager.Designer.cs">
       <DependentUpon>WarningsManager.cs</DependentUpon>
     </Compile>
@@ -1750,9 +1684,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\paramcompare.resx">
       <DependentUpon>paramcompare.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="plugins\generator.resx">
-      <DependentUpon>generator.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Plugin\PluginUI.resx">
       <DependentUpon>PluginUI.cs</DependentUpon>
@@ -4502,9 +4433,6 @@
     <EmbeddedResource Include="UserPanel\UserPanel.resx">
       <DependentUpon>UserPanel.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Utilities\AltitudeAngel\AASettings.resx">
-      <DependentUpon>AASettings.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Warnings\WarningControl.resx">
       <DependentUpon>WarningControl.cs</DependentUpon>
     </EmbeddedResource>
@@ -4525,9 +4453,6 @@
     <Content Include="rotmat.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Compile Include="plugins\example-watchbutton.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
     <None Include=".editorconfig" />
     <None Include="BurntKermit.mpsystheme">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -4543,8 +4468,8 @@
     </None>
     <None Include="MissionPlanner.GCSViews.ConfigurationView.DeviceInfo.datasource" />
     <None Include="Resources\Gaugebg.png" />
-    <Content Include="appxmanifest.xml" >
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Content Include="appxmanifest.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ArduCopterConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -4907,6 +4832,8 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="plugins\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

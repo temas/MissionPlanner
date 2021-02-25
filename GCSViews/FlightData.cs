@@ -252,7 +252,7 @@ namespace MissionPlanner.GCSViews
             log.Info("Graph Setup");
             CreateChart(zg1);
 
-            // config map      
+            // config map
             log.Info("Map Setup");
             gMapControl1.CacheLocation = Settings.GetDataDirectory() +
                                          "gmapcache" + Path.DirectorySeparatorChar;
@@ -886,7 +886,7 @@ namespace MissionPlanner.GCSViews
         private void altitudeAngelSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
 #if !LIB
-            new Utilities.AltitudeAngel.AASettings().Show(this);
+            //new Utilities.AltitudeAngel.AASettings().Show(this);
 #endif
         }
 
@@ -2986,7 +2986,7 @@ namespace MissionPlanner.GCSViews
                     if (MainV2.comPort.MAV.param.ContainsKey("BATT_CRT_VOLT")) critvolt = MainV2.comPort.MAV.param["BATT_CRT_VOLT"].Value;
                     if (MainV2.comPort.MAV.param.ContainsKey("BATT_CRT_MAH") && MainV2.comPort.MAV.param.ContainsKey("BATT_CAPACITY"))
                     {
-                        if (MainV2.comPort.MAV.param["BATT_CRT_MAH"].Value > 0) 
+                        if (MainV2.comPort.MAV.param["BATT_CRT_MAH"].Value > 0)
                         {
                             critpercent = MainV2.comPort.MAV.param["BATT_CRT_MAH"].Value / MainV2.comPort.MAV.param["BATT_CAPACITY"].Value * 100 ;
                         }
@@ -3084,7 +3084,7 @@ namespace MissionPlanner.GCSViews
                     }
 
                     // update map - 0.3sec if connected , 2 sec if not connected
-                    if (((MainV2.comPort.BaseStream.IsOpen || MainV2.comPort.logreadmode) && 
+                    if (((MainV2.comPort.BaseStream.IsOpen || MainV2.comPort.logreadmode) &&
                          tracklast.AddSeconds(Settings.Instance.GetDouble("FD_MapUpdateDelay", 0.3)) < DateTime.Now) ||
                         tracklast.AddSeconds(2) < DateTime.Now)
                     {
@@ -3336,7 +3336,7 @@ namespace MissionPlanner.GCSViews
                         try
                         {
 
-                            // cleanup old - no markers where added, so remove all old 
+                            // cleanup old - no markers where added, so remove all old
                             if (MainV2.comPort.MAV.camerapoints.Count < photosoverlay.Markers.Count)
                                 photosoverlay.Markers.Clear();
 
@@ -3612,7 +3612,7 @@ namespace MissionPlanner.GCSViews
             Func<TBuilder, string> GetTagSource, Func<GMapMarker, string> GetTagMarker,
             Func<TBuilder, GMapMarker> create, Action<TBuilder, GMapMarker> update)
         {
-            if (list == null || gMapOverlay == null || GetTagSource == null 
+            if (list == null || gMapOverlay == null || GetTagSource == null
                 || GetTagMarker == null || create == null || update == null)
                 return;
 
@@ -3622,7 +3622,7 @@ namespace MissionPlanner.GCSViews
             {
                 if (item == null)
                     continue;
-                
+
                 if (markers.Any(a => a is TMarker && GetTagMarker(a) == GetTagSource(item)))
                 {
                     update(item, markers.First(a => a is TMarker && GetTagMarker(a) == GetTagSource(item)));
@@ -4372,7 +4372,7 @@ namespace MissionPlanner.GCSViews
 
             e.Graphics.FillRectangle(linear, e.Bounds);
 
-            // Draw the current item text based on the current Font 
+            // Draw the current item text based on the current Font
             // and the custom brush settings.
             e.Graphics.DrawString(((TabControl) sender).TabPages[e.Index].Text,
                 e.Font, myBrush, e.Bounds, StringFormat.GenericDefault);
@@ -4594,7 +4594,7 @@ namespace MissionPlanner.GCSViews
             }
             catch
             {
-            } // ignore any invalid 
+            } // ignore any invalid
         }
 
         private void triggerCameraToolStripMenuItem_Click(object sender, EventArgs e)
@@ -5227,7 +5227,7 @@ namespace MissionPlanner.GCSViews
 
             if (DialogResult.Cancel == InputBox.Show("Battery Cell Count", "Cell Count", ref CellCount))
                 return;
-            
+
             if (!int.TryParse(CellCount, out iCellCount))
             {
                 CustomMessageBox.Show("Bad Radius");

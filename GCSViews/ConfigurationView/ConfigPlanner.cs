@@ -930,7 +930,7 @@ namespace MissionPlanner.GCSViews.ConfigurationView
         private void but_AAsignin_Click(object sender, EventArgs e)
         {
 #if !LIB
-            new Utilities.AltitudeAngel.AASettings().Show(this);
+            //new Utilities.AltitudeAngel.AASettings().Show(this);
 #endif
         }
 
