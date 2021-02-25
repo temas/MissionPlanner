@@ -18,6 +18,7 @@
     <Copyright>Copyright © Michael Oborne 2010-2018</Copyright>
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -32,14 +33,14 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <OutputPath>bin\Debug\net461\</OutputPath>
     <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
     <Prefer32Bit>false</Prefer32Bit>
     <DebugType>portable</DebugType>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>
     </CodeAnalysisRuleSet>
@@ -114,10 +115,6 @@
     <ProjectReference Include="ExtLibs\alglibnet\alglibnet.csproj">
       <Project>{b994d8d2-c052-4616-9d20-386640c7387f}</Project>
       <Name>alglibnet</Name>
-    </ProjectReference>
-    <ProjectReference Include="ExtLibs\AltitudeAngelWings\AltitudeAngelWings.csproj">
-      <Project>{098f542c-7c70-4b9c-b2e2-ac5dc5e0294b}</Project>
-      <Name>AltitudeAngelWings</Name>
     </ProjectReference>
     <ProjectReference Include="ExtLibs\Antenna\MissionPlanner.Antenna.csproj">
       <Project>{94836116-0CD5-4EA9-8049-447FEA886406}</Project>

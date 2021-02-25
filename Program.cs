@@ -285,7 +285,7 @@ namespace MissionPlanner
             Console.WriteLine("Setup GoogleMapProvider API");
             GoogleMapProvider.APIKey = "AIzaSyA5nFp39fEHruCezXnG3r8rGyZtuAkmCug";
             if (Settings.Instance["GoogleApiKey"] != null) GoogleMapProvider.APIKey = Settings.Instance["GoogleApiKey"];
-            
+
             Console.WriteLine("Setup Tracking.productName");
             Tracking.productName = Application.ProductName;
             Tracking.productVersion = Application.ProductVersion;
@@ -325,7 +325,7 @@ namespace MissionPlanner
             // generic status report screen
             MAVLinkInterface.CreateIProgressReporterDialogue += title =>
                 new ProgressReporterDialogue() { StartPosition = FormStartPosition.CenterScreen, Text = title };
-            
+
             Console.WriteLine("Setup proxy");
             try
             {
@@ -746,7 +746,7 @@ namespace MissionPlanner
                     }
                     catch
                     {
-                       
+
                     }
 
                     string postData = "message=" + Environment.OSVersion.VersionString + " " +

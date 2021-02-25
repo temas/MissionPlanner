@@ -3084,6 +3084,8 @@ namespace MissionPlanner
 
             this.SuspendLayout();
 
+            /*
+
             // setup http server
             try
             {
@@ -3100,6 +3102,7 @@ namespace MissionPlanner
                 log.Error("Error starting TCP listener thread: ", ex);
                 CustomMessageBox.Show(ex.ToString());
             }
+            */
 
             log.Info("start joystick");
             try
@@ -3135,6 +3138,8 @@ namespace MissionPlanner
                 log.Error(ex);
             }
 
+            /*
+
             log.Info("start plugin thread");
             try
             {
@@ -3152,10 +3157,11 @@ namespace MissionPlanner
                 log.Error(ex);
             }
 
+            */
 
             ThreadPool.QueueUserWorkItem(LoadGDALImages);
 
-            ThreadPool.QueueUserWorkItem(BGLoadAirports);
+            //ThreadPool.QueueUserWorkItem(BGLoadAirports);
 
             ThreadPool.QueueUserWorkItem(BGCreateMaps);
 
@@ -3166,13 +3172,13 @@ namespace MissionPlanner
             // tfr went dead on 30-9-2020
             //ThreadPool.QueueUserWorkItem(BGgetTFR);
 
-            ThreadPool.QueueUserWorkItem(BGNoFly);
+            //ThreadPool.QueueUserWorkItem(BGNoFly);
 
-            ThreadPool.QueueUserWorkItem(BGGetKIndex);
+            //ThreadPool.QueueUserWorkItem(BGGetKIndex);
 
             // update firmware version list - only once per day
-            ThreadPool.QueueUserWorkItem(BGFirmwareCheck);
-
+            //ThreadPool.QueueUserWorkItem(BGFirmwareCheck);
+            /*
             ThreadPool.QueueUserWorkItem((s) =>
             {
                 try
@@ -3183,6 +3189,9 @@ namespace MissionPlanner
                 {
                 }
             });
+            */
+
+            /*
 
             log.Info("start AutoConnect");
             AutoConnect.NewMavlinkConnection += (sender, serial) =>
@@ -3389,7 +3398,7 @@ namespace MissionPlanner
                     MainV2.Comports.Add(mav);
                 }
             };
-
+            */
             try
             {
                 if (!MONO)
@@ -3437,6 +3446,7 @@ namespace MissionPlanner
                 System.Configuration.ConfigurationManager.AppSettings["BetaUpdateLocationVersion"] = "";
             }
 
+            /*
             try
             {
                 // single update check per day - in a seperate thread
@@ -3455,6 +3465,8 @@ namespace MissionPlanner
             {
                 log.Error("Update check failed", ex);
             }
+
+            */
 
             // play a tlog that was passed to the program/ load a bin log passed
             if (Program.args.Length > 0)
