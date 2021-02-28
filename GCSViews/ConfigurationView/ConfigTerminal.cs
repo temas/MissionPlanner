@@ -38,7 +38,7 @@ namespace MissionPlanner.GCSViews.ConfigurationView
 
         public void Activate()
         {
-            MainV2.instance.MenuConnect.Visible = false;
+            //MainV2.instance.MenuConnect.Visible = false;
         }
 
         public void Deactivate()
@@ -59,7 +59,7 @@ namespace MissionPlanner.GCSViews.ConfigurationView
             {
             }
 
-            MainV2.instance.MenuConnect.Visible = true;
+            //MainV2.instance.MenuConnect.Visible = true;
         }
 
         private void comPort_DataReceived(object sender, object e)

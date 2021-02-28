@@ -378,6 +378,12 @@
   <ItemGroup>
     <Compile Include="Antenna\TrackerGeneric.cs" />
     <Compile Include="Common.cs" />
+    <Compile Include="Controls\annunciator.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\annunciator.Designer.cs">
+      <DependentUpon>annunciator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UAVCANSubscriber.cs">
       <SubType>UserControl</SubType>
     </Compile>

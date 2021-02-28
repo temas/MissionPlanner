@@ -350,6 +350,7 @@ namespace MissionPlanner
             }
         }
 
+        public static List<Button> anunciators = new List<Button>();
 
         public static bool ShowAirports { get; set; }
         public static bool ShowTFR { get; set; }
@@ -540,20 +541,20 @@ namespace MissionPlanner
 
         public void updateLayout(object sender, EventArgs e)
         {
-            MenuSimulation.Visible = DisplayConfiguration.displaySimulation;
-            MenuHelp.Visible = DisplayConfiguration.displayHelp;
+            //MenuSimulation.Visible = DisplayConfiguration.displaySimulation;
+            //MenuHelp.Visible = DisplayConfiguration.displayHelp;
             MissionPlanner.Controls.BackstageView.BackstageView.Advanced = DisplayConfiguration.isAdvancedMode;
 
             // force autohide on
             if (DisplayConfiguration.autoHideMenuForce)
             {
-                AutoHideMenu(true);
+                //AutoHideMenu(true);
                 Settings.Instance["menu_autohide"] = true.ToString();
                 autoHideToolStripMenuItem.Visible = false;
             }
             else if (Settings.Instance.GetBoolean("menu_autohide"))
             {
-                AutoHideMenu(Settings.Instance.GetBoolean("menu_autohide"));
+                //AutoHideMenu(Settings.Instance.GetBoolean("menu_autohide"));
                 Settings.Instance["menu_autohide"] = Settings.Instance.GetBoolean("menu_autohide").ToString();
             }
 
@@ -745,7 +746,7 @@ namespace MissionPlanner
             comPort.BaseStream = new SerialPort();
             comPort.BaseStream.BaudRate = 57600;
 
-            _connectionControl = toolStripConnectionControl.ConnectionControl;
+            _connectionControl = connectionControl1;
             _connectionControl.CMB_baudrate.TextChanged += this.CMB_baudrate_TextChanged;
             _connectionControl.CMB_serialport.SelectedIndexChanged += this.CMB_serialport_SelectedIndexChanged;
             _connectionControl.CMB_serialport.Click += this.CMB_serialport_Click;
@@ -1082,16 +1083,16 @@ namespace MissionPlanner
 #endif
 #endif
 
-            if (Program.IconFile != null)
-            {
-                this.Icon = Icon.FromHandle(((Bitmap)Program.IconFile).GetHicon());
-            }
+//            if (Program.IconFile != null)
+//            {
+//                this.Icon = Icon.FromHandle(((Bitmap)Program.IconFile).GetHicon());
+//            }
 
-            MenuArduPilot.Image = new Bitmap(Properties.Resources._0d92fed790a3a70170e61a86db103f399a595c70, (int)(200), 31);
-            MenuArduPilot.Width = MenuArduPilot.Image.Width;
+            //MenuArduPilot.Image = new Bitmap(Properties.Resources._0d92fed790a3a70170e61a86db103f399a595c70, (int)(200), 31);
+            //MenuArduPilot.Width = MenuArduPilot.Image.Width;
 
-            if (Program.Logo2 != null)
-                MenuArduPilot.Image = Program.Logo2;
+//            if (Program.Logo2 != null)
+//                MenuArduPilot.Image = Program.Logo2;
 
             Application.DoEvents();
 
@@ -1195,26 +1196,26 @@ namespace MissionPlanner
 
             displayicons = icons;
 
-            MainMenu.BackColor = SystemColors.MenuBar;
+            //MainMenu.BackColor = SystemColors.MenuBar;
 
-            MainMenu.BackgroundImage = displayicons.bg;
+            //MainMenu.BackgroundImage = displayicons.bg;
 
-            MenuFlightData.Image = displayicons.fd;
-            MenuFlightPlanner.Image = displayicons.fp;
-            MenuInitConfig.Image = displayicons.initsetup;
-            MenuSimulation.Image = displayicons.sim;
-            MenuConfigTune.Image = displayicons.config_tuning;
-            MenuConnect.Image = displayicons.connect;
-            MenuHelp.Image = displayicons.help;
+            //MenuFlightData.Image = displayicons.fd;
+            //MenuFlightPlanner.Image = displayicons.fp;
+            //MenuInitConfig.Image = displayicons.initsetup;
+            //MenuSimulation.Image = displayicons.sim;
+            //MenuConfigTune.Image = displayicons.config_tuning;
+            //MenuConnect.Image = displayicons.connect;
+            //MenuHelp.Image = displayicons.help;
 
 
-            MenuFlightData.ForeColor = ThemeManager.TextColor;
-            MenuFlightPlanner.ForeColor = ThemeManager.TextColor;
-            MenuInitConfig.ForeColor = ThemeManager.TextColor;
-            MenuSimulation.ForeColor = ThemeManager.TextColor;
-            MenuConfigTune.ForeColor = ThemeManager.TextColor;
-            MenuConnect.ForeColor = ThemeManager.TextColor;
-            MenuHelp.ForeColor = ThemeManager.TextColor;
+            //MenuFlightData.ForeColor = ThemeManager.TextColor;
+            //MenuFlightPlanner.ForeColor = ThemeManager.TextColor;
+            //MenuInitConfig.ForeColor = ThemeManager.TextColor;
+            //MenuSimulation.ForeColor = ThemeManager.TextColor;
+            //MenuConfigTune.ForeColor = ThemeManager.TextColor;
+            //MenuConnect.ForeColor = ThemeManager.TextColor;
+            //MenuHelp.ForeColor = ThemeManager.TextColor;
         }
 
         void adsb_UpdatePlanePosition(object sender, MissionPlanner.Utilities.adsb.PointLatLngAltHdg adsb)
@@ -1470,7 +1471,7 @@ namespace MissionPlanner
             {
             }
 
-            this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;
+            //this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;
         }
 
         public void doConnect(MAVLinkInterface comPort, string portname, string baud, bool getparams = true)
@@ -1831,7 +1832,7 @@ namespace MissionPlanner
                 HUD.Custom.src = MainV2.comPort.MAV.cs;
 
                 // set connected icon
-                this.MenuConnect.Image = displayicons.disconnect;
+                //this.MenuConnect.Image = displayicons.disconnect;
             }
             catch (Exception ex)
             {
@@ -2423,6 +2424,10 @@ namespace MissionPlanner
         /// </summary>
         private void UpdateConnectIcon()
         {
+
+/*
+
+
             if ((DateTime.Now - connectButtonUpdate).Milliseconds > 500)
             {
                 //                        Console.WriteLine(DateTime.Now.Millisecond);
@@ -2463,7 +2468,9 @@ namespace MissionPlanner
                 }
                 connectButtonUpdate = DateTime.Now;
             }
+*/
         }
+
 
         ManualResetEvent PluginThreadrunner = new ManualResetEvent(false);
 
@@ -3017,19 +3024,18 @@ namespace MissionPlanner
 
         protected override void OnLoad(EventArgs e)
         {
-            // check if its defined, and force to show it if not known about
-            if (Settings.Instance["menu_autohide"] == null)
-            {
-                Settings.Instance["menu_autohide"] = "false";
-            }
-
             try
             {
-                AutoHideMenu(Settings.Instance.GetBoolean("menu_autohide"));
+                AutoHideMenu(false);
             }
             catch
             {
             }
+
+
+            annunciator1.setColor(Stat.COMM, StatLight.WARNING);
+            annunciator1.setColor(Stat.FUEL, StatLight.ALERT);
+            annunciator1.setColor(Stat.VIBE, StatLight.NOMINAL);
 
             MyView.AddScreen(new MainSwitcher.Screen("FlightData", FlightData, true));
             MyView.AddScreen(new MainSwitcher.Screen("FlightPlanner", FlightPlanner, true));
@@ -3041,7 +3047,7 @@ namespace MissionPlanner
             // hide simulation under mono
             if (Program.MONO)
             {
-                MenuSimulation.Visible = false;
+                //MenuSimulation.Visible = false;
             }
 
             try
@@ -3068,7 +3074,7 @@ namespace MissionPlanner
             {
                 this.PerformLayout();
                 MenuFlightPlanner_Click(this, e);
-                MainMenu_ItemClicked(this, new ToolStripItemClickedEventArgs(MenuFlightPlanner));
+                //MainMenu_ItemClicked(this, new ToolStripItemClickedEventArgs(MenuFlightPlanner));
             }
             else
             {
@@ -3076,7 +3082,7 @@ namespace MissionPlanner
                 log.Info("show FlightData");
                 MenuFlightData_Click(this, e);
                 log.Info("show FlightData... Done");
-                MainMenu_ItemClicked(this, new ToolStripItemClickedEventArgs(MenuFlightData));
+                //MainMenu_ItemClicked(this, new ToolStripItemClickedEventArgs(MenuFlightData));
             }
 
             // for long running tasks using own threads.
@@ -4143,16 +4149,17 @@ namespace MissionPlanner
 
         private void MainMenu_MouseLeave(object sender, EventArgs e)
         {
-            if (_connectionControl.PointToClient(Control.MousePosition).Y < MainMenu.Height)
+/*            if (_connectionControl.PointToClient(Control.MousePosition).Y < MainMenu.Height)
                 return;
 
             this.SuspendLayout();
 
             panel1.Visible = false;
 
-            this.ResumeLayout();
+            this.ResumeLayout();*/
         }
 
+        /*
         void menu_MouseEnter(object sender, EventArgs e)
         {
             this.SuspendLayout();
@@ -4162,28 +4169,26 @@ namespace MissionPlanner
             panel1.Visible = true;
             this.ResumeLayout();
         }
-
+        */
+        /*
         private void autoHideToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AutoHideMenu(autoHideToolStripMenuItem.Checked);
 
             Settings.Instance["menu_autohide"] = autoHideToolStripMenuItem.Checked.ToString();
         }
-
+        */
         void AutoHideMenu(bool hide)
         {
-            autoHideToolStripMenuItem.Checked = hide;
-
             if (!hide)
             {
                 this.SuspendLayout();
                 panel1.Dock = DockStyle.Top;
                 panel1.SendToBack();
                 panel1.Visible = true;
-                menu.Visible = false;
-                MainMenu.MouseLeave -= MainMenu_MouseLeave;
+                //MainMenu.MouseLeave -= MainMenu_MouseLeave;
                 panel1.MouseLeave -= MainMenu_MouseLeave;
-                toolStripConnectionControl.MouseLeave -= MainMenu_MouseLeave;
+                //toolStripConnectionControl.MouseLeave -= MainMenu_MouseLeave;
                 this.ResumeLayout();
             }
             else
@@ -4191,15 +4196,12 @@ namespace MissionPlanner
                 this.SuspendLayout();
                 panel1.Dock = DockStyle.None;
                 panel1.Visible = false;
-                MainMenu.MouseLeave += MainMenu_MouseLeave;
+                //MainMenu.MouseLeave += MainMenu_MouseLeave;
                 panel1.MouseLeave += MainMenu_MouseLeave;
-                toolStripConnectionControl.MouseLeave += MainMenu_MouseLeave;
-                menu.Visible = true;
-                menu.SendToBack();
+                //toolStripConnectionControl.MouseLeave += MainMenu_MouseLeave;
                 this.ResumeLayout();
             }
         }
-
         private void MainV2_KeyDown(object sender, KeyEventArgs e)
         {
             Message temp = new Message();
@@ -4394,6 +4396,7 @@ namespace MissionPlanner
             DBT_USERDEFINED = 0xFFFF,
         }
 
+        /*
         private void MainMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
         {
             foreach (ToolStripItem item in MainMenu.Items)
@@ -4414,7 +4417,7 @@ namespace MissionPlanner
             //MainMenu.BackColor = Color.Black;
             //MainMenu.BackgroundImage = MissionPlanner.Properties.Resources.bgdark;
         }
-
+        */
         private void fullScreenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // full screen
@@ -4531,6 +4534,11 @@ namespace MissionPlanner
                     });
                 }
             }
+        }
+
+        private void menu_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

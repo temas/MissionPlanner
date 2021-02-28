@@ -1040,6 +1040,8 @@ mc:Ignorable=""d""
                 temp.ForeColor = TextColor;
             }
 
+            if (temp.Name == "annunciator1") return;
+
             foreach (Control ctl in temp.Controls)
             {
                 if (ctl.GetType() == typeof(Label))
