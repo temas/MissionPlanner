@@ -43,9 +43,9 @@ namespace MissionPlanner
             this.connectionOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectionListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.connectionControl1 = new MissionPlanner.Controls.ConnectionControl();
-            this.status1 = new MissionPlanner.Controls.Status();
             this.annunciator1 = new MissionPlanner.Controls.annunciator();
+            this.status1 = new MissionPlanner.Controls.Status();
+            this.connectionControl1 = new MissionPlanner.Controls.ConnectionControl();
             this.CTX_mainmenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -101,10 +101,11 @@ namespace MissionPlanner
             this.panel1.Name = "panel1";
             this.panel1.MouseLeave += new System.EventHandler(this.MainMenu_MouseLeave);
             // 
-            // connectionControl1
+            // annunciator1
             // 
-            resources.ApplyResources(this.connectionControl1, "connectionControl1");
-            this.connectionControl1.Name = "connectionControl1";
+            resources.ApplyResources(this.annunciator1, "annunciator1");
+            this.annunciator1.BackColor = System.Drawing.Color.Black;
+            this.annunciator1.Name = "annunciator1";
             // 
             // status1
             // 
@@ -112,11 +113,10 @@ namespace MissionPlanner
             this.status1.Name = "status1";
             this.status1.Percent = 0D;
             // 
-            // annunciator1
+            // connectionControl1
             // 
-            resources.ApplyResources(this.annunciator1, "annunciator1");
-            this.annunciator1.BackColor = System.Drawing.Color.Black;
-            this.annunciator1.Name = "annunciator1";
+            resources.ApplyResources(this.connectionControl1, "connectionControl1");
+            this.connectionControl1.Name = "connectionControl1";
             // 
             // MainV2
             // 

@@ -16,12 +16,12 @@ using System.Xml;
 namespace MissionPlanner.Utilities
 {
 
-    //ThemeColor class is describe an item in a theme. 
-    // strColorItemName is the variable name of the 
+    //ThemeColor class is describe an item in a theme.
+    // strColorItemName is the variable name of the
     public class ThemeColor
     {
         public String strColorItemName { get; set; }
-        
+
         [XmlElement(Type = typeof(XmlColor))]
         public Color clrColor { get; set; }
         public String strVariableName { get; set; }
@@ -88,7 +88,7 @@ namespace MissionPlanner.Utilities
             colors.Add("BackStageView Button Area", Color.Black, "BSVButtonAreaBGColor");					// This changes the colour of a backstageview button area
             colors.Add("BSV Unselected Text", Color.WhiteSmoke, "UnselectedTextColour");			// This changes the colour of unselected text in a BSV button
             colors.Add("Horizontal ProgressBar", Color.FromArgb(148, 193, 31), "HorizontalPBValueColor"); // This changes the colour of the horizontal progressbar
-            colors.Add("HUD text and drawings", Color.LightGray, "HudText");                       
+            colors.Add("HUD text and drawings", Color.LightGray, "HudText");
             colors.Add("HUD Ground top", Color.FromArgb(0x9b, 0xb8, 0x24), "HudGroundTop");
             colors.Add("HUD Ground bottom", Color.FromArgb(0x41, 0x4f, 0x07), "HudGroundBot");
             colors.Add("HUD Sky top", Color.Blue, "HudSkyTop");
@@ -125,7 +125,7 @@ namespace MissionPlanner.Utilities
                     case IconSet.HighContrastIconSet:
                         MainV2.instance.switchicons(new MainV2.highcontrastmenuicons());
                         break;
-                    default:                                                            
+                    default:
                         MainV2.instance.switchicons(new MainV2.burntkermitmenuicons());     //Fall back to BurntKermit
                         break;
                 }
@@ -251,7 +251,7 @@ namespace MissionPlanner.Utilities
             Console.WriteLine(strThemeName + " theme is loading");
 
             ThemeManager.GetThemesList();
-            
+
             //check theme extension to determine location (mpsystheme is in the program directory, mpusertheme is in the userdata directory)
             if (Path.GetExtension(strThemeName).Equals(".mpsystheme", StringComparison.OrdinalIgnoreCase))
             {
@@ -300,7 +300,7 @@ namespace MissionPlanner.Utilities
         }
 
         /// <summary>
-        /// Will recursively apply the current theme to 'control' unless the control has the 
+        /// Will recursively apply the current theme to 'control' unless the control has the
         /// PreventTheming attribute
         /// </summary>
         /// <param name="control"></param>
@@ -704,7 +704,7 @@ mc:Ignorable=""d""
                                  @""" HorizontalAlignment=""Left"" VerticalAlignment=""Top"" Margin=""" + ctl.Location.X +
                                  "," + ctl.Location.Y + @",0,0"" Width=""" + ctl.Width + @""" Height=""" + ctl.Height +
                                  @""">");
-                                 
+
                     if (ctl.Controls.Count > 0)
                         doxamlctls(ctl, st);
 
@@ -772,11 +772,21 @@ mc:Ignorable=""d""
         }
         private static void ApplyCustomTheme(Control temp, int level)
         {
+
+            if (temp.Name == "annunciator1") return;
+            if (temp.Name == "tabPayloadControl") return;
+            if (temp.Name == "tabFlightControl") return;
+
+
+
             if (level == 0)
             {
                 temp.BackColor = BGColor;
                 temp.ForeColor = TextColor;
             }
+
+
+
 
             foreach (Control ctl in temp.Controls)
             {
@@ -1034,13 +1044,18 @@ mc:Ignorable=""d""
 
         private static void ApplyTheme(Control temp, int level)
         {
+
+            if (temp.Name == "annunciator1") return;
+            if (temp.Name == "tabPayloadControl") return;
+            if (temp.Name == "tabFlightControl") return;
+
+
             if (level == 0)
             {
                 temp.BackColor = BGColor;
                 temp.ForeColor = TextColor;
             }
 
-            if (temp.Name == "annunciator1") return;
 
             foreach (Control ctl in temp.Controls)
             {

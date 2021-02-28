@@ -604,33 +604,40 @@ namespace MissionPlanner.GCSViews
         }
 
         //Updates the visibility of the payload control tab based on whether the payload target is available or not
+        //public void updatePayloadTabVisible()
+        //{
+        //    bool gimbalPresent = false;
+
+        //    //if the currently connected target is a flight controller check if there is an associated mavlink gimbal
+        //    if (MainV2.comPort.compidcurrent == 1)
+        //    {
+        //        foreach (var mav in MainV2.comPort.MAVlist)
+        //        {
+        //            if (mav.sysid == MainV2.comPort.sysidcurrent &&
+        //                mav.compid == (int) MAVLink.MAV_COMPONENT.MAV_COMP_ID_GIMBAL)
+        //            {
+        //                gimbalPresent = true;
+        //                break;
+        //            }
+        //        }
+        //    }
+
+        //    if (tabControlactions.TabPages.Contains(tabPayload) == true && gimbalPresent == false)
+        //    {
+        //        tabControlactions.TabPages.Remove(tabPayload);
+        //    }
+        //    else if (tabControlactions.TabPages.Contains(tabPayload) == false && gimbalPresent == true)
+        //    {
+        //        tabControlactions.TabPages.Add(tabPayload);
+        //    }
+        //}
+
         public void updatePayloadTabVisible()
         {
-            bool gimbalPresent = false;
+            tabControlactions.TabPages.Remove(tabPayload);
 
-            //if the currently connected target is a flight controller check if there is an associated mavlink gimbal
-            if (MainV2.comPort.compidcurrent == 1)
-            {
-                foreach (var mav in MainV2.comPort.MAVlist)
-                {
-                    if (mav.sysid == MainV2.comPort.sysidcurrent &&
-                        mav.compid == (int) MAVLink.MAV_COMPONENT.MAV_COMP_ID_GIMBAL)
-                    {
-                        gimbalPresent = true;
-                        break;
-                    }
-                }
-            }
-
-            if (tabControlactions.TabPages.Contains(tabPayload) == true && gimbalPresent == false)
-            {
-                tabControlactions.TabPages.Remove(tabPayload);
-            }
-            else if (tabControlactions.TabPages.Contains(tabPayload) == false && gimbalPresent == true)
-            {
-                tabControlactions.TabPages.Add(tabPayload);
-            }
         }
+
 
         internal void BUT_run_script_Click(object sender, EventArgs e)
         {
@@ -4383,6 +4390,9 @@ namespace MissionPlanner.GCSViews
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             Messagetabtimer.Stop();
+
+            if (tabControlactions.SelectedTab == tabPayloadControl) payloadcontrol1.resetControls();
+
 
             if (tabControlactions.SelectedTab == tabStatus)
             {

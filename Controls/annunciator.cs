@@ -57,6 +57,7 @@ namespace MissionPlanner.Controls
             messagesBox.Size = new System.Drawing.Size(498, 398);
             messagesBox.BackColor = Color.DarkSlateGray;
             messagesBox.ForeColor = Color.Yellow;
+            messagesBox.ReadOnly = true;
 
 
             messagesForm.Controls.Add(messagesBox);
@@ -64,6 +65,9 @@ namespace MissionPlanner.Controls
 
             messages = new StringBuilder();
             messages.Append(@"{\rtf1 {\colortbl \red255\green255\blue255;\red255\green0\blue0;\red255\green255\blue102;} {\fonttbl{\f0\fnil\fcharset0 Arial Rounded MT Bold;}{\f1\fnil\fcharset0 Calibri;}}");
+            addMessage("Log Started...");
+
+
 
         }
 
