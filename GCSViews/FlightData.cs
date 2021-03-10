@@ -5249,5 +5249,10 @@ namespace MissionPlanner.GCSViews
             hud1.displayCellVoltage = true;
             hud1.batterycellcount = iCellCount;
         }
+
+        private void myButton8_Click(object sender, EventArgs e)
+        {
+            MainV2.ActiveForm.Close();
+        }
     }
 }

@@ -46,6 +46,7 @@ namespace MissionPlanner
             this.annunciator1 = new MissionPlanner.Controls.annunciator();
             this.status1 = new MissionPlanner.Controls.Status();
             this.connectionControl1 = new MissionPlanner.Controls.ConnectionControl();
+            this.MenuConnect = new MissionPlanner.Controls.MyButton();
             this.CTX_mainmenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -118,12 +119,21 @@ namespace MissionPlanner
             resources.ApplyResources(this.connectionControl1, "connectionControl1");
             this.connectionControl1.Name = "connectionControl1";
             // 
+            // MenuConnect
+            // 
+            resources.ApplyResources(this.MenuConnect, "MenuConnect");
+            this.MenuConnect.Name = "MenuConnect";
+            this.MenuConnect.UseVisualStyleBackColor = true;
+            this.MenuConnect.Click += new System.EventHandler(this.MenuConnect_Click);
+            // 
             // MainV2
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.MenuConnect);
             this.Controls.Add(this.connectionControl1);
             this.Controls.Add(this.panel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.KeyPreview = true;
             this.Name = "MainV2";
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainV2_KeyDown);
@@ -145,5 +155,6 @@ namespace MissionPlanner
         public Controls.Status status1;
         private Controls.ConnectionControl connectionControl1;
         private Controls.annunciator annunciator1;
+        private Controls.MyButton MenuConnect;
     }
 }
