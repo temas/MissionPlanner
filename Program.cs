@@ -633,8 +633,6 @@ namespace MissionPlanner
             if (MainV2.instance != null && MainV2.instance.IsDisposed)
                 return;
 
-            MissionPlanner.Utilities.Tracking.AddException(ex);
-
             log.Debug(ex.ToString());
 
             GetStackTrace(ex);

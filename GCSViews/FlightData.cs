@@ -3606,7 +3606,6 @@ namespace MissionPlanner.GCSViews
                 catch (Exception ex)
                 {
                     log.Error(ex);
-                    Tracking.AddException(ex);
                     Console.WriteLine("FD Main loop exception " + ex);
                 }
             }
@@ -4734,7 +4733,6 @@ namespace MissionPlanner.GCSViews
             catch (Exception ex)
             {
                 log.Error(ex);
-                Tracking.AddException(ex);
             }
         }
 
