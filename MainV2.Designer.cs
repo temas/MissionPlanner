@@ -43,10 +43,10 @@ namespace MissionPlanner
             this.connectionOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectionListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.annunciator1 = new MissionPlanner.Controls.annunciator();
             this.status1 = new MissionPlanner.Controls.Status();
             this.connectionControl1 = new MissionPlanner.Controls.ConnectionControl();
             this.MenuConnect = new MissionPlanner.Controls.MyButton();
+            this.annunciator1 = new MissionPlanner.Controls.annunciator();
             this.CTX_mainmenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -102,12 +102,6 @@ namespace MissionPlanner
             this.panel1.Name = "panel1";
             this.panel1.MouseLeave += new System.EventHandler(this.MainMenu_MouseLeave);
             // 
-            // annunciator1
-            // 
-            resources.ApplyResources(this.annunciator1, "annunciator1");
-            this.annunciator1.BackColor = System.Drawing.Color.Black;
-            this.annunciator1.Name = "annunciator1";
-            // 
             // status1
             // 
             resources.ApplyResources(this.status1, "status1");
@@ -125,6 +119,29 @@ namespace MissionPlanner
             this.MenuConnect.Name = "MenuConnect";
             this.MenuConnect.UseVisualStyleBackColor = true;
             this.MenuConnect.Click += new System.EventHandler(this.MenuConnect_Click);
+            // 
+            // annunciator1
+            // 
+            resources.ApplyResources(this.annunciator1, "annunciator1");
+            this.annunciator1.BackColor = System.Drawing.Color.Black;
+            this.annunciator1.btnLabels = new string[] {
+        "ENGINE",
+        "EKF",
+        "BATT",
+        "COMM",
+        "GPS",
+        "FUEL",
+        "VIBE",
+        "NONE",
+        "NONE",
+        "NONE",
+        "NONE",
+        "NONE",
+        "NONE",
+        "NONE",
+        "NONE",
+        "NONE"};
+            this.annunciator1.Name = "annunciator1";
             // 
             // MainV2
             // 
@@ -154,7 +171,7 @@ namespace MissionPlanner
         private System.Windows.Forms.ToolStripMenuItem connectionListToolStripMenuItem;
         public Controls.Status status1;
         private Controls.ConnectionControl connectionControl1;
-        private Controls.annunciator annunciator1;
         private Controls.MyButton MenuConnect;
+        private Controls.annunciator annunciator1;
     }
 }

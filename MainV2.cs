@@ -3043,58 +3043,49 @@ namespace MissionPlanner
             {
             }
 
-
-            annunciator1.setColor(Stat.COMM, StatLight.WARNING);
-            annunciator1.setColor(Stat.FUEL, StatLight.ALERT);
-            annunciator1.setColor(Stat.VIBE, StatLight.NOMINAL);
+            annunciator1.btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "CHUTE", "TERM", "CPULT", "PRFLT", "PNL15" };
 
             MyView.AddScreen(new MainSwitcher.Screen("FlightData", FlightData, true));
             MyView.AddScreen(new MainSwitcher.Screen("FlightPlanner", FlightPlanner, true));
-            MyView.AddScreen(new MainSwitcher.Screen("HWConfig", typeof(GCSViews.InitialSetup), false));
-            MyView.AddScreen(new MainSwitcher.Screen("SWConfig", typeof(GCSViews.SoftwareConfig), false));
-            MyView.AddScreen(new MainSwitcher.Screen("Simulation", Simulation, true));
-            MyView.AddScreen(new MainSwitcher.Screen("Help", typeof(GCSViews.Help), false));
+            //MyView.AddScreen(new MainSwitcher.Screen("HWConfig", typeof(GCSViews.InitialSetup), false));
+            //MyView.AddScreen(new MainSwitcher.Screen("SWConfig", typeof(GCSViews.SoftwareConfig), false));
+            //MyView.AddScreen(new MainSwitcher.Screen("Simulation", Simulation, true));
+            //MyView.AddScreen(new MainSwitcher.Screen("Help", typeof(GCSViews.Help), false));
 
-            // hide simulation under mono
-            if (Program.MONO)
-            {
-                //MenuSimulation.Visible = false;
-            }
+            //try
+            //{
+            //    if (Control.ModifierKeys == Keys.Shift)
+            //    {
+            //    }
+            //    else
+            //    {
+            //        log.Info("Load Pluggins");
+            //        Plugin.PluginLoader.DisabledPluginNames.Clear();
+            //        foreach (var s in Settings.Instance.GetList("DisabledPlugins"))
+            //            Plugin.PluginLoader.DisabledPluginNames.Add(s);
+            //        Plugin.PluginLoader.LoadAll();
+            //        log.Info("Load Pluggins... Done");
+            //    }
+            //}
+            //catch (Exception ex)
+            //{
+            //    log.Error(ex);
+            //}
 
-            try
-            {
-                if (Control.ModifierKeys == Keys.Shift)
-                {
-                }
-                else
-                {
-                    log.Info("Load Pluggins");
-                    Plugin.PluginLoader.DisabledPluginNames.Clear();
-                    foreach (var s in Settings.Instance.GetList("DisabledPlugins"))
-                        Plugin.PluginLoader.DisabledPluginNames.Add(s);
-                    Plugin.PluginLoader.LoadAll();
-                    log.Info("Load Pluggins... Done");
-                }
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex);
-            }
-
-            if (Program.Logo != null && Program.name == "VVVVZ")
-            {
-                this.PerformLayout();
-                MenuFlightPlanner_Click(this, e);
-                //MainMenu_ItemClicked(this, new ToolStripItemClickedEventArgs(MenuFlightPlanner));
-            }
-            else
-            {
+            //if (Program.Logo != null && Program.name == "VVVVZ")
+            //{
+            //    this.PerformLayout();
+            //    MenuFlightPlanner_Click(this, e);
+            //    //MainMenu_ItemClicked(this, new ToolStripItemClickedEventArgs(MenuFlightPlanner));
+            //}
+            //else
+            //{
                 this.PerformLayout();
                 log.Info("show FlightData");
                 MenuFlightData_Click(this, e);
                 log.Info("show FlightData... Done");
                 //MainMenu_ItemClicked(this, new ToolStripItemClickedEventArgs(MenuFlightData));
-            }
+            //}
 
             // for long running tasks using own threads.
             // for short use threadpool
@@ -3416,26 +3407,6 @@ namespace MissionPlanner
                 }
             };
             */
-            try
-            {
-                if (!MONO)
-                {
-#if !LIB
-                    //log.Info("Load AltitudeAngel");
-                    //AltitudeAngel.Configure();
-                    //AltitudeAngel.Initialize();
-                    //log.Info("Load AltitudeAngel... Done");
-#endif
-                }
-            }
-            catch (TypeInitializationException) // windows xp lacking patch level
-            {
-                //CustomMessageBox.Show("Please update your .net version. kb2468871");
-            }
-            catch (Exception ex)
-            {
-                Tracking.AddException(ex);
-            }
 
             this.ResumeLayout();
 

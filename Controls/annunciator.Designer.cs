@@ -47,6 +47,7 @@ namespace MissionPlanner.Controls
             this.button14 = new System.Windows.Forms.Button();
             this.button15 = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
+            this.timer1 = new System.Windows.Forms.Timer();
             this.layoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -352,5 +353,6 @@ namespace MissionPlanner.Controls
         private System.Windows.Forms.Button button14;
         private System.Windows.Forms.Button button15;
         private System.Windows.Forms.Button button16;
+        private System.Windows.Forms.Timer timer1;
     }
 }
