@@ -43,10 +43,10 @@ namespace MissionPlanner
             this.connectionOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectionListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.annunciator1 = new MissionPlanner.Controls.annunciator();
             this.status1 = new MissionPlanner.Controls.Status();
             this.connectionControl1 = new MissionPlanner.Controls.ConnectionControl();
             this.MenuConnect = new MissionPlanner.Controls.MyButton();
-            this.annunciator1 = new MissionPlanner.Controls.annunciator();
             this.CTX_mainmenu.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -102,24 +102,6 @@ namespace MissionPlanner
             this.panel1.Name = "panel1";
             this.panel1.MouseLeave += new System.EventHandler(this.MainMenu_MouseLeave);
             // 
-            // status1
-            // 
-            resources.ApplyResources(this.status1, "status1");
-            this.status1.Name = "status1";
-            this.status1.Percent = 0D;
-            // 
-            // connectionControl1
-            // 
-            resources.ApplyResources(this.connectionControl1, "connectionControl1");
-            this.connectionControl1.Name = "connectionControl1";
-            // 
-            // MenuConnect
-            // 
-            resources.ApplyResources(this.MenuConnect, "MenuConnect");
-            this.MenuConnect.Name = "MenuConnect";
-            this.MenuConnect.UseVisualStyleBackColor = true;
-            this.MenuConnect.Click += new System.EventHandler(this.MenuConnect_Click);
-            // 
             // annunciator1
             // 
             resources.ApplyResources(this.annunciator1, "annunciator1");
@@ -142,6 +124,25 @@ namespace MissionPlanner
         "NONE",
         "NONE"};
             this.annunciator1.Name = "annunciator1";
+            this.annunciator1.buttonClicked += new System.EventHandler(this.annunciator1_buttonClicked);
+            // 
+            // status1
+            // 
+            resources.ApplyResources(this.status1, "status1");
+            this.status1.Name = "status1";
+            this.status1.Percent = 0D;
+            // 
+            // connectionControl1
+            // 
+            resources.ApplyResources(this.connectionControl1, "connectionControl1");
+            this.connectionControl1.Name = "connectionControl1";
+            // 
+            // MenuConnect
+            // 
+            resources.ApplyResources(this.MenuConnect, "MenuConnect");
+            this.MenuConnect.Name = "MenuConnect";
+            this.MenuConnect.UseVisualStyleBackColor = true;
+            this.MenuConnect.Click += new System.EventHandler(this.MenuConnect_Click);
             // 
             // MainV2
             // 

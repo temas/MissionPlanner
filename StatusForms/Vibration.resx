@@ -145,7 +145,7 @@
     <value>VibBarZ</value>
   </data>
   <data name="&gt;&gt;VibBarZ.Type" xml:space="preserve">
-    <value>MissionPlanner.Controls.VerticalProgressBar2, MissionPlanner.Controls, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+    <value>MissionPlanner.Controls.VerticalProgressBar2, MissionPlanner.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;VibBarZ.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -169,7 +169,7 @@
     <value>VibBarY</value>
   </data>
   <data name="&gt;&gt;VibBarY.Type" xml:space="preserve">
-    <value>MissionPlanner.Controls.VerticalProgressBar2, MissionPlanner.Controls, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+    <value>MissionPlanner.Controls.VerticalProgressBar2, MissionPlanner.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;VibBarY.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>
@@ -322,7 +322,7 @@
     <value>237, 135</value>
   </data>
   <data name="label7.Size" type="System.Drawing.Size, System.Drawing">
-    <value>62, 45</value>
+    <value>59, 45</value>
   </data>
   <data name="label7.TabIndex" type="System.Int32, mscorlib">
     <value>8</value>
@@ -355,7 +355,7 @@
     <value>237, 90</value>
   </data>
   <data name="label2.Size" type="System.Drawing.Size, System.Drawing">
-    <value>62, 45</value>
+    <value>59, 45</value>
   </data>
   <data name="label2.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
@@ -388,7 +388,7 @@
     <value>237, 180</value>
   </data>
   <data name="label6.Size" type="System.Drawing.Size, System.Drawing">
-    <value>62, 45</value>
+    <value>59, 45</value>
   </data>
   <data name="label6.TabIndex" type="System.Int32, mscorlib">
     <value>10</value>
@@ -448,7 +448,7 @@
     <value>10</value>
   </data>
   <data name="txt_clip0.Location" type="System.Drawing.Point, System.Drawing">
-    <value>305, 93</value>
+    <value>302, 93</value>
   </data>
   <data name="txt_clip0.Size" type="System.Drawing.Size, System.Drawing">
     <value>47, 20</value>
@@ -469,7 +469,7 @@
     <value>11</value>
   </data>
   <data name="txt_clip1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>305, 138</value>
+    <value>302, 138</value>
   </data>
   <data name="txt_clip1.Size" type="System.Drawing.Size, System.Drawing">
     <value>47, 20</value>
@@ -490,7 +490,7 @@
     <value>12</value>
   </data>
   <data name="txt_clip2.Location" type="System.Drawing.Point, System.Drawing">
-    <value>305, 183</value>
+    <value>302, 183</value>
   </data>
   <data name="txt_clip2.Size" type="System.Drawing.Size, System.Drawing">
     <value>47, 20</value>
@@ -538,7 +538,7 @@
     <value>0</value>
   </data>
   <data name="tableLayoutPanel1.LayoutSettings" type="System.Windows.Forms.TableLayoutSettings, System.Windows.Forms">
-    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="VibBarZ" Row="1" RowSpan="4" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="VibBarY" Row="1" RowSpan="4" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="VibBarX" Row="1" RowSpan="4" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label1" Row="0" RowSpan="1" Column="1" ColumnSpan="3" /&gt;&lt;Control Name="label5" Row="5" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="label4" Row="5" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="label3" Row="5" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label7" Row="3" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="label2" Row="2" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="label6" Row="4" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="label8" Row="1" RowSpan="1" Column="4" ColumnSpan="2" /&gt;&lt;Control Name="txt_clip0" Row="2" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="txt_clip1" Row="3" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="txt_clip2" Row="4" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,30,Percent,21.05264,Percent,21.05263,Percent,21.05263,Percent,21.05263,Percent,15.78947" /&gt;&lt;Rows Styles="Percent,16.66667,Percent,16.66667,Percent,16.66667,Percent,16.66667,Percent,16.66667,Percent,16.66667" /&gt;&lt;/TableLayoutSettings&gt;</value>
+    <value>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;TableLayoutSettings&gt;&lt;Controls&gt;&lt;Control Name="VibBarZ" Row="1" RowSpan="4" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="VibBarY" Row="1" RowSpan="4" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="VibBarX" Row="1" RowSpan="4" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label1" Row="0" RowSpan="1" Column="1" ColumnSpan="3" /&gt;&lt;Control Name="label5" Row="5" RowSpan="1" Column="3" ColumnSpan="1" /&gt;&lt;Control Name="label4" Row="5" RowSpan="1" Column="2" ColumnSpan="1" /&gt;&lt;Control Name="label3" Row="5" RowSpan="1" Column="1" ColumnSpan="1" /&gt;&lt;Control Name="label7" Row="3" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="label2" Row="2" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="label6" Row="4" RowSpan="1" Column="4" ColumnSpan="1" /&gt;&lt;Control Name="label8" Row="1" RowSpan="1" Column="4" ColumnSpan="2" /&gt;&lt;Control Name="txt_clip0" Row="2" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="txt_clip1" Row="3" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;Control Name="txt_clip2" Row="4" RowSpan="1" Column="5" ColumnSpan="1" /&gt;&lt;/Controls&gt;&lt;Columns Styles="Absolute,30,Percent,21.05264,Percent,21.05263,Percent,21.05263,Percent,20.30769,Percent,16.92308" /&gt;&lt;Rows Styles="Percent,16.66667,Percent,16.66667,Percent,16.66667,Percent,16.66667,Percent,16.66667,Percent,16.66667" /&gt;&lt;/TableLayoutSettings&gt;</value>
   </data>
   <data name="VibBarX.Size" type="System.Drawing.Size, System.Drawing">
     <value>62, 174</value>
@@ -550,7 +550,7 @@
     <value>VibBarX</value>
   </data>
   <data name="&gt;&gt;VibBarX.Type" xml:space="preserve">
-    <value>MissionPlanner.Controls.VerticalProgressBar2, MissionPlanner.Controls, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+    <value>MissionPlanner.Controls.VerticalProgressBar2, MissionPlanner.Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
   </data>
   <data name="&gt;&gt;VibBarX.Parent" xml:space="preserve">
     <value>tableLayoutPanel1</value>

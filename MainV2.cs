@@ -36,6 +36,7 @@ using MissionPlanner.Utilities.HW;
 using Transitions;
 using System.Linq;
 using MissionPlanner.Joystick;
+using MissionPlanner.StatusForms;
 
 namespace MissionPlanner
 {
@@ -674,6 +675,11 @@ namespace MissionPlanner
                 MainV2.instance.FlightPlanner.updateDisplayView();
             }
         }
+
+
+        public static EKFStatus ekfForm = new EKFStatus();
+        public static Vibration vibeForm = new Vibration();
+        public static engineStatusForm engineForm = new engineStatusForm();
 
 
         public MainV2()
@@ -4519,6 +4525,81 @@ namespace MissionPlanner
 
         private void menu_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void hideAllForms()
+        {
+            //Hide all forms
+            ekfForm.Hide();
+            vibeForm.Hide();
+            engineForm.Hide();
+
+        }
+
+
+        private void annunciator1_buttonClicked(object sender, EventArgs e)
+        {
+
+
+            //Check Button
+            if (annunciator1.clickedButtonName == "EKF")
+            {
+
+                if (ekfForm.Visible)
+                {
+                    ekfForm.Hide();
+                }
+                else
+                {
+                    hideAllForms();
+                    ekfForm.FormBorderStyle = FormBorderStyle.None;
+                    ekfForm.Owner = this;
+                    ekfForm.Show();
+                    ekfForm.Location = new Point(this.Location.X + this.Size.Width - ekfForm.Size.Width, this.Location.Y+ this.annunciator1.Location.Y + 61);
+                }
+            }
+            else if (annunciator1.clickedButtonName == "VIBE")
+            {
+                if (vibeForm.Visible)
+                {
+                    vibeForm.Hide();
+                }
+                else
+                {
+                    hideAllForms();
+                    vibeForm.FormBorderStyle = FormBorderStyle.None;
+                    vibeForm.Owner = this;
+                    vibeForm.Show();
+                    vibeForm.Location = new Point(this.Location.X + this.Size.Width - vibeForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+
+                }
+            }
+            else if (annunciator1.clickedButtonName == "ENGINE")
+            {
+                if (engineForm.Visible)
+                {
+                    engineForm.Hide();
+                }
+                else
+                {
+                    hideAllForms();
+                    engineForm.Owner = this;
+                    engineForm.Show();
+                    engineForm.Location = new Point(this.Location.X + this.Size.Width - engineForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+
+                }
+            }
+
+
+
+
+
+
+
+
+
+
 
         }
     }
