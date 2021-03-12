@@ -605,6 +605,12 @@
       <SubType>Form</SubType>
       <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
+    <Compile Include="StatusForms\batteryStatus.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatusForms\batteryStatus.Designer.cs">
+      <DependentUpon>batteryStatus.cs</DependentUpon>
+    </Compile>
     <Compile Include="StatusForms\engineStatusForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -743,6 +749,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\payloadsetup.resx">
       <DependentUpon>payloadsetup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatusForms\batteryStatus.resx">
+      <DependentUpon>batteryStatus.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\EKFStatus.ko-KR.resx">
       <DependentUpon>EKFStatus.cs</DependentUpon>

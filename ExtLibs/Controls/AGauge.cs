@@ -29,8 +29,8 @@ using MissionPlanner.Controls;
 
 namespace AGaugeApp
 {
-    [ToolboxBitmapAttribute(typeof(AGauge)), 
-    DefaultEvent("ValueInRangeChanged"), 
+    [ToolboxBitmapAttribute(typeof(AGauge)),
+    DefaultEvent("ValueInRangeChanged"),
     Description("Displays a value on an analog gauge. Raises an event if the value enters one of the definable ranges.")]
     public partial class AGauge : MyUserControl
     {
@@ -267,7 +267,7 @@ namespace AGaugeApp
                         {
                             m_valueIsInRange[counter] = false;
                         }
-                    }                   
+                    }
                     Refresh();
                 }
             }
@@ -754,7 +754,8 @@ namespace AGaugeApp
             {
                 if ((m_ScaleLinesMajorStepValue != value) && (value > 0))
                 {
-                    m_ScaleLinesMajorStepValue = Math.Max(Math.Min(value, m_MaxValue), m_MinValue);
+                    //m_ScaleLinesMajorStepValue = Math.Max(Math.Min(value, m_MaxValue), m_MinValue);
+                    m_ScaleLinesMajorStepValue = Math.Min(value, m_MaxValue);
                     drawGaugeBackground = true;
                     Refresh();
                 }
@@ -1758,7 +1759,7 @@ System.ComponentModel.Description("Enables or disables the range selected by Nee
                         }
 
                         /*ggr.TranslateTransform((Single)(Center.X + m_ScaleNumbersRadius * Math.Cos((m_BaseArcStart + countValue * m_BaseArcSweep / (m_MaxValue - m_MinValue)) * Math.PI / 180.0f)),
-                                           (Single)(Center.Y + m_ScaleNumbersRadius * Math.Sin((m_BaseArcStart + countValue * m_BaseArcSweep / (m_MaxValue - m_MinValue)) * Math.PI / 180.0f)), 
+                                           (Single)(Center.Y + m_ScaleNumbersRadius * Math.Sin((m_BaseArcStart + countValue * m_BaseArcSweep / (m_MaxValue - m_MinValue)) * Math.PI / 180.0f)),
                                            System.Drawing.Drawing2D.MatrixOrder.Append);*/
 
                         ggr.TranslateTransform(
@@ -1986,7 +1987,7 @@ System.ComponentModel.Description("Enables or disables the range selected by Nee
                 }
             } // needles
         }
-        
+
         protected override void OnResize(EventArgs e)
         {
             //if (this.Width > this.Height)
@@ -2008,15 +2009,15 @@ System.ComponentModel.Description("Enables or disables the range selected by Nee
         public new Size Size { get { return base.Size; } set { base.Size = value; } }
 
         private Size basesize = new Size(150,150);
-         
+
 #endregion
 
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            // 
+            //
             // AGauge
-            // 
+            //
             this.BackColor = System.Drawing.Color.Transparent;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.DoubleBuffered = true;

@@ -681,6 +681,7 @@ namespace MissionPlanner
         public static Vibration vibeForm = new Vibration();
         public static engineStatusForm engineForm = new engineStatusForm();
         public static payloadStatusForm payloadForm = new payloadStatusForm();
+        public static batteryStatusForm batteryForm = new batteryStatusForm(); 
 
         public MainV2()
         {
@@ -4535,6 +4536,7 @@ namespace MissionPlanner
             vibeForm.Hide();
             engineForm.Hide();
             payloadForm.Hide();
+            batteryForm.Hide();
 
         }
 
@@ -4602,12 +4604,27 @@ namespace MissionPlanner
                     hideAllForms();
                     payloadForm.Owner = this;
                     payloadForm.Show();
-                    
                     payloadForm.Location = new Point(this.Location.X + this.Size.Width - payloadForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
                     payloadForm.refreshPayloads();
 
                 }
             }
+            else if (annunciator1.clickedButtonName == "BATT")
+            {
+                if (batteryForm.Visible)
+                {
+                    batteryForm.Hide();
+                }
+                else
+                {
+                    hideAllForms();
+                    batteryForm.Owner = this;
+                    batteryForm.Show();
+                    batteryForm.Location = new Point(this.Location.X + this.Size.Width - batteryForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+
+                }
+            }
+
 
 
         }
