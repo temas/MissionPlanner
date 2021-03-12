@@ -680,7 +680,7 @@ namespace MissionPlanner
         public static EKFStatus ekfForm = new EKFStatus();
         public static Vibration vibeForm = new Vibration();
         public static engineStatusForm engineForm = new engineStatusForm();
-
+        public static payloadStatusForm payloadForm = new payloadStatusForm();
 
         public MainV2()
         {
@@ -4534,6 +4534,7 @@ namespace MissionPlanner
             ekfForm.Hide();
             vibeForm.Hide();
             engineForm.Hide();
+            payloadForm.Hide();
 
         }
 
@@ -4590,15 +4591,23 @@ namespace MissionPlanner
 
                 }
             }
+            else if (annunciator1.clickedButtonName == "PAYLD")
+            {
+                if (payloadForm.Visible)
+                {
+                    payloadForm.Hide();
+                }
+                else
+                {
+                    hideAllForms();
+                    payloadForm.Owner = this;
+                    payloadForm.Show();
+                    
+                    payloadForm.Location = new Point(this.Location.X + this.Size.Width - payloadForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+                    payloadForm.refreshPayloads();
 
-
-
-
-
-
-
-
-
+                }
+            }
 
 
         }

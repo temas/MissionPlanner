@@ -124,6 +124,24 @@ namespace MissionPlanner.Controls
             var b = (Button)sender;
 
             _clickedButtonName = b.Text;
+            if (b.FlatAppearance.BorderSize == 1)
+            {
+                foreach(Button btn in layoutPanel.Controls)
+                {
+                    btn.FlatAppearance.BorderSize = 1;
+                    btn.FlatAppearance.BorderColor = Color.Black; ;
+                }
+                b.FlatAppearance.BorderSize = 3;
+                b.FlatAppearance.BorderColor = Color.White;
+            }
+            else
+            {
+                b.FlatAppearance.BorderSize = 1;
+                b.FlatAppearance.BorderColor = Color.Black; ;
+            }
+
+
+
             EventHandler handler = this.buttonClicked;
             if (handler != null)
             {

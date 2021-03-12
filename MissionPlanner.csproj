@@ -384,6 +384,12 @@
     <Compile Include="Controls\annunciator.Designer.cs">
       <DependentUpon>annunciator.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\payloadsetup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\payloadsetup.Designer.cs">
+      <DependentUpon>payloadsetup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\payloadcontrol.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -605,6 +611,12 @@
     <Compile Include="StatusForms\engineStatusForm.Designer.cs">
       <DependentUpon>engineStatusForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="StatusForms\payloadStatusForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatusForms\payloadStatusForm.Designer.cs">
+      <DependentUpon>payloadStatusForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Swarm\PaintEventArgsI.cs" />
     <Compile Include="temp.Designer.cs">
       <DependentUpon>temp.cs</DependentUpon>
@@ -729,6 +741,9 @@
     <EmbeddedResource Include="Controls\DigitalSkyUI.resx">
       <DependentUpon>DigitalSkyUI.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\payloadsetup.resx">
+      <DependentUpon>payloadsetup.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\EKFStatus.ko-KR.resx">
       <DependentUpon>EKFStatus.cs</DependentUpon>
     </EmbeddedResource>
@@ -803,6 +818,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\engineStatusForm.resx">
       <DependentUpon>engineStatusForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatusForms\payloadStatusForm.resx">
+      <DependentUpon>payloadStatusForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\Vibration.ko-KR.resx">
       <DependentUpon>Vibration.cs</DependentUpon>
