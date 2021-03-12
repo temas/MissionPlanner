@@ -617,6 +617,12 @@
     <Compile Include="StatusForms\engineStatusForm.Designer.cs">
       <DependentUpon>engineStatusForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="StatusForms\gpsStatusForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatusForms\gpsStatusForm.Designer.cs">
+      <DependentUpon>gpsStatusForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="StatusForms\payloadStatusForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -827,6 +833,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\engineStatusForm.resx">
       <DependentUpon>engineStatusForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatusForms\gpsStatusForm.resx">
+      <DependentUpon>gpsStatusForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\payloadStatusForm.resx">
       <DependentUpon>payloadStatusForm.cs</DependentUpon>

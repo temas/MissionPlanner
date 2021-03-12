@@ -681,7 +681,8 @@ namespace MissionPlanner
         public static Vibration vibeForm = new Vibration();
         public static engineStatusForm engineForm = new engineStatusForm();
         public static payloadStatusForm payloadForm = new payloadStatusForm();
-        public static batteryStatusForm batteryForm = new batteryStatusForm(); 
+        public static batteryStatusForm batteryForm = new batteryStatusForm();
+        public static gpsStatusForm gpsForm = new gpsStatusForm();
 
         public MainV2()
         {
@@ -1321,10 +1322,7 @@ namespace MissionPlanner
                 {
                     Width = 430,
                     Height = 180,
-                    MaximizeBox = false,
-                    MinimizeBox = false,
-                    FormBorderStyle = FormBorderStyle.FixedDialog,
-                    Text = Strings.LinkStats
+                    FormBorderStyle = FormBorderStyle.None
                 };
                 // Change the connection stats control, so that when/if the connection stats form is showing,
                 // there will be something to see
@@ -4537,13 +4535,14 @@ namespace MissionPlanner
             engineForm.Hide();
             payloadForm.Hide();
             batteryForm.Hide();
+            gpsForm.Hide();
+            connectionStatsForm?.Hide();
 
         }
 
 
         private void annunciator1_buttonClicked(object sender, EventArgs e)
         {
-
 
             //Check Button
             if (annunciator1.clickedButtonName == "EKF")
@@ -4624,8 +4623,46 @@ namespace MissionPlanner
 
                 }
             }
+            else if (annunciator1.clickedButtonName == "GPS")
+            {
+                if (gpsForm.Visible)
+                {
+                    gpsForm.Hide();
+                }
+                else
+                {
+                    hideAllForms();
+                    gpsForm.Owner = this;
+                    gpsForm.Show();
+                    gpsForm.Location = new Point(this.Location.X + this.Size.Width - gpsForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
 
+                }
+            }
+            else if (annunciator1.clickedButtonName == "COMM")
+            {
+                if (connectionStatsForm is null)
+                {
+                    hideAllForms();
+                    ShowConnectionStatsForm();
+                    connectionStatsForm.Owner = this;
+                    connectionStatsForm.Location = new Point(this.Location.X + this.Size.Width - connectionStatsForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+                }
+                else
+                {
+                if (connectionStatsForm.Visible)
+                    {
+                        connectionStatsForm.Hide();
+                    }
+                else
+                    {
+                        hideAllForms();
+                        ShowConnectionStatsForm();
+                        connectionStatsForm.Owner = this;
+                        connectionStatsForm.Location = new Point(this.Location.X + this.Size.Width - connectionStatsForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
 
+                    }
+                }
+            }
 
         }
     }
