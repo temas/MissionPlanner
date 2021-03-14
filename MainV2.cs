@@ -4544,6 +4544,7 @@ namespace MissionPlanner
             fuelForm.Hide();
             fenceForm.Hide();
             airspeedForm.Hide();
+            magForm.Hide();
 
 
         }
