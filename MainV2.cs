@@ -683,6 +683,10 @@ namespace MissionPlanner
         public static payloadStatusForm payloadForm = new payloadStatusForm();
         public static batteryStatusForm batteryForm = new batteryStatusForm();
         public static gpsStatusForm gpsForm = new gpsStatusForm();
+        public static fuelStatusForm fuelForm = new fuelStatusForm();
+        public static fenceStatusForm fenceForm = new fenceStatusForm();
+        public static airspeedStatusForm airspeedForm = new airspeedStatusForm();
+        public static magStatusForm magForm = new magStatusForm();
 
         public MainV2()
         {
@@ -4537,6 +4541,10 @@ namespace MissionPlanner
             batteryForm.Hide();
             gpsForm.Hide();
             connectionStatsForm?.Hide();
+            fuelForm.Hide();
+            fenceForm.Hide();
+            airspeedForm.Hide();
+
 
         }
 
@@ -4663,6 +4671,71 @@ namespace MissionPlanner
                     }
                 }
             }
+            else if (annunciator1.clickedButtonName == "FUEL")
+            {
+                if (fuelForm.Visible)
+                {
+                    fuelForm.Hide();
+                }
+                else
+                {
+                    hideAllForms();
+                    fuelForm.Owner = this;
+                    fuelForm.Show();
+                    fuelForm.Location = new Point(this.Location.X + this.Size.Width - fuelForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+
+                }
+            }
+            else if (annunciator1.clickedButtonName == "FENCE")
+            {
+                if (fenceForm.Visible)
+                {
+                    fenceForm.Hide();
+                }
+                else
+                {
+                    hideAllForms();
+                    fenceForm.Owner = this;
+                    fenceForm.Show();
+                    fenceForm.Location = new Point(this.Location.X + this.Size.Width - fenceForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+
+                }
+            }
+            else if (annunciator1.clickedButtonName == "AIRSPD")
+            {
+                if (airspeedForm.Visible)
+                {
+                    airspeedForm.Hide();
+                }
+                else
+                {
+                    hideAllForms();
+                    airspeedForm.Owner = this;
+                    airspeedForm.Show();
+                    airspeedForm.Location = new Point(this.Location.X + this.Size.Width - airspeedForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+
+                }
+            }
+            else if (annunciator1.clickedButtonName == "MAG")
+            {
+                if (magForm.Visible)
+                {
+                    magForm.Hide();
+                }
+                else
+                {
+                    hideAllForms();
+                    magForm.Owner = this;
+                    magForm.Show();
+                    magForm.Location = new Point(this.Location.X + this.Size.Width - magForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+
+                }
+            }
+
+
+
+
+
 
         }
     }
