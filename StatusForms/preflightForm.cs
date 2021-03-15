@@ -20,9 +20,9 @@ namespace MissionPlanner.StatusForms
 
 
             InitializeComponent();
-            preflightCheckControl1.noimage = Image.FromFile("controls/noimage.png");
-            preflightCheckControl1.ready = Image.FromFile("controls/ready.png");
-            preflightCheckControl1.notready = Image.FromFile("controls/notready.png");
+            //preflightCheckControl1.noimage = Image.FromFile("controls/noimage.png");
+            //preflightCheckControl1.ready = Image.FromFile("controls/ready.png");
+            //preflightCheckControl1.notready = Image.FromFile("controls/notready.png");
             preflightCheckControl1.displayStep(MissionPlanner.Controls.PreflightList.currentStep);
 
         }

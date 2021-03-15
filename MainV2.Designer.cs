@@ -172,7 +172,7 @@ namespace MissionPlanner
         private System.Windows.Forms.ToolStripMenuItem connectionListToolStripMenuItem;
         public Controls.Status status1;
         private Controls.ConnectionControl connectionControl1;
-        private Controls.MyButton MenuConnect;
+        public Controls.MyButton MenuConnect;
         private Controls.annunciator annunciator1;
     }
 }

@@ -4685,6 +4685,11 @@ namespace MissionPlanner.GCSViews
         {
             try
             {
+
+               if (MainV2.gpsForm.Visible) MainV2.comPort.MAV.cs.UpdateCurrentSettings(MainV2.gpsForm.bindingSourceGPSStatus.UpdateDataSource(MainV2.comPort.MAV.cs));
+
+
+
                 if (this.Visible)
                 {
                     //Console.Write("bindingSource1 ");
@@ -5251,6 +5256,30 @@ namespace MissionPlanner.GCSViews
         private void myButton8_Click(object sender, EventArgs e)
         {
             MainV2.ActiveForm.Close();
+        }
+
+        private void bHideComm_Click(object sender, EventArgs e)
+        {
+            if (MainV2._connectionControl.Visible)
+            {
+                MainV2.instance.MenuConnect.Visible = false;
+                MainV2._connectionControl.Visible = false;
+            }
+            else
+            {
+                MainV2.instance.MenuConnect.Visible = true;
+                MainV2._connectionControl.Visible = true;
+            }
+        }
+
+        private void bSIM_Click(object sender, EventArgs e)
+        {
+            MainV2.instance.showSim();
+        }
+
+        private void Gvspeed_ValueInRangeChanged(object sender, AGaugeApp.AGauge.ValueInRangeChangedEventArgs e)
+        {
+
         }
     }
 }

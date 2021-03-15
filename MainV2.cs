@@ -1399,6 +1399,12 @@ namespace MissionPlanner
             }
         }
 
+
+        public void showSim()
+        {
+            MyView.ShowScreen("Simulation");
+        }
+
         private void MenuSimulation_Click(object sender, EventArgs e)
         {
             MyView.ShowScreen("Simulation");
@@ -3058,6 +3064,10 @@ namespace MissionPlanner
 
             annunciator1.btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "CHUTE", "TERM", "CPULT", "PRFLT", "PNL15" };
             annunciator1.setStatus("PRFLT", Stat.ALERT);
+            annunciator1.setStatus("CPULT", Stat.ALERT);
+            annunciator1.setStatus("FENCE", Stat.DISABLED);
+
+
 
 
             prefForm.controlStatusUpdated += preflightStatusChanged;
@@ -3068,9 +3078,11 @@ namespace MissionPlanner
 
             MyView.AddScreen(new MainSwitcher.Screen("FlightData", FlightData, true));
             MyView.AddScreen(new MainSwitcher.Screen("FlightPlanner", FlightPlanner, true));
+
+
             //MyView.AddScreen(new MainSwitcher.Screen("HWConfig", typeof(GCSViews.InitialSetup), false));
             //MyView.AddScreen(new MainSwitcher.Screen("SWConfig", typeof(GCSViews.SoftwareConfig), false));
-            //MyView.AddScreen(new MainSwitcher.Screen("Simulation", Simulation, true));
+            MyView.AddScreen(new MainSwitcher.Screen("Simulation", Simulation, true));
             //MyView.AddScreen(new MainSwitcher.Screen("Help", typeof(GCSViews.Help), false));
 
             //try
@@ -4791,5 +4803,7 @@ namespace MissionPlanner
 
 
         }
+
+
     }
 }
