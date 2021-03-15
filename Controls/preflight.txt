@@ -1,0 +1,16 @@
+﻿1;Sérülések ellenőrzése;"Vizsgálja meg a repülőgép törzsét és szárnyait, esetleges sérüléseket keresve.";image1.gif
+2;Kommunikáció;"Ellenőrizze a pilótapult és a repülőgép között kapcsolatot, a COMM indikátor zöld és az adatkapcsolat 100%";image2.gif
+3;Akkumulátorok rögzítése;Ellenőrizze az akkumulátorok rögzítését a törzsben.;image3.gif
+4;Üzemanyag ;Ellenőrizze az üzemanyag szintjét és betöltött mennyiséget az üzemenyag nyilvántartási napló alapján.;image1.gif
+5;Üzemanyag rendszer;"Vizsgálja meg a repülőgépet, üzemanyag folyás jeleit keresve,";image1.gif
+6;Szervó mozgás;"Ellenőrizze, hogy a szervók akadálymentesen, teljes kitéréssel mozognak.";image1.gif
+7;Tolórudak;Ellenőrizze a tolórudak bekötéseit és a tolórudak sértetlenségét;image1.gif
+8;Ejtőernyő ;Ellenőrizze az ejtőernyő fedél rögzítettségét.;image1.gif
+9;Légsebesség mérő kalibrálása;"Ellenőrizze, hogy a védőkupak a helyén van, majd indítja el a kalibrálást. A kalibrálás után a legésebessé 4m/s-nél kisebb értéket kell hogy mutasson";image1.gif
+10;Légsebesség mérő szabadon;Távolítsa el a légsebesség mérőt védő kupakot.;image1.gif
+11;Katapultra helyezés;Helyezzék fel a repülőgépet a katapultra.;image1.gif
+12;Katapult bekötések;Ellenőrizze a katapult bekötések állapotát és rögzítettségét.;image1.gif
+13;Payload safety;Távolítsal el a payload vezérlő biztosító tüskéjét.;image1.gif
+14;Katapult hozzárendelés;Ellenőrizze, hogy a supervisor hozzárendelte a katapult vezérlését a géphez;image1.gif
+15;Motor indítása;Indítsa el a hajtóművet, ellenőrizze a stabil alapjáratot;image1.gif
+

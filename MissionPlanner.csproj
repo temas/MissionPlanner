@@ -396,6 +396,12 @@
     <Compile Include="Controls\payloadcontrol.Designer.cs">
       <DependentUpon>payloadcontrol.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\preflightCheckControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\preflightCheckControl.Designer.cs">
+      <DependentUpon>preflightCheckControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UAVCANSubscriber.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -653,6 +659,12 @@
     <Compile Include="StatusForms\payloadStatusForm.Designer.cs">
       <DependentUpon>payloadStatusForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="StatusForms\preflightForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatusForms\preflightForm.Designer.cs">
+      <DependentUpon>preflightForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Swarm\PaintEventArgsI.cs" />
     <Compile Include="temp.Designer.cs">
       <DependentUpon>temp.cs</DependentUpon>
@@ -780,6 +792,11 @@
     <EmbeddedResource Include="Controls\payloadsetup.resx">
       <DependentUpon>payloadsetup.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\preflightCheckControl.resx">
+      <DependentUpon>preflightCheckControl.cs</DependentUpon>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>preflightCheckControl1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\airspeedStatusForm.resx">
       <DependentUpon>airspeedStatusForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -875,6 +892,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\payloadStatusForm.resx">
       <DependentUpon>payloadStatusForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatusForms\preflightForm.resx">
+      <DependentUpon>preflightForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\Vibration.ko-KR.resx">
       <DependentUpon>Vibration.cs</DependentUpon>
@@ -4544,9 +4564,24 @@
     <Content Include="aircraft.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Controls\noimage.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Controls\notready.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Controls\preflight.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Controls\ready.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="quaternion.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <None Include="Resources\notready.png" />
+    <None Include="Resources\ready.png" />
+    <None Include="Resources\noimage.png" />
     <Content Include="rotmat.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

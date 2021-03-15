@@ -687,6 +687,7 @@ namespace MissionPlanner
         public static fenceStatusForm fenceForm = new fenceStatusForm();
         public static airspeedStatusForm airspeedForm = new airspeedStatusForm();
         public static magStatusForm magForm = new magStatusForm();
+        public static preflightForm prefForm = new preflightForm();
 
         public MainV2()
         {
@@ -3051,7 +3052,19 @@ namespace MissionPlanner
             {
             }
 
+
+
+            //Set up annunciator
+
             annunciator1.btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "CHUTE", "TERM", "CPULT", "PRFLT", "PNL15" };
+            annunciator1.setStatus("PRFLT", Stat.ALERT);
+
+
+            prefForm.controlStatusUpdated += preflightStatusChanged;
+
+
+
+
 
             MyView.AddScreen(new MainSwitcher.Screen("FlightData", FlightData, true));
             MyView.AddScreen(new MainSwitcher.Screen("FlightPlanner", FlightPlanner, true));
@@ -4531,6 +4544,29 @@ namespace MissionPlanner
 
         }
 
+        private void preflightStatusChanged(object sender, EventArgs e)
+        {
+
+            //Update preflight check status
+            preflightStatus stat = PreflightList.stat;
+            switch (stat)
+            {
+                case preflightStatus.notStarted:
+                    annunciator1.setStatus("PRFLT", Stat.ALERT);
+                    break;
+                case preflightStatus.inProgress:
+                    annunciator1.setStatus("PRFLT", Stat.WARNING);
+                    break;
+                case preflightStatus.finished:
+                    annunciator1.setStatus("PRFLT", Stat.NOMINAL);
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
+
         private void hideAllForms()
         {
             //Hide all forms
@@ -4545,6 +4581,7 @@ namespace MissionPlanner
             fenceForm.Hide();
             airspeedForm.Hide();
             magForm.Hide();
+            prefForm.Hide();
 
 
         }
@@ -4733,6 +4770,21 @@ namespace MissionPlanner
                 }
             }
 
+            else if (annunciator1.clickedButtonName == "PRFLT")
+            {
+                if (prefForm.Visible)
+                {
+                    prefForm.Hide();
+                }
+                else
+                {
+                    hideAllForms();
+                    prefForm.Owner = this;
+                    prefForm.Show();
+                    prefForm.Location = new Point(this.Location.X + this.Size.Width - prefForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+
+                }
+            }
 
 
 
