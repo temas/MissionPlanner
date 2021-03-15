@@ -573,6 +573,12 @@ namespace MissionPlanner.GCSViews
 
         public void loadTabControlActions()
         {
+
+
+
+
+
+
             string tabs = Settings.Instance["tabcontrolactions"];
 
             if (String.IsNullOrEmpty(tabs) || TabListOriginal == null || TabListOriginal.Count == 0)
@@ -4393,6 +4399,12 @@ namespace MissionPlanner.GCSViews
             if (tabControlactions.SelectedTab == tabPayloadControl) payloadcontrol1.resetControls();
 
 
+            if (tabControlactions.SelectedTab == tabFlightControl)
+            {
+                setFlighControlMode(MainV2.comPort.MAV.cs.mode);
+
+            }
+
             if (tabControlactions.SelectedTab == tabStatus)
             {
                 tabControlactions.Visible = false;
@@ -4687,7 +4699,7 @@ namespace MissionPlanner.GCSViews
             {
 
                if (MainV2.gpsForm.Visible) MainV2.comPort.MAV.cs.UpdateCurrentSettings(MainV2.gpsForm.bindingSourceGPSStatus.UpdateDataSource(MainV2.comPort.MAV.cs));
-
+               if (MainV2.airspeedForm.Visible) MainV2.comPort.MAV.cs.UpdateCurrentSettings(MainV2.airspeedForm.bindingSourceAirpseedForm.UpdateDataSource(MainV2.comPort.MAV.cs));
 
 
                 if (this.Visible)
@@ -5281,5 +5293,100 @@ namespace MissionPlanner.GCSViews
         {
 
         }
+
+
+
+
+        //All Fligh Control button clicks land here
+        private void bFC_Click(object sender, EventArgs e)
+        {
+
+            List<Button> bts = new List<Button>();
+            bts.Add(bFC1); bts.Add(bFC2); bts.Add(bFC3); bts.Add(bFC4); bts.Add(bFC5); bts.Add(bFC6);
+
+
+            Button bs = (Button)sender;
+
+            if (bs.BackColor == Color.Green) return;     //Do not allow select the one that you already in
+            //Clear all except the green
+            foreach (Button b in bts)
+                if (b.BackColor == Color.DarkGoldenrod) b.BackColor = Color.FromArgb(64, 64, 64);
+            bs.BackColor = Color.DarkGoldenrod;
+
+
+        }
+
+        private void bFCClear_Click(object sender, EventArgs e)
+        {
+            List<Button> bts = new List<Button>();
+            bts.Add(bFC1); bts.Add(bFC2); bts.Add(bFC3); bts.Add(bFC4); bts.Add(bFC5); bts.Add(bFC6);
+            foreach (Button b in bts)
+                if (b.BackColor == Color.DarkGoldenrod) b.BackColor = Color.FromArgb(64, 64, 64);
+
+        }
+
+        private void bFCExecute_Click(object sender, EventArgs e)
+        {
+            List<Button> bts = new List<Button>();
+            bts.Add(bFC1); bts.Add(bFC2); bts.Add(bFC3); bts.Add(bFC4); bts.Add(bFC5); bts.Add(bFC6);
+
+            String newmode = "";
+
+            foreach (Button b in bts)
+                if (b.BackColor == Color.DarkGoldenrod)
+                {
+                    newmode = b.Text;
+                }
+
+            if (newmode != "")
+            {
+
+                try
+                {
+                    ((Control)sender).Enabled = false;
+                    MainV2.comPort.setMode(newmode);
+                }
+                catch
+                {
+                    CustomMessageBox.Show(Strings.CommandFailed, Strings.ERROR);
+                }
+
+            ((Control)sender).Enabled = true;
+
+            }
+
+
+        }
+
+
+        public void setFlighControlMode(string mode)
+        {
+            Color dark = Color.FromArgb(64, 64, 64);
+            bFC1.BackColor = dark; bFC2.BackColor = dark; bFC3.BackColor = dark; bFC4.BackColor = dark; bFC5.BackColor = dark; bFC6.BackColor = dark;
+            switch (mode.ToUpper())
+            {
+                case "AUTO":
+                    bFC1.BackColor = Color.Green;
+                    break;
+                case "GUIDED":
+                    bFC2.BackColor = Color.Green;
+                    break;
+                case "LOITER":
+                    bFC3.BackColor = Color.Green;
+                    break;
+                case "CIRCLE":
+                    bFC4.BackColor = Color.Green;
+                    break;
+                case "TAKEOFF":
+                    bFC5.BackColor = Color.Green;
+                    break;
+                case "RTL":
+                    bFC6.BackColor = Color.Green;
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 }

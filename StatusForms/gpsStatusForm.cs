@@ -16,5 +16,17 @@ namespace MissionPlanner.StatusForms
         {
             InitializeComponent();
         }
+
+
+        public void addText(string t)
+        {
+            textBox1.Text += t + "\r\n";
+        }
+
+        public void clearText()
+        {
+            textBox1.Text = "";
+        }
+
     }
 }

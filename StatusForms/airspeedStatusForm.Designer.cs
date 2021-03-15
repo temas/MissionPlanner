@@ -29,14 +29,17 @@ namespace MissionPlanner.StatusForms
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.lAirSpeed = new System.Windows.Forms.Label();
+            this.bindingSourceAirpseedForm = new System.Windows.Forms.BindingSource(this.components);
             this.lAirSpeedError = new System.Windows.Forms.Label();
             this.lGroundSpeed = new System.Windows.Forms.Label();
-            this.myButtonNoTheme1 = new MissionPlanner.Controls.myButtonNoTheme();
+            this.bDoPreflight = new MissionPlanner.Controls.myButtonNoTheme();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSourceAirpseedForm)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -72,6 +75,7 @@ namespace MissionPlanner.StatusForms
             // lAirSpeed
             // 
             this.lAirSpeed.AutoSize = true;
+            this.lAirSpeed.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSourceAirpseedForm, "airspeed", true, System.Windows.Forms.DataSourceUpdateMode.Never, null, "N1"));
             this.lAirSpeed.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lAirSpeed.Location = new System.Drawing.Point(138, 9);
             this.lAirSpeed.Name = "lAirSpeed";
@@ -79,9 +83,14 @@ namespace MissionPlanner.StatusForms
             this.lAirSpeed.TabIndex = 3;
             this.lAirSpeed.Text = "000";
             // 
+            // bindingSourceAirpseedForm
+            // 
+            this.bindingSourceAirpseedForm.DataSource = typeof(MissionPlanner.CurrentState);
+            // 
             // lAirSpeedError
             // 
             this.lAirSpeedError.AutoSize = true;
+            this.lAirSpeedError.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSourceAirpseedForm, "aspd_error", true, System.Windows.Forms.DataSourceUpdateMode.Never, null, "N1"));
             this.lAirSpeedError.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lAirSpeedError.Location = new System.Drawing.Point(138, 55);
             this.lAirSpeedError.Name = "lAirSpeedError";
@@ -92,6 +101,7 @@ namespace MissionPlanner.StatusForms
             // lGroundSpeed
             // 
             this.lGroundSpeed.AutoSize = true;
+            this.lGroundSpeed.DataBindings.Add(new System.Windows.Forms.Binding("Text", this.bindingSourceAirpseedForm, "groundspeed", true, System.Windows.Forms.DataSourceUpdateMode.Never, null, "N1"));
             this.lGroundSpeed.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lGroundSpeed.Location = new System.Drawing.Point(138, 32);
             this.lGroundSpeed.Name = "lGroundSpeed";
@@ -99,18 +109,20 @@ namespace MissionPlanner.StatusForms
             this.lGroundSpeed.TabIndex = 5;
             this.lGroundSpeed.Text = "000";
             // 
-            // myButtonNoTheme1
+            // bDoPreflight
             // 
-            this.myButtonNoTheme1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.myButtonNoTheme1.Location = new System.Drawing.Point(226, 12);
-            this.myButtonNoTheme1.Name = "myButtonNoTheme1";
-            this.myButtonNoTheme1.Size = new System.Drawing.Size(242, 66);
-            this.myButtonNoTheme1.TabIndex = 6;
-            this.myButtonNoTheme1.Text = "PREFLIGHT CALIBRATION";
-            this.myButtonNoTheme1.UseVisualStyleBackColor = true;
+            this.bDoPreflight.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.bDoPreflight.Location = new System.Drawing.Point(226, 12);
+            this.bDoPreflight.Name = "bDoPreflight";
+            this.bDoPreflight.Size = new System.Drawing.Size(242, 66);
+            this.bDoPreflight.TabIndex = 6;
+            this.bDoPreflight.Text = "PREFLIGHT CALIBRATION";
+            this.bDoPreflight.UseVisualStyleBackColor = true;
+            this.bDoPreflight.Click += new System.EventHandler(this.bDoPreflight_Click);
             // 
             // textBox1
             // 
+            this.textBox1.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.textBox1.Location = new System.Drawing.Point(16, 94);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
@@ -123,7 +135,7 @@ namespace MissionPlanner.StatusForms
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 317);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.myButtonNoTheme1);
+            this.Controls.Add(this.bDoPreflight);
             this.Controls.Add(this.lGroundSpeed);
             this.Controls.Add(this.lAirSpeedError);
             this.Controls.Add(this.lAirSpeed);
@@ -133,6 +145,7 @@ namespace MissionPlanner.StatusForms
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "airspeedStatusForm";
             this.Text = "airspeedStatusForm";
+            ((System.ComponentModel.ISupportInitialize)(this.bindingSourceAirpseedForm)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -146,7 +159,8 @@ namespace MissionPlanner.StatusForms
         private System.Windows.Forms.Label lAirSpeed;
         private System.Windows.Forms.Label lAirSpeedError;
         private System.Windows.Forms.Label lGroundSpeed;
-        private Controls.myButtonNoTheme myButtonNoTheme1;
+        private Controls.myButtonNoTheme bDoPreflight;
         private System.Windows.Forms.TextBox textBox1;
+        public System.Windows.Forms.BindingSource bindingSourceAirpseedForm;
     }
 }

@@ -19,6 +19,8 @@ namespace MissionPlanner.Controls
     {
 
         private string[] _btnLabels = { "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE" };
+        private Stat[] _btnStatus = { Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED };
+
 
         public StringBuilder messages;
 
@@ -58,9 +60,9 @@ namespace MissionPlanner.Controls
             foreach (Button b in layoutPanel.Controls)
             {
                 b.Text = _btnLabels[a];
-                b.Name = _btnLabels[a++];
-                b.BackColor = Color.Lime;
-                b.ForeColor = Color.DarkSlateGray;
+                b.Name = _btnLabels[a];
+                _btnStatus[a] = Stat.NOMINAL;
+                setButtonColor(b, _btnStatus[a]);
                 b.Click += new System.EventHandler(this.panel_Click);
             }
 
@@ -72,6 +74,31 @@ namespace MissionPlanner.Controls
                 timer1.Enabled = true;
             }
         }
+
+
+        private void setButtonColor(Button b, Stat s)
+        {
+            switch (s)
+            {
+                case Stat.DISABLED:
+                    b.BackColor = Color.DarkSlateGray;
+                    b.ForeColor = Color.LightSlateGray;
+                    break;
+                case Stat.NOMINAL:
+                    b.BackColor = Color.Lime;
+                    b.ForeColor = Color.DarkSlateGray;
+                    break;
+                case Stat.WARNING:
+                    b.BackColor = Color.Yellow;
+                    b.ForeColor = Color.DarkSlateGray;
+                    break;
+                case Stat.ALERT:
+                    b.BackColor = Color.Red;
+                    b.ForeColor = Color.White;
+                    break;
+            }
+        }
+
 
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -90,32 +117,13 @@ namespace MissionPlanner.Controls
         public void setStatus(string panelName, Stat c)
         {
 
-            foreach (Button b in layoutPanel.Controls.Find(panelName, false))
+            Button b = layoutPanel.Controls.Find(panelName, false).FirstOrDefault() as Button;
+            int index = Array.IndexOf(_btnLabels,panelName);
+            if (_btnStatus[index] != c)
             {
-                switch (c)
-                {
-                    case Stat.DISABLED:
-                        b.BackColor = Color.DarkSlateGray;
-                        b.ForeColor = Color.LightSlateGray;
-                        break;
-                    case Stat.NOMINAL:
-                        b.BackColor = Color.Lime;
-                        b.ForeColor = Color.DarkSlateGray;
-                        break;
-                    case Stat.WARNING:
-                        b.BackColor = Color.Yellow;
-                        b.ForeColor = Color.DarkSlateGray;
-                        break;
-                    case Stat.ALERT:
-                        b.BackColor = Color.Red;
-                        b.ForeColor = Color.White;
-                        break;
-                }
-
+                _btnStatus[index] = c;
+                setButtonColor(b, c);
             }
-
-
-
         }
 
         private void panel_Click(object sender, EventArgs e)

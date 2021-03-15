@@ -495,6 +495,12 @@ namespace MissionPlanner
         Thread serialreaderthread;
         Thread pluginthread;
 
+        //Annunciator check trackings
+        private DateTime lastGpsCheck = DateTime.Now;
+
+
+
+
         /// <summary>
         /// track the last heartbeat sent
         /// </summary>
@@ -589,11 +595,11 @@ namespace MissionPlanner
 
                 //if (DisplayConfiguration.displayAdvActionsTab && !t.TabPages.Contains(FlightData.tabActions))
                 //{
-                    //t.TabPages.Add(FlightData.tabActions);
+                    t.TabPages.Add(FlightData.tabActions);
                 //}
                 //else if (!DisplayConfiguration.displayAdvActionsTab && t.TabPages.Contains(FlightData.tabActions))
                 //{
-                    t.TabPages.Remove(FlightData.tabActions);
+                    //t.TabPages.Remove(FlightData.tabActions);
                 //}
 
 
@@ -2592,6 +2598,8 @@ namespace MissionPlanner
 
             bool armedstatus = false;
 
+            string lastmode = "Unknown";
+
             string lastmessagehigh = "";
 
             DateTime speechcustomtime = DateTime.Now;
@@ -2856,6 +2864,19 @@ namespace MissionPlanner
                         }
                     }
 
+
+                    //update annunciator status forms (if needed)
+                    updateAnnunciatorForms();
+
+
+                    //update FlightControl
+                    if (lastmode != comPort.MAV.cs.mode)
+                    {
+                        lastmode = comPort.MAV.cs.mode;
+                        FlightData.setFlighControlMode(lastmode);
+                    }
+
+
                     // send a hb every seconds from gcs to ap
                     if (heatbeatSend.Second != DateTime.Now.Second)
                     {
@@ -3059,22 +3080,23 @@ namespace MissionPlanner
             }
 
 
+            connectionControl1.Visible = false;
+            MainV2.instance.MenuConnect.Visible = false;
 
             //Set up annunciator
 
             annunciator1.btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "CHUTE", "TERM", "CPULT", "PRFLT", "PNL15" };
-            annunciator1.setStatus("PRFLT", Stat.ALERT);
-            annunciator1.setStatus("CPULT", Stat.ALERT);
-            annunciator1.setStatus("FENCE", Stat.DISABLED);
+
+
+            setAnnunciatorInitialState();
+
+
 
 
 
 
             prefForm.controlStatusUpdated += preflightStatusChanged;
-
-
-
-
+            airspeedForm.controlStatusUpdated += airspeedStatusChanged;
 
             MyView.AddScreen(new MainSwitcher.Screen("FlightData", FlightData, true));
             MyView.AddScreen(new MainSwitcher.Screen("FlightPlanner", FlightPlanner, true));
@@ -3675,6 +3697,8 @@ namespace MissionPlanner
             GMapMarkerBase.DisplayRadius = Settings.Instance.GetBoolean("GMapMarkerBase_DisplayRadius", true);
             GMapMarkerBase.DisplayTarget = Settings.Instance.GetBoolean("GMapMarkerBase_DisplayTarget", true);
         }
+
+
 
         private async void BGLogMessagesMetaData(object nothing)
         {
@@ -4578,6 +4602,25 @@ namespace MissionPlanner
 
         }
 
+        private void airspeedStatusChanged(object sender, EventArgs e)
+        {
+
+            switch (airspeedForm.status)
+            {
+                case 0:
+                    annunciator1.setStatus("AIRSPD", Stat.ALERT);
+                    break;
+                case 2:
+                    annunciator1.setStatus("AIRSPD", Stat.NOMINAL);
+                    break;
+                default:
+                    break;
+            }
+
+
+        }
+
+
 
         private void hideAllForms()
         {
@@ -4802,7 +4845,52 @@ namespace MissionPlanner
 
 
 
+        } //end annunciator button click
+
+
+        private void setAnnunciatorInitialState()
+        {
+            annunciator1.setStatus("PRFLT", Stat.ALERT);
+            //annunciator1.setStatus("GPS", Stat.ALERT);
+            annunciator1.setStatus("FENCE", Stat.DISABLED);
+            annunciator1.setStatus("AIRSPD", Stat.ALERT); airspeedForm.addText("AIRSPEED SENSOR NOT CALIBRATED!");
+
         }
+
+
+        private void updateAnnunciatorForms()
+        {
+
+            //check GPS
+            if ((DateTime.Now - lastGpsCheck) >= TimeSpan.FromSeconds(2))
+            {
+
+                MainV2.instance.BeginInvoke((MethodInvoker)(() =>
+                {
+                    gpsForm.clearText();
+                    if (comPort.MAV.cs.gpshdop == 0 || comPort.MAV.cs.satcount <= 4)
+                    {
+                        annunciator1.setStatus("GPS", Stat.ALERT);
+                        gpsForm.addText("NO GPS reception!");
+                    }
+                    else if (comPort.MAV.cs.gpshdop > 1.2)
+                    {
+                        annunciator1.setStatus("GPS", Stat.WARNING);
+                        gpsForm.addText("Weak GPS reception!");
+
+                    }
+                }));
+
+            }
+
+
+
+
+
+
+        }
+
+
 
 
     }

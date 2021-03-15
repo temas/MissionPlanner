@@ -95,7 +95,6 @@ namespace MissionPlanner.StatusForms
             this.textBox1.Name = "textBox1";
             this.textBox1.Size = new System.Drawing.Size(429, 157);
             this.textBox1.TabIndex = 3;
-            this.textBox1.Text = "GPS OK !";
             // 
             // label5
             // 

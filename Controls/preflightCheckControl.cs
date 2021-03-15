@@ -122,6 +122,9 @@ namespace MissionPlanner.Controls
             //Fire event on change
             EventHandler handler = this.statusUpdated;
             if (handler != null) handler(this, EventArgs.Empty);
+
+            bNext_Click(null, EventArgs.Empty); //skip to the next item;
+
         }
 
         private void bNext_Click(object sender, EventArgs e)
