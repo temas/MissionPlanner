@@ -796,6 +796,7 @@
       <DependentUpon>preflightCheckControl.cs</DependentUpon>
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>preflightCheckControl1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\airspeedStatusForm.resx">
       <DependentUpon>airspeedStatusForm.cs</DependentUpon>

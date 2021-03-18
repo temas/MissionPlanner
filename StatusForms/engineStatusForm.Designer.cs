@@ -72,7 +72,7 @@
             this.Gspeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Gspeed.Location = new System.Drawing.Point(9, 9);
             this.Gspeed.Margin = new System.Windows.Forms.Padding(0);
-            this.Gspeed.MaxValue = 50F;
+            this.Gspeed.MaxValue = 135F;
             this.Gspeed.MinValue = 0F;
             this.Gspeed.Name = "Gspeed";
             this.Gspeed.Need_Idx = ((byte)(3));
@@ -112,10 +112,10 @@
         2};
             this.Gspeed.NeedleType = 0;
             this.Gspeed.NeedleWidth = 2;
-            this.Gspeed.Range_Idx = ((byte)(3));
-            this.Gspeed.RangeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.Gspeed.Range_Idx = ((byte)(2));
+            this.Gspeed.RangeColor = System.Drawing.Color.Orange;
             this.Gspeed.RangeEnabled = true;
-            this.Gspeed.RangeEndValue = 50F;
+            this.Gspeed.RangeEndValue = 120F;
             this.Gspeed.RangeInnerRadius = 60;
             this.Gspeed.RangeOuterRadius = 70;
             this.Gspeed.RangesColor = new System.Drawing.Color[] {
@@ -131,10 +131,10 @@
         true,
         false};
             this.Gspeed.RangesEndValue = new float[] {
-        15F,
-        32F,
-        42F,
-        50F,
+        20F,
+        90F,
+        120F,
+        135F,
         0F};
             this.Gspeed.RangesInnerRadius = new int[] {
         60,
@@ -150,11 +150,11 @@
         80};
             this.Gspeed.RangesStartValue = new float[] {
         0F,
-        15F,
-        32F,
-        42F,
+        20F,
+        90F,
+        120F,
         0F};
-            this.Gspeed.RangeStartValue = 42F;
+            this.Gspeed.RangeStartValue = 90F;
             this.Gspeed.ScaleLinesInterColor = System.Drawing.Color.White;
             this.Gspeed.ScaleLinesInterInnerRadius = 52;
             this.Gspeed.ScaleLinesInterOuterRadius = 60;
@@ -162,7 +162,7 @@
             this.Gspeed.ScaleLinesMajorColor = System.Drawing.Color.White;
             this.Gspeed.ScaleLinesMajorInnerRadius = 50;
             this.Gspeed.ScaleLinesMajorOuterRadius = 60;
-            this.Gspeed.ScaleLinesMajorStepValue = 10F;
+            this.Gspeed.ScaleLinesMajorStepValue = 15F;
             this.Gspeed.ScaleLinesMajorWidth = 2;
             this.Gspeed.ScaleLinesMinorColor = System.Drawing.Color.White;
             this.Gspeed.ScaleLinesMinorInnerRadius = 55;

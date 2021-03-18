@@ -497,6 +497,7 @@ namespace MissionPlanner
 
         //Annunciator check trackings
         private DateTime lastGpsCheck = DateTime.Now;
+        private DateTime lastComCheck = DateTime.Now;
 
 
 
@@ -3085,7 +3086,7 @@ namespace MissionPlanner
 
             //Set up annunciator
 
-            annunciator1.btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "CHUTE", "TERM", "CPULT", "PRFLT", "PNL15" };
+            annunciator1.btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "CHUTE", "TERM", "CPULT", "PRFLT", "MSG" };
 
 
             setAnnunciatorInitialState();
@@ -4851,7 +4852,6 @@ namespace MissionPlanner
         private void setAnnunciatorInitialState()
         {
             annunciator1.setStatus("PRFLT", Stat.ALERT);
-            //annunciator1.setStatus("GPS", Stat.ALERT);
             annunciator1.setStatus("FENCE", Stat.DISABLED);
             annunciator1.setStatus("AIRSPD", Stat.ALERT); airspeedForm.addText("AIRSPEED SENSOR NOT CALIBRATED!");
 
@@ -4864,7 +4864,7 @@ namespace MissionPlanner
             //check GPS
             if ((DateTime.Now - lastGpsCheck) >= TimeSpan.FromSeconds(2))
             {
-
+                lastGpsCheck = DateTime.Now;
                 MainV2.instance.BeginInvoke((MethodInvoker)(() =>
                 {
                     gpsForm.clearText();
@@ -4883,15 +4883,23 @@ namespace MissionPlanner
 
             }
 
+            if ((DateTime.Now - lastComCheck) >= TimeSpan.FromSeconds(1))
+            {
+                lastComCheck = DateTime.Now;
+                if (!comPort.MAV.cs.connected)
+                {
+                    annunciator1.setStatus("COMM", Stat.ALERT);
+                    return;
+                }
+                else annunciator1.setStatus("COMM", Stat.NOMINAL);
 
+
+
+            }
 
 
 
 
         }
-
-
-
-
     }
 }

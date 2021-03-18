@@ -38,6 +38,19 @@ namespace MissionPlanner.StatusForms
 
             status = 0;
 
+            if (!MainV2.comPort.MAV.cs.connected)
+            {
+                CustomMessageBox.Show("You have to connect first!", "Action", MessageBoxButtons.OK);
+                return;
+            }
+
+            if (MainV2.comPort.MAV.cs.armed)
+            {
+                CustomMessageBox.Show("You cannot do it while aircraft is armed!", "Action", MessageBoxButtons.OK);
+                return;
+
+            }
+
             if (CustomMessageBox.Show("Are you sure you want to do Preflight Calibration ?", "Action", MessageBoxButtons.YesNo) == (int)DialogResult.Yes)
             {
                 try

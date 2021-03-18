@@ -156,6 +156,14 @@ namespace MissionPlanner.Controls
 
             displayAOASSA = false;
 
+            displayvibe = false;
+            displayekf = false;
+            displayconninfo = false;
+            displayheading = false;
+            displaygps = false;
+            displayxtrack = false;
+
+
             this.Name = "Hud";
 
             try

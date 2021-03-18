@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,6 +30,10 @@ namespace MissionPlanner.Controls
         public void displayStep(PreflightStep s)
         {
 
+
+            string preflightPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + Path.DirectorySeparatorChar + "Mission Planner" +
+                Path.DirectorySeparatorChar + "preflight" + Path.DirectorySeparatorChar;
+
             if (s is null) return;
 
             this.lName.Text = s.name;
@@ -36,7 +41,7 @@ namespace MissionPlanner.Controls
 
             try
             {
-                Image i = Image.FromFile(s.imageFile);
+                Image i = Image.FromFile(preflightPath + s.imageFile);
                 pictureBox1.Image = i;
 
             }
@@ -178,9 +183,13 @@ namespace MissionPlanner.Controls
 
         static PreflightList()
         {
+
+            string preflightPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + Path.DirectorySeparatorChar + "Mission Planner" +
+                Path.DirectorySeparatorChar + "preflight" + Path.DirectorySeparatorChar ;
+
             if ((LicenseManager.UsageMode != LicenseUsageMode.Designtime))
             {
-                if (!loadPreflight("controls/preflight.txt")) return;
+                if (!loadPreflight(preflightPath + "preflight.txt")) return;
                 invalidateAllSteps();
                 initPreflight();
                 updateStatus();
