@@ -4661,217 +4661,72 @@ namespace MissionPlanner
 
         private void annunciator1_buttonClicked(object sender, EventArgs e)
         {
-            //Check Button
-            if (annunciator1.clickedButtonName == "EKF")
-            {
+            Form f = null;
 
-                if (ekfForm.Visible)
+            switch (annunciator1.clickedButtonName)
+            {
+                case "EKF":
+                    f = ekfForm;
+                    break;
+                case "VIBE":
+                    f = vibeForm;
+                    break;
+                case "ENGINE":
+                    f = engineForm;
+                    break;
+                case "PAYLD":
+                    f = payloadForm;
+                    break;
+                case "BATT":
+                    f = batteryForm;
+                    break;
+                case "GPS":
+                    f = gpsForm;
+                    break;
+                case "FUEL":
+                    f = fuelForm;
+                    break;
+                case "MAG":
+                    f = magForm;
+                    break;
+                case "FENCE":
+                    f = fenceForm;
+                    break;
+                case "AIRSPD":
+                    f = airspeedForm;
+                    break;
+                case "PRFLT":
+                    f = prefForm;
+                    break;
+                case "MSG":
+                    f = msgForm;
+                    break;
+                case "START":
+                    f = startForm;
+                    break;
+                default:
+                    f = null;
+                    break;
+            }
+
+            //Generic show/hide
+            if (f != null)
+            {
+                if (f.Visible)
                 {
-                    ekfForm.Hide();
+                    f.Hide();
                 }
                 else
                 {
                     hideAllForms();
-                    ekfForm.FormBorderStyle = FormBorderStyle.None;
-                    ekfForm.Owner = this;
-                    ekfForm.Show();
-                    ekfForm.Location = new Point(this.Location.X + this.Size.Width - ekfForm.Size.Width, this.Location.Y+ this.annunciator1.Location.Y + 61);
-                }
-            }
-            else if (annunciator1.clickedButtonName == "VIBE")
-            {
-                if (vibeForm.Visible)
-                {
-                    vibeForm.Hide();
-                }
-                else
-                {
-                    hideAllForms();
-                    vibeForm.FormBorderStyle = FormBorderStyle.None;
-                    vibeForm.Owner = this;
-                    vibeForm.Show();
-                    vibeForm.Location = new Point(this.Location.X + this.Size.Width - vibeForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+                    f.FormBorderStyle = FormBorderStyle.None;
+                    f.Owner = this;
+                    f.Show();
+                    f.Location = new Point(this.Location.X + this.Size.Width - f.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
 
                 }
             }
-            else if (annunciator1.clickedButtonName == "ENGINE")
-            {
-                if (engineForm.Visible)
-                {
-                    engineForm.Hide();
-                }
-                else
-                {
-                    hideAllForms();
-                    engineForm.Owner = this;
-                    engineForm.Show();
-                    engineForm.Location = new Point(this.Location.X + this.Size.Width - engineForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
-
-                }
-            }
-            else if (annunciator1.clickedButtonName == "PAYLD")
-            {
-                if (payloadForm.Visible)
-                {
-                    payloadForm.Hide();
-                }
-                else
-                {
-                    hideAllForms();
-                    payloadForm.Owner = this;
-                    payloadForm.Show();
-                    payloadForm.Location = new Point(this.Location.X + this.Size.Width - payloadForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
-                    payloadForm.refreshPayloads();
-
-                }
-            }
-            else if (annunciator1.clickedButtonName == "BATT")
-            {
-                if (batteryForm.Visible)
-                {
-                    batteryForm.Hide();
-                }
-                else
-                {
-                    hideAllForms();
-                    batteryForm.Owner = this;
-                    batteryForm.Show();
-                    batteryForm.Location = new Point(this.Location.X + this.Size.Width - batteryForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
-
-                }
-            }
-            else if (annunciator1.clickedButtonName == "GPS")
-            {
-                if (gpsForm.Visible)
-                {
-                    gpsForm.Hide();
-                }
-                else
-                {
-                    hideAllForms();
-                    gpsForm.Owner = this;
-                    gpsForm.Show();
-                    gpsForm.Location = new Point(this.Location.X + this.Size.Width - gpsForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
-
-                }
-            }
-            else if (annunciator1.clickedButtonName == "COMM")
-            {
-                if (connectionStatsForm is null)
-                {
-                    hideAllForms();
-                    ShowConnectionStatsForm();
-                    connectionStatsForm.Owner = this;
-                    connectionStatsForm.Location = new Point(this.Location.X + this.Size.Width - connectionStatsForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
-                }
-                else
-                {
-                if (connectionStatsForm.Visible)
-                    {
-                        connectionStatsForm.Hide();
-                    }
-                else
-                    {
-                        hideAllForms();
-                        ShowConnectionStatsForm();
-                        connectionStatsForm.Owner = this;
-                        connectionStatsForm.Location = new Point(this.Location.X + this.Size.Width - connectionStatsForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
-
-                    }
-                }
-            }
-            else if (annunciator1.clickedButtonName == "FUEL")
-            {
-                if (fuelForm.Visible)
-                {
-                    fuelForm.Hide();
-                }
-                else
-                {
-                    hideAllForms();
-                    fuelForm.Owner = this;
-                    fuelForm.Show();
-                    fuelForm.Location = new Point(this.Location.X + this.Size.Width - fuelForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
-
-                }
-            }
-            else if (annunciator1.clickedButtonName == "FENCE")
-            {
-                if (fenceForm.Visible)
-                {
-                    fenceForm.Hide();
-                }
-                else
-                {
-                    hideAllForms();
-                    fenceForm.Owner = this;
-                    fenceForm.Show();
-                    fenceForm.Location = new Point(this.Location.X + this.Size.Width - fenceForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
-
-                }
-            }
-            else if (annunciator1.clickedButtonName == "AIRSPD")
-            {
-                if (airspeedForm.Visible)
-                {
-                    airspeedForm.Hide();
-                }
-                else
-                {
-                    hideAllForms();
-                    airspeedForm.Owner = this;
-                    airspeedForm.Show();
-                    airspeedForm.Location = new Point(this.Location.X + this.Size.Width - airspeedForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
-
-                }
-            }
-            else if (annunciator1.clickedButtonName == "MAG")
-            {
-                if (magForm.Visible)
-                {
-                    magForm.Hide();
-                }
-                else
-                {
-                    hideAllForms();
-                    magForm.Owner = this;
-                    magForm.Show();
-                    magForm.Location = new Point(this.Location.X + this.Size.Width - magForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
-
-                }
-            }
-
-            else if (annunciator1.clickedButtonName == "PRFLT")
-            {
-                if (prefForm.Visible)
-                {
-                    prefForm.Hide();
-                }
-                else
-                {
-                    hideAllForms();
-                    prefForm.Owner = this;
-                    prefForm.Show();
-                    prefForm.Location = new Point(this.Location.X + this.Size.Width - prefForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
-
-                }
-            }
-
-            else if (annunciator1.clickedButtonName == "MSG")
-            {
-                if (msgForm.Visible)
-                {
-                    msgForm.Hide();
-                }
-                else
-                {
-                    hideAllForms();
-                    msgForm.Owner = this;
-                    msgForm.Show();
-                    msgForm.Location = new Point(this.Location.X + this.Size.Width - msgForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
-
-                }
-            }
+            //Route
             else if (annunciator1.clickedButtonName == "ROUTE")
             {
                 if (FlightData.plannerShown)
@@ -4884,27 +4739,34 @@ namespace MissionPlanner
                     FlightPlanner.BUT_read_Click(null, EventArgs.Empty);
                 }
             }
-
-            else if (annunciator1.clickedButtonName == "START")
+            //Comm
+            else if (annunciator1.clickedButtonName == "COMM")
             {
-                if (startForm.Visible)
+                if (connectionStatsForm is null)
                 {
-                    startForm.Hide();
+                    hideAllForms();
+                    ShowConnectionStatsForm();
+                    connectionStatsForm.Owner = this;
+                    connectionStatsForm.Location = new Point(this.Location.X + this.Size.Width - connectionStatsForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
                 }
                 else
                 {
-                    hideAllForms();
-                    startForm.Owner = this;
-                    startForm.Show();
-                    startForm.Location = new Point(this.Location.X + this.Size.Width - startForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+                    if (connectionStatsForm.Visible)
+                    {
+                        connectionStatsForm.Hide();
+                    }
+                    else
+                    {
+                        hideAllForms();
+                        ShowConnectionStatsForm();
+                        connectionStatsForm.Owner = this;
+                        connectionStatsForm.Location = new Point(this.Location.X + this.Size.Width - connectionStatsForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
 
+                    }
                 }
             }
 
-
-
-        } //end annunciator button click
-
+        }
 
         private void setAnnunciatorInitialState()
         {
@@ -4918,8 +4780,6 @@ namespace MissionPlanner
             startForm.setItem(StartItem.aircraftArmed, true);
             startForm.setItem(StartItem.takeoffMode, true);
             startForm.setItem(StartItem.fullThrottle, true);
-
-
         }
 
 
