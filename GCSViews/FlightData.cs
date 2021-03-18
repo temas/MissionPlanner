@@ -470,7 +470,7 @@ namespace MissionPlanner.GCSViews
             if (MainV2.comPort.MAV.param.ContainsKey("BATT_MONITOR") &&
                 (float) MainV2.comPort.MAV.param["BATT_MONITOR"] != 0)
             {
-                hud1.batteryon = true;
+                hud1.batteryon = false;
             }
             else
             {
