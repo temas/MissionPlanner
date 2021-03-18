@@ -34,6 +34,7 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.myButtonNoTheme1 = new MissionPlanner.Controls.myButtonNoTheme();
             this.myButtonNoTheme2 = new MissionPlanner.Controls.myButtonNoTheme();
+            this.btnArmVehicle = new MissionPlanner.Controls.myButtonNoTheme();
             this.SuspendLayout();
             // 
             // Gspeed
@@ -337,14 +338,14 @@
             this.textBox1.Location = new System.Drawing.Point(9, 221);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(209, 130);
+            this.textBox1.Size = new System.Drawing.Size(209, 219);
             this.textBox1.TabIndex = 83;
             this.textBox1.Text = "Engine flameout!\r\nRestart in progress...";
             // 
             // myButtonNoTheme1
             // 
             this.myButtonNoTheme1.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.myButtonNoTheme1.Location = new System.Drawing.Point(225, 227);
+            this.myButtonNoTheme1.Location = new System.Drawing.Point(225, 305);
             this.myButtonNoTheme1.Name = "myButtonNoTheme1";
             this.myButtonNoTheme1.Size = new System.Drawing.Size(201, 47);
             this.myButtonNoTheme1.TabIndex = 87;
@@ -356,7 +357,7 @@
             this.myButtonNoTheme2.BGGradBot = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.myButtonNoTheme2.BGGradTop = System.Drawing.Color.Red;
             this.myButtonNoTheme2.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.myButtonNoTheme2.Location = new System.Drawing.Point(226, 304);
+            this.myButtonNoTheme2.Location = new System.Drawing.Point(224, 393);
             this.myButtonNoTheme2.Name = "myButtonNoTheme2";
             this.myButtonNoTheme2.Outline = System.Drawing.Color.Red;
             this.myButtonNoTheme2.Size = new System.Drawing.Size(201, 47);
@@ -365,11 +366,25 @@
             this.myButtonNoTheme2.TextColor = System.Drawing.Color.White;
             this.myButtonNoTheme2.UseVisualStyleBackColor = true;
             // 
+            // btnArmVehicle
+            // 
+            this.btnArmVehicle.BGGradBot = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.btnArmVehicle.BGGradTop = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.btnArmVehicle.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnArmVehicle.Location = new System.Drawing.Point(225, 221);
+            this.btnArmVehicle.Name = "btnArmVehicle";
+            this.btnArmVehicle.Size = new System.Drawing.Size(201, 47);
+            this.btnArmVehicle.TabIndex = 89;
+            this.btnArmVehicle.Text = "ARM VEHICLE";
+            this.btnArmVehicle.UseVisualStyleBackColor = true;
+            this.btnArmVehicle.Click += new System.EventHandler(this.btnArmVehicle_Click);
+            // 
             // engineStatusForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(438, 363);
+            this.ClientSize = new System.Drawing.Size(438, 452);
+            this.Controls.Add(this.btnArmVehicle);
             this.Controls.Add(this.myButtonNoTheme2);
             this.Controls.Add(this.myButtonNoTheme1);
             this.Controls.Add(this.textBox1);
@@ -390,5 +405,6 @@
         private System.Windows.Forms.TextBox textBox1;
         private Controls.myButtonNoTheme myButtonNoTheme1;
         private Controls.myButtonNoTheme myButtonNoTheme2;
+        private Controls.myButtonNoTheme btnArmVehicle;
     }
 }

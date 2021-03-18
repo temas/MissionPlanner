@@ -653,6 +653,12 @@
     <Compile Include="StatusForms\magStatusForm.Designer.cs">
       <DependentUpon>magStatusForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="StatusForms\messagesStatusForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatusForms\messagesStatusForm.Designer.cs">
+      <DependentUpon>messagesStatusForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="StatusForms\payloadStatusForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -664,6 +670,12 @@
     </Compile>
     <Compile Include="StatusForms\preflightForm.Designer.cs">
       <DependentUpon>preflightForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="StatusForms\startProcessForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatusForms\startProcessForm.Designer.cs">
+      <DependentUpon>startProcessForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Swarm\PaintEventArgsI.cs" />
     <Compile Include="temp.Designer.cs">
@@ -891,11 +903,17 @@
     <EmbeddedResource Include="StatusForms\magStatusForm.resx">
       <DependentUpon>magStatusForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="StatusForms\messagesStatusForm.resx">
+      <DependentUpon>messagesStatusForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\payloadStatusForm.resx">
       <DependentUpon>payloadStatusForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\preflightForm.resx">
       <DependentUpon>preflightForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatusForms\startProcessForm.resx">
+      <DependentUpon>startProcessForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\Vibration.ko-KR.resx">
       <DependentUpon>Vibration.cs</DependentUpon>

@@ -6,6 +6,9 @@ namespace MissionPlanner.Controls
 {
     public partial class EKFStatus : Form
     {
+
+        public Stat ekfStat;
+
         public EKFStatus()
         {
             InitializeComponent();
@@ -21,11 +24,14 @@ namespace MissionPlanner.Controls
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+
             ekfvel.Value = (int)(MainV2.comPort.MAV.cs.ekfvelv * 100);
             ekfposh.Value = (int)(MainV2.comPort.MAV.cs.ekfposhor * 100);
             ekfposv.Value = (int)(MainV2.comPort.MAV.cs.ekfposvert * 100);
             ekfcompass.Value = (int)(MainV2.comPort.MAV.cs.ekfcompv * 100);
             ekfterrain.Value = (int)(MainV2.comPort.MAV.cs.ekfteralt * 100);
+
+            ekfStat = Stat.NOMINAL;
 
             // restore colours
             Utilities.ThemeManager.ApplyThemeTo(this);
@@ -33,10 +39,16 @@ namespace MissionPlanner.Controls
             foreach (var item in new VerticalProgressBar2[] { ekfvel, ekfposh, ekfposv, ekfcompass, ekfterrain })
             {
                 if (item.Value > 50)
+                {
                     item.ValueColor = Color.Orange;
+                    if (ekfStat == Stat.NOMINAL) ekfStat = Stat.WARNING;
+                }
 
                 if (item.Value > 80)
+                {
                     item.ValueColor = Color.Red;
+                    if (ekfStat == Stat.NOMINAL || ekfStat == Stat.WARNING) ekfStat = Stat.ALERT;
+                }
             }
 
             int idx = 0;
@@ -61,6 +73,7 @@ namespace MissionPlanner.Controls
                      currentflag == MAVLink.EKF_STATUS_FLAGS.EKF_POS_VERT_ABS) && currentbit == 0)
                 {
                     flowLayoutPanel1.Controls[idx].ForeColor = Color.Red;
+                    ekfStat = Stat.ALERT;
                 }
 
                 idx++;

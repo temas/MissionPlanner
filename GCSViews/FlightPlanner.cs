@@ -576,7 +576,7 @@ namespace MissionPlanner.GCSViews
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        public void BUT_read_Click(object sender, EventArgs e)
+       public void BUT_read_Click(object sender, EventArgs e)
         {
             if (Commands.Rows.Count > 0)
             {

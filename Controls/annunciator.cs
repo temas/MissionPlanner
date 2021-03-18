@@ -22,8 +22,6 @@ namespace MissionPlanner.Controls
         private Stat[] _btnStatus = { Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED };
 
 
-        public StringBuilder messages;
-
         [Browsable(true)]
         [Category("Action")]
         public event EventHandler buttonClicked;
@@ -39,6 +37,7 @@ namespace MissionPlanner.Controls
         [System.ComponentModel.Browsable(true)]
         public string[] btnLabels
         {
+
             get { return _btnLabels; }
             set
             {
@@ -64,6 +63,7 @@ namespace MissionPlanner.Controls
                 _btnStatus[a] = Stat.NOMINAL;
                 setButtonColor(b, _btnStatus[a]);
                 b.Click += new System.EventHandler(this.panel_Click);
+                a++;
             }
 
             timer1.Interval = 500;
@@ -132,6 +132,7 @@ namespace MissionPlanner.Controls
             {
                 _btnStatus[index] = c;
                 setButtonColor(b, c);
+                this.Invalidate();
             }
         }
 
@@ -164,6 +165,28 @@ namespace MissionPlanner.Controls
             {
                 handler(this, e);
             }
+
+        }
+
+        private void annunciator_EnabledChanged(object sender, EventArgs e)
+        {
+            if (this.Enabled)
+            {
+                int a = 0;
+                foreach (Button b in layoutPanel.Controls)
+                {
+                    setButtonColor(b, _btnStatus[a++]);
+                }
+            }
+            else
+            {
+                foreach (Button b in layoutPanel.Controls)
+                {
+                    b.BackColor = Color.DarkSlateGray;
+                    b.ForeColor = Color.LightSlateGray;
+                }
+            }
+
 
         }
     }

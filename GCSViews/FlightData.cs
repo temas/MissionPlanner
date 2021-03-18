@@ -2293,7 +2293,7 @@ namespace MissionPlanner.GCSViews
             //attitudeIndicatorInstrumentControl1;
         }
 
-        private void flightPlannerToolStripMenuItem_Click(object sender, EventArgs e)
+        public void flightPlannerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             foreach (Control ctl in splitContainer1.Panel2.Controls)
             {
@@ -5300,6 +5300,8 @@ namespace MissionPlanner.GCSViews
         //All Fligh Control button clicks land here
         private void bFC_Click(object sender, EventArgs e)
         {
+
+            if (!MainV2.comPort.MAV.cs.connected) return;
 
             List<Button> bts = new List<Button>();
             bts.Add(bFC1); bts.Add(bFC2); bts.Add(bFC3); bts.Add(bFC4); bts.Add(bFC5); bts.Add(bFC6);

@@ -499,6 +499,14 @@ namespace MissionPlanner
         private DateTime lastGpsCheck = DateTime.Now;
         private DateTime lastComCheck = DateTime.Now;
         private DateTime lastBattCheck = DateTime.Now;
+        private DateTime lastMsgCheck = DateTime.Now;
+        private DateTime lastEkfCheck = DateTime.Now;
+        private DateTime lastVibeCheck = DateTime.Now;
+        private DateTime lastStartCheck = DateTime.Now;
+        private DateTime lastConnectCheck = DateTime.Now;
+
+
+        private int messagecount;
 
 
 
@@ -695,6 +703,8 @@ namespace MissionPlanner
         public static airspeedStatusForm airspeedForm = new airspeedStatusForm();
         public static magStatusForm magForm = new magStatusForm();
         public static preflightForm prefForm = new preflightForm();
+        public static messagesStatusForm msgForm = new messagesStatusForm();
+        public static startProcessForm startForm = new startProcessForm();
 
         public MainV2()
         {
@@ -3086,7 +3096,8 @@ namespace MissionPlanner
 
             //Set up annunciator
 
-            annunciator1.btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "CHUTE", "TERM", "CPULT", "PRFLT", "MSG" };
+            //annunciator1.btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "CHUTE", "TERM", "CPULT", "PRFLT", "MSG" };
+            annunciator1.btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "ROUTE", "CHUTE", "PRFLT", "START", "MSG"};
 
 
             setAnnunciatorInitialState();
@@ -3098,6 +3109,10 @@ namespace MissionPlanner
 
             prefForm.controlStatusUpdated += preflightStatusChanged;
             airspeedForm.controlStatusUpdated += airspeedStatusChanged;
+
+            engineForm.armClicked += engineForm_armClicked;
+
+
 
             MyView.AddScreen(new MainSwitcher.Screen("FlightData", FlightData, true));
             MyView.AddScreen(new MainSwitcher.Screen("FlightPlanner", FlightPlanner, true));
@@ -4637,6 +4652,7 @@ namespace MissionPlanner
             fenceForm.Hide();
             airspeedForm.Hide();
             magForm.Hide();
+            startForm.Hide();
             prefForm.Hide();
 
 
@@ -4645,6 +4661,10 @@ namespace MissionPlanner
 
         private void annunciator1_buttonClicked(object sender, EventArgs e)
         {
+
+
+            //if (!comPort.MAV.cs.connected) return;
+
 
             //Check Button
             if (annunciator1.clickedButtonName == "EKF")
@@ -4842,7 +4862,42 @@ namespace MissionPlanner
                 }
             }
 
+            else if (annunciator1.clickedButtonName == "MSG")
+            {
+                if (msgForm.Visible)
+                {
+                    msgForm.Hide();
+                }
+                else
+                {
+                    hideAllForms();
+                    msgForm.Owner = this;
+                    msgForm.Show();
+                    msgForm.Location = new Point(this.Location.X + this.Size.Width - msgForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
 
+                }
+            }
+            else if (annunciator1.clickedButtonName == "ROUTE")
+            {
+                FlightData.flightPlannerToolStripMenuItem_Click(null, EventArgs.Empty);
+                FlightPlanner.BUT_read_Click(null, EventArgs.Empty);
+            }
+
+            else if (annunciator1.clickedButtonName == "START")
+            {
+                if (startForm.Visible)
+                {
+                    startForm.Hide();
+                }
+                else
+                {
+                    hideAllForms();
+                    startForm.Owner = this;
+                    startForm.Show();
+                    startForm.Location = new Point(this.Location.X + this.Size.Width - startForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+
+                }
+            }
 
 
 
@@ -4851,9 +4906,17 @@ namespace MissionPlanner
 
         private void setAnnunciatorInitialState()
         {
-            annunciator1.setStatus("PRFLT", Stat.ALERT);
-            annunciator1.setStatus("FENCE", Stat.DISABLED);
             annunciator1.setStatus("AIRSPD", Stat.ALERT); airspeedForm.addText("AIRSPEED SENSOR NOT CALIBRATED!");
+            annunciator1.setStatus("PRFLT", Stat.ALERT);
+
+
+
+            startForm.setItem(StartItem.catapultAllocated,true);
+            startForm.setItem(StartItem.catapultReady, true);
+            startForm.setItem(StartItem.aircraftArmed, true);
+            startForm.setItem(StartItem.takeoffMode, true);
+            startForm.setItem(StartItem.fullThrottle, true);
+
 
         }
 
@@ -4861,28 +4924,84 @@ namespace MissionPlanner
         private void updateAnnunciatorForms()
         {
 
-            //check GPS
+
+            if ((DateTime.Now - lastConnectCheck) >= TimeSpan.FromSeconds(1))
+            {
+
+                lastConnectCheck = DateTime.Now;
+                var c = comPort.MAV.cs.connected;
+
+                MainV2.instance.BeginInvoke((MethodInvoker)(() =>
+                {
+
+                    if (annunciator1.Enabled != c)
+                            annunciator1.Enabled = c;
+
+                }));
+            }
+
+            //Id we disconnected then all buttons are disabled
+            if (!comPort.MAV.cs.connected) return;
+
+
+
+            if ((DateTime.Now - lastStartCheck) >= TimeSpan.FromSeconds(1))
+            {
+
+                lastStartCheck = DateTime.Now;
+
+                startForm.setItem(StartItem.aircraftArmed, comPort.MAV.cs.armed);
+                if (comPort.MAV.cs.mode == "TAKEOFF") startForm.setItem(StartItem.takeoffMode, true);
+                else startForm.setItem(StartItem.takeoffMode, false);
+
+
+
+
+                if ( (annunciator1.getStatus("PRFLT") == Stat.NOMINAL) && startForm.bArmed && startForm.bCatAllocated && startForm.bCatReady && startForm.bFullThrottle && startForm.bTakeoff)
+                {
+                    annunciator1.setStatus("START", Stat.NOMINAL);
+                    startForm.bExternal = true;
+                }
+                else
+                {
+                    annunciator1.setStatus("START", Stat.ALERT);
+                }
+
+
+
+            }
+
+
+            //GPS check
             if ((DateTime.Now - lastGpsCheck) >= TimeSpan.FromSeconds(2))
             {
                 lastGpsCheck = DateTime.Now;
+
                 MainV2.instance.BeginInvoke((MethodInvoker)(() =>
                 {
                     gpsForm.clearText();
+
                     if (comPort.MAV.cs.gpshdop == 0 || comPort.MAV.cs.satcount <= 4)
                     {
                         annunciator1.setStatus("GPS", Stat.ALERT);
                         gpsForm.addText("NO GPS reception!");
                     }
-                    else if (comPort.MAV.cs.gpshdop > 1.2)
+                    else if (comPort.MAV.cs.gpshdop > 1.5 || comPort.MAV.cs.satcount <=6)
                     {
                         annunciator1.setStatus("GPS", Stat.WARNING);
                         gpsForm.addText("Weak GPS reception!");
 
                     }
+                    else
+                    {
+                        annunciator1.setStatus("GPS", Stat.NOMINAL);
+                    }
                 }));
 
             }
 
+
+            //Comm status
             if ((DateTime.Now - lastComCheck) >= TimeSpan.FromSeconds(1))
             {
                 lastComCheck = DateTime.Now;
@@ -4897,6 +5016,8 @@ namespace MissionPlanner
             //Battery status
             if ((DateTime.Now - lastBattCheck) >= TimeSpan.FromSeconds(1))
             {
+
+                lastBattCheck = DateTime.Now;
                 PowerStatus pwr = SystemInformation.PowerStatus;
                 double batt = comPort.MAV.cs.battery_voltage;
                 MainV2.instance.BeginInvoke((MethodInvoker)(() =>
@@ -4943,12 +5064,129 @@ namespace MissionPlanner
                 annunciator1.setStatus("BATT", (Stat)Math.Max((int)pwrStatus, (int)battStatus));
             }
 
+            //messages status
+            if ((DateTime.Now - lastMsgCheck) >= TimeSpan.FromMilliseconds(500))
+            {
+                lastBattCheck = DateTime.Now;
+                var newmsgcount = MainV2.comPort.MAV.cs.messages.Count;
+                if (messagecount != newmsgcount)
+                {
+                    try
+                    {
+                        StringBuilder message = new StringBuilder();
+
+                        MainV2.comPort.MAV.cs.messages.ForEach(x =>
+                        {
+                            message.Insert(0, x.Item1 + " : " + x.Item2 + "\r\n");
+                        });
+
+                        MainV2.instance.BeginInvoke((MethodInvoker)(() =>
+                        {
+                            msgForm.addText(message.ToString());
+                        }));
+
+                        messagecount = newmsgcount;
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Error(ex);
+                    }
+                }
+
+            }
+
+            //EKF checks
+            if ((DateTime.Now - lastEkfCheck) >= TimeSpan.FromSeconds(1))
+            {
+                lastEkfCheck = DateTime.Now;
+
+                switch (comPort.MAV.cs.ekfstatus)
+                {
+                    case float n when n < 0.5:
+                        annunciator1.setStatus("EKF", Stat.NOMINAL);
+                        break;
+                    case float n when n < 1:
+                        annunciator1.setStatus("EKF", Stat.WARNING);
+                        break;
+                    default:
+                        annunciator1.setStatus("EKF", Stat.ALERT);
+                        break;
+                }
+
+            }
+
+            //Vibe checks
+            if ((DateTime.Now - lastVibeCheck) >= TimeSpan.FromSeconds(1))
+            {
+                lastVibeCheck = DateTime.Now;
+
+                if (comPort.MAV.cs.vibex >= 60 || comPort.MAV.cs.vibey >= 60 || comPort.MAV.cs.vibez >= 60)
+                {
+                    annunciator1.setStatus("VIBE", Stat.ALERT);
+                }
+                else if (comPort.MAV.cs.vibex >= 30 || comPort.MAV.cs.vibey >= 30 || comPort.MAV.cs.vibez >= 30)
+                {
+                    annunciator1.setStatus("VIBE", Stat.WARNING);
+
+                } else
+                {
+                    annunciator1.setStatus("VIBE", Stat.NOMINAL);
+                }
+            }
+        }
 
 
+        //This is a copy from FlightData, it was easier to copy it that xthread calling. Later we can refactor it.
+        private void engineForm_armClicked(object sender, EventArgs e)
+        {
+            if (!MainV2.comPort.BaseStream.IsOpen)
+                return;
 
+            // arm the MAV
+            try
+            {
+                var isitarmed = MainV2.comPort.MAV.cs.armed;
+                var action = MainV2.comPort.MAV.cs.armed ? "Disarm" : "Arm";
 
+                if (isitarmed)
+                    if (CustomMessageBox.Show("Are you sure you want to " + action, action,
+                            CustomMessageBox.MessageBoxButtons.YesNo) !=
+                        CustomMessageBox.DialogResult.Yes)
+                        return;
+                StringBuilder sb = new StringBuilder();
+                var sub = MainV2.comPort.SubscribeToPacketType(MAVLink.MAVLINK_MSG_ID.STATUSTEXT, message =>
+                {
+                    sb.AppendLine(Encoding.ASCII.GetString(((MAVLink.mavlink_statustext_t)message.data).text)
+                        .TrimEnd('\0'));
+                    return true;
+                });
+                bool ans = MainV2.comPort.doARM(!isitarmed);
+                MainV2.comPort.UnSubscribeToPacketType(sub);
+                if (ans == false)
+                {
+                    if (CustomMessageBox.Show(
+                            action + " failed.\n" + sb.ToString() + "\nForce " + action +
+                            " can bypass safety checks,\nwhich can lead to the vehicle crashing\nand causing serious injuries.\n\nDo you wish to Force " +
+                            action + "?", Strings.ERROR, CustomMessageBox.MessageBoxButtons.YesNo,
+                            CustomMessageBox.MessageBoxIcon.Exclamation, "Force " + action, "Cancel") ==
+                        CustomMessageBox.DialogResult.Yes)
+                    {
+                        ans = MainV2.comPort.doARM(!isitarmed, true);
+                        if (ans == false)
+                        {
+                            CustomMessageBox.Show(Strings.ErrorRejectedByMAV, Strings.ERROR);
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                CustomMessageBox.Show(Strings.ErrorNoResponce, Strings.ERROR);
+            }
 
         }
+
+
 
     }
 }

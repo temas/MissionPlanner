@@ -12,9 +12,23 @@ namespace MissionPlanner.StatusForms
 {
     public partial class engineStatusForm : Form
     {
+
+
+        public event EventHandler armClicked;
+
         public engineStatusForm()
         {
             InitializeComponent();
+        }
+
+        //pass arming click up 
+        private void btnArmVehicle_Click(object sender, EventArgs e)
+        {
+            EventHandler handler = this.armClicked;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
         }
     }
 }

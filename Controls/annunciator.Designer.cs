@@ -331,6 +331,7 @@ namespace MissionPlanner.Controls
             this.Controls.Add(this.layoutPanel);
             this.Name = "annunciator";
             this.Size = new System.Drawing.Size(1600, 60);
+            this.EnabledChanged += new System.EventHandler(this.annunciator_EnabledChanged);
             this.layoutPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
