@@ -498,7 +498,7 @@ namespace MissionPlanner
         //Annunciator check trackings
         private DateTime lastGpsCheck = DateTime.Now;
         private DateTime lastComCheck = DateTime.Now;
-
+        private DateTime lastBattCheck = DateTime.Now;
 
 
 
@@ -4889,17 +4889,66 @@ namespace MissionPlanner
                 if (!comPort.MAV.cs.connected)
                 {
                     annunciator1.setStatus("COMM", Stat.ALERT);
-                    return;
                 }
                 else annunciator1.setStatus("COMM", Stat.NOMINAL);
+            }
 
 
+            //Battery status
+            if ((DateTime.Now - lastBattCheck) >= TimeSpan.FromSeconds(1))
+            {
+                PowerStatus pwr = SystemInformation.PowerStatus;
+                double batt = comPort.MAV.cs.battery_voltage;
+                MainV2.instance.BeginInvoke((MethodInvoker)(() =>
+                {
+                    batteryForm.updateBatteryStatusForm(batt, pwr.BatteryLifePercent);
+                }));
 
+                Stat pwrStatus;
+                Stat battStatus;
+
+
+                switch (pwr.BatteryLifePercent)
+                {
+                    case float n when n <= 0.1:
+                        pwrStatus = Stat.ALERT;
+                        break;
+                    case float n when n >= 0.1 && n <= 0.2:
+                        pwrStatus = Stat.WARNING;
+                        break;
+                    default:
+                        pwrStatus = Stat.NOMINAL;
+                        break;
+                }
+
+                switch (batt)
+                {
+                    case double n when n <=13.2:
+                        battStatus = Stat.ALERT;
+                        break;
+                    case double n when n > 13.2 && n < 14:
+                        battStatus = Stat.WARNING;
+                        break;
+                    case double n when n >= 14 && n <= 16.8:
+                        battStatus = Stat.NOMINAL;
+                        break;
+                    case double n when n > 16.8:
+                        battStatus = Stat.ALERT;
+                        break;
+                    default:
+                        battStatus = Stat.ALERT;
+                        break;
+                }
+                //Ok I admit, this a nasty hack, but quick and works as long as the stat severity goes up in enum values
+                annunciator1.setStatus("BATT", (Stat)Math.Max((int)pwrStatus, (int)battStatus));
             }
 
 
 
 
+
+
         }
+
     }
 }

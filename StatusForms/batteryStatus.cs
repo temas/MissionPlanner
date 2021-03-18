@@ -16,5 +16,18 @@ namespace MissionPlanner.StatusForms
         {
             InitializeComponent();
         }
+
+
+        public void updateBatteryStatusForm( double battVolts, double ctrBattPercent)
+        {
+            battGauge.Cap_Idx = 1;
+            battGauge.CapText = battVolts.ToString("F1") + " volt";
+            if (battVolts < 12) battVolts = 12;
+            battGauge.Value0 = (float)battVolts;
+            ctrPultGauge.Value0 = (float)ctrBattPercent * 100;
+
+        }
+
+
     }
 }

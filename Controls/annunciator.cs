@@ -114,6 +114,15 @@ namespace MissionPlanner.Controls
             }
         }
 
+
+        public Stat getStatus(string panelName)
+        {
+            Button b = layoutPanel.Controls.Find(panelName, false).FirstOrDefault() as Button;
+            int index = Array.IndexOf(_btnLabels, panelName);
+            return _btnStatus[index];
+        }
+
+
         public void setStatus(string panelName, Stat c)
         {
 
