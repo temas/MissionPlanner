@@ -4591,11 +4591,6 @@ namespace MissionPlanner
             }
         }
 
-        private void menu_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void preflightStatusChanged(object sender, EventArgs e)
         {
 
@@ -4636,8 +4631,6 @@ namespace MissionPlanner
 
         }
 
-
-
         private void hideAllForms()
         {
             //Hide all forms
@@ -4657,7 +4650,6 @@ namespace MissionPlanner
             msgForm.Hide();
 
         }
-
 
         private void annunciator1_buttonClicked(object sender, EventArgs e)
         {
@@ -4781,7 +4773,6 @@ namespace MissionPlanner
             startForm.setItem(StartItem.takeoffMode, true);
             startForm.setItem(StartItem.fullThrottle, true);
         }
-
 
         private void updateAnnunciatorForms()
         {
@@ -4996,7 +4987,6 @@ namespace MissionPlanner
                 }
             }
         }
-
 
         //This is a copy from FlightData, it was easier to copy it that xthread calling. Later we can refactor it.
         private void engineForm_armClicked(object sender, EventArgs e)
