@@ -139,7 +139,7 @@ namespace MissionPlanner.GCSViews
 
 
 
-            // config map             
+            // config map
             MainMap.CacheLocation = Settings.GetDataDirectory() +
                                                    "gmapcache" + Path.DirectorySeparatorChar;
 
@@ -175,7 +175,7 @@ namespace MissionPlanner.GCSViews
 
             //MainMap.MaxZoom = 18;
 
-            // get zoom  
+            // get zoom
             MainMap.MinZoom = 0;
             MainMap.MaxZoom = 24;
 
@@ -252,7 +252,7 @@ namespace MissionPlanner.GCSViews
             Frame.DisplayMember = "Value";
             Frame.ValueMember = "Key";
             Frame.DataSource = EnumTranslator.EnumToList<altmode>();
- 
+
             updateMapType(null, null);
 
             // hide the map to prevent redraws when its loaded
@@ -334,7 +334,7 @@ namespace MissionPlanner.GCSViews
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        { 
+        {
             // undo
             if (keyData == (Keys.Control | Keys.Z))
             {
@@ -608,6 +608,9 @@ namespace MissionPlanner.GCSViews
             frmProgressReporter.RunBackgroundOperationAsync();
 
             frmProgressReporter.Dispose();
+
+            zoomToMissionToolStripMenuItem_Click(null, EventArgs.Empty);
+
         }
 
         /// <summary>
@@ -735,7 +738,7 @@ namespace MissionPlanner.GCSViews
             {
                 selectedrow = int.Parse(pointno) - 1;
                 Commands.CurrentCell = Commands[1, selectedrow];
-                // depending on the dragged item, selectedrow can be reset 
+                // depending on the dragged item, selectedrow can be reset
                 selectedrow = int.Parse(pointno) - 1;
             }
             catch
@@ -773,7 +776,7 @@ namespace MissionPlanner.GCSViews
         {
             double denom = ((end1.Lng - start1.Lng) * (end2.Lat - start2.Lat)) -
                            ((end1.Lat - start1.Lat) * (end2.Lng - start2.Lng));
-            //  AB & CD are parallel         
+            //  AB & CD are parallel
             if (denom == 0)
                 return PointLatLng.Empty;
             double numer = ((start1.Lat - start2.Lat) * (end2.Lng - start2.Lng)) -
@@ -784,7 +787,7 @@ namespace MissionPlanner.GCSViews
             double s = numer2 / denom;
             if ((r < 0 || r > 1) || (s < 0 || s > 1))
                 return PointLatLng.Empty;
-            // Find intersection point      
+            // Find intersection point
             PointLatLng result = new PointLatLng();
             result.Lng = start1.Lng + (r * (end1.Lng - start1.Lng));
             result.Lat = start1.Lat + (r * (end1.Lat - start1.Lat));
@@ -1415,7 +1418,7 @@ namespace MissionPlanner.GCSViews
                         }
                         catch
                         {
-                            
+
                         }
                         fenceoverlay.overlay.Markers.Select(a => a.IsHitTestVisible = false).ToArray();
                         var fence = MainMap.Overlays.Where(a => a.Id == "fence");
@@ -1467,7 +1470,7 @@ namespace MissionPlanner.GCSViews
                                 var next = pointLatLngAlt.Item3;
 
                                 if (now == null || next == null)
-                                    continue;                              
+                                    continue;
 
                                 var mid = new PointLatLngAlt((now.Lat + next.Lat) / 2, (now.Lng + next.Lng) / 2, 0);
 
@@ -1619,7 +1622,7 @@ namespace MissionPlanner.GCSViews
             if (drawnpolygon.Points.Count > 1 &&
                 drawnpolygon.Points[0] == drawnpolygon.Points[drawnpolygon.Points.Count - 1])
                 drawnpolygon.Points.RemoveAt(drawnpolygon.Points.Count - 1); // unmake a full loop
-            
+
             drawnpolygon.Points.Add(new PointLatLng(MouseDownStart.Lat, MouseDownStart.Lng));
 
             redrawPolygonSurvey(drawnpolygon.Points.Select(a => new PointLatLngAlt(a)).ToList());
@@ -5318,7 +5321,7 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
 
                             sw.Write((a + 1)); // seq
                             sw.Write("\t" + 0); // current
-                            sw.Write("\t" + ((int)Commands.Rows[a].Cells[Frame.Index].Value).ToString()); //frame 
+                            sw.Write("\t" + ((int)Commands.Rows[a].Cells[Frame.Index].Value).ToString()); //frame
                             sw.Write("\t" + mode);
                             sw.Write("\t" +
                                      double.Parse(Commands.Rows[a].Cells[Param1.Index].Value.ToString())
@@ -5685,7 +5688,7 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
 
                 MainV2.comPort.sendPacket(req, MainV2.comPort.MAV.sysid, MainV2.comPort.MAV.compid);
             }
-            
+
             MainV2.comPort.UnSubscribeToPacketType(sub1);
             MainV2.comPort.UnSubscribeToPacketType(sub2);
 
@@ -5941,7 +5944,7 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
             InputBox.Show("Enter size", "Enter size", ref size);
             string rotation = "0";
             InputBox.Show("Enter rotation", "Enter rotation", ref rotation);
-            
+
             using (Font font = new System.Drawing.Font("1CamBam_Stick_3", float.Parse(size) * 1.35f, FontStyle.Regular))
             using (GraphicsPath gp = new GraphicsPath())
             using (StringFormat sf = new StringFormat())
@@ -6340,7 +6343,7 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
             if (!IsHandleCreated || IsDisposed || Disposing)
                 return;
 
-            // number rows 
+            // number rows
             BeginInvoke((MethodInvoker)delegate
             {
                 // thread for updateing row numbers
@@ -6377,9 +6380,9 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
         /// <returns></returns>
         private string BuildGetCapabilitityRequest(string serverUrl)
         {
-            // What happens if the URL already has  '?'. 
+            // What happens if the URL already has  '?'.
             // For example: http://foo.com?Token=yyyy
-            // In this example, the get capability request should be 
+            // In this example, the get capability request should be
             // http://foo.com?Token=yyyy&version=1.1.0&Request=GetCapabilities&service=WMS but not
             // http://foo.com?Token=yyyy?version=1.1.0&Request=GetCapabilities&service=WMS
 
@@ -7252,7 +7255,7 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
                 if (nameNode != null)
                 {
                     var name = nameNode.InnerText;
-                    // Set the default title as the layer name. 
+                    // Set the default title as the layer name.
                     var title = name;
                     // Get Title element.
                     var titleNode = layerElement.SelectSingleNode("Title", nsmgr);

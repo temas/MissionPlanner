@@ -4654,18 +4654,13 @@ namespace MissionPlanner
             magForm.Hide();
             startForm.Hide();
             prefForm.Hide();
-
+            msgForm.Hide();
 
         }
 
 
         private void annunciator1_buttonClicked(object sender, EventArgs e)
         {
-
-
-            //if (!comPort.MAV.cs.connected) return;
-
-
             //Check Button
             if (annunciator1.clickedButtonName == "EKF")
             {
@@ -4879,8 +4874,15 @@ namespace MissionPlanner
             }
             else if (annunciator1.clickedButtonName == "ROUTE")
             {
-                FlightData.flightPlannerToolStripMenuItem_Click(null, EventArgs.Empty);
-                FlightPlanner.BUT_read_Click(null, EventArgs.Empty);
+                if (FlightData.plannerShown)
+                {
+                    FlightData.but_Click(null, EventArgs.Empty);
+                }
+                else
+                {
+                    FlightData.flightPlannerToolStripMenuItem_Click(null, EventArgs.Empty);
+                    FlightPlanner.BUT_read_Click(null, EventArgs.Empty);
+                }
             }
 
             else if (annunciator1.clickedButtonName == "START")

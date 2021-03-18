@@ -44,6 +44,10 @@ namespace MissionPlanner.GCSViews
         public static myGMAP mymap;
         public static bool threadrun;
         public SplitContainer MainHcopy;
+
+        public bool plannerShown = false;
+
+
         internal static GMapOverlay geofence;
         internal static GMapOverlay photosoverlay;
         internal static GMapOverlay poioverlay = new GMapOverlay("POI");
@@ -1001,7 +1005,7 @@ namespace MissionPlanner.GCSViews
                 MainV2.comPort.MAV.camerapoints.Clear();
         }
 
-        void but_Click(object sender, EventArgs e)
+        public void but_Click(object sender, EventArgs e)
         {
             foreach (MainSwitcher.Screen sc in MainV2.View.screens)
             {
@@ -1024,6 +1028,7 @@ namespace MissionPlanner.GCSViews
             {
                 ctl.Visible = true;
             }
+            plannerShown = false;
         }
 
         private void but_dflogtokml_Click(object sender, EventArgs e)
@@ -2304,14 +2309,14 @@ namespace MissionPlanner.GCSViews
             {
                 if (sc.Name == "FlightPlanner")
                 {
-                    MyButton but = new MyButton
-                    {
-                        Location = new Point(splitContainer1.Panel2.Width / 2, 0),
-                        Text = "Close"
-                    };
-                    but.Click += but_Click;
+                    //MyButton but = new MyButton
+                    //{
+                    //    Location = new Point(splitContainer1.Panel2.Width / 2, 0),
+                    //    Text = "Close"
+                    //};
+                    //but.Click += but_Click;
 
-                    splitContainer1.Panel2.Controls.Add(but);
+                    //splitContainer1.Panel2.Controls.Add(but);
                     splitContainer1.Panel2.Controls.Add(sc.Control);
                     ThemeManager.ApplyThemeTo(sc.Control);
                     ThemeManager.ApplyThemeTo(this);
@@ -2323,8 +2328,8 @@ namespace MissionPlanner.GCSViews
                     {
                         ((IActivate) (sc.Control)).Activate();
                     }
-
-                    but.BringToFront();
+                    plannerShown = true;
+                    //but.BringToFront();
                     break;
                 }
             }

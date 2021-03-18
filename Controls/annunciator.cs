@@ -97,6 +97,8 @@ namespace MissionPlanner.Controls
                     b.ForeColor = Color.White;
                     break;
             }
+            b.FlatAppearance.BorderSize = 1;
+            b.FlatAppearance.BorderColor = Color.Black;
         }
 
 
