@@ -19,6 +19,27 @@ namespace MissionPlanner
 
         [JsonIgnore] [IgnoreDataMember] public static ISpeech Speech;
 
+        //Protar added parameters
+        [DisplayText("Jet RPM")]
+        [GroupText("Protar")]
+        public static float jetRpm { get; set; }
+
+        [DisplayText("Jet Temp")]
+        [GroupText("Protar")]
+        public static float jetTemp { get; set; }
+
+        [DisplayText("Fuel level")]
+        [GroupText("Protar")]
+        public static float fuelLevel { get; set; }
+
+        [DisplayText("Ignite received")]
+        [GroupText("Protar")]
+        public static bool payloadIginteReceived { get; set; }
+
+        [DisplayText("Payload to ignite")]
+        [GroupText("Protar")]
+        public static float payloadToIgnite { get; set; }
+
         // multipliers
         public static float multiplierdist = 1;
         public static string DistanceUnit = "";
@@ -281,7 +302,7 @@ namespace MissionPlanner
             get => (_alt - altoffsethome) * multiplieralt;
             set
             {
-                // check update rate, and ensure time hasnt gone backwards                
+                // check update rate, and ensure time hasnt gone backwards
                 _alt = value;
 
                 if ((datetime - lastalt).TotalSeconds >= 0.2 && oldalt != alt || lastalt > datetime)
@@ -1916,7 +1937,7 @@ namespace MissionPlanner
                     case (uint)MAVLink.MAVLINK_MSG_ID.HIGH_LATENCY2:
                         {
                             var highlatency = mavLinkMessage.ToStructure<MAVLink.mavlink_high_latency2_t>();
-                            
+
                             {
                                 var modelist = Common.getModesList(firmware);
 
@@ -1948,7 +1969,7 @@ namespace MissionPlanner
                             targetalt = highlatency.target_altitude;
                             wp_dist = highlatency.target_distance;
                             wpno = highlatency.wp_num;
-                           
+
                             if (highlatency.failure_flags != 0)
                             {
                                 var flags = highlatency.failure_flags;
@@ -2220,7 +2241,7 @@ namespace MissionPlanner
                                 if(voltageflag == (uint)MAVLink.MAV_POWER_STATUS.PERIPH_OVERCURRENT)
                                 {
                                     messageHigh = "PERIPH_OVERCURRENT";
-                                } 
+                                }
                                 else if(voltageflag == (uint)MAVLink.MAV_POWER_STATUS.PERIPH_HIPOWER_OVERCURRENT)
                                 {
                                     messageHigh = "PERIPH_HIPOWER_OVERCURRENT";
@@ -3084,74 +3105,101 @@ namespace MissionPlanner
                             var named_float = mavLinkMessage.ToStructure<MAVLink.mavlink_named_value_float_t>();
 
                             string mav_value_name = Encoding.ASCII.GetString(named_float.name);
-
-                            int ind = mav_value_name.IndexOf('\0');
-                            if (ind != -1)
-                                mav_value_name = mav_value_name.Substring(0, ind);
-
-                            string name = "MAV_" + mav_value_name.ToUpper();
-
                             float value = named_float.value;
-                            var field = custom_field_names.FirstOrDefault(x => x.Value == name).Key;
 
-                            //todo: if field is null then check if we have a free customfield and add the named_value 
-                            if (field == null)
+                            //We use only the first character of the name for sending different values
+                            // P payload ignition, R Jet RPM, T Motor Temp, F fuel level, S status
+                            switch (mav_value_name[0])
                             {
-                                short i;
-                                for (i = 0; i < 10; i++)
-                                {
-                                    if (!custom_field_names.ContainsKey("customfield" + i.ToString())) break;
-                                }
-                                if (i < 10)
-                                {
-                                    field = "customfield" + i.ToString();
-                                    custom_field_names.Add(field, name);
-                                }
-                            }
-
-
-                            if (field != null)
-                            {
-                                switch (field)
-                                {
-                                    case "customfield0":
-                                        customfield0 = value;
-                                        break;
-                                    case "customfield1":
-                                        customfield1 = value;
-                                        break;
-                                    case "customfield2":
-                                        customfield2 = value;
-                                        break;
-                                    case "customfield3":
-                                        customfield3 = value;
-                                        break;
-                                    case "customfield4":
-                                        customfield4 = value;
-                                        break;
-                                    case "customfield5":
-                                        customfield5 = value;
-                                        break;
-                                    case "customfield6":
-                                        customfield6 = value;
-                                        break;
-                                    case "customfield7":
-                                        customfield7 = value;
-                                        break;
-                                    case "customfield8":
-                                        customfield8 = value;
-                                        break;
-                                    case "customfield9":
-                                        customfield9 = value;
-                                        break;
-                                    default:
-                                        break;
-                                }
-
+                                case 'P':
+                                    payloadIginteReceived = true;
+                                    payloadToIgnite = value;
+                                    break;
+                                case 'R':
+                                    jetRpm = value;
+                                    break;
+                                case 'T':
+                                    jetTemp = value;
+                                    break;
+                                case 'F':
+                                    fuelLevel = value;
+                                    break;
+                                case 'S':
+                                    //Todo: Status info processing.
+                                    break;
+                                default:
+                                    break;
                             }
 
                         }
                         break;
+
+                        // ***** removed customfield handling, since we using named_float for payload controller communication
+
+                        //    int ind = mav_value_name.IndexOf('\0');
+                        //    if (ind != -1)
+                        //        mav_value_name = mav_value_name.Substring(0, ind);
+
+                        //    string name = "MAV_" + mav_value_name.ToUpper();
+
+                        //    var field = custom_field_names.FirstOrDefault(x => x.Value == name).Key;
+
+                        //    //todo: if field is null then check if we have a free customfield and add the named_value
+                        //    if (field == null)
+                        //    {
+                        //        short i;
+                        //        for (i = 0; i < 10; i++)
+                        //        {
+                        //            if (!custom_field_names.ContainsKey("customfield" + i.ToString())) break;
+                        //        }
+                        //        if (i < 10)
+                        //        {
+                        //            field = "customfield" + i.ToString();
+                        //            custom_field_names.Add(field, name);
+                        //        }
+                        //    }
+
+
+                        //    if (field != null)
+                        //    {
+                        //        switch (field)
+                        //        {
+                        //            case "customfield0":
+                        //                customfield0 = value;
+                        //                break;
+                        //            case "customfield1":
+                        //                customfield1 = value;
+                        //                break;
+                        //            case "customfield2":
+                        //                customfield2 = value;
+                        //                break;
+                        //            case "customfield3":
+                        //                customfield3 = value;
+                        //                break;
+                        //            case "customfield4":
+                        //                customfield4 = value;
+                        //                break;
+                        //            case "customfield5":
+                        //                customfield5 = value;
+                        //                break;
+                        //            case "customfield6":
+                        //                customfield6 = value;
+                        //                break;
+                        //            case "customfield7":
+                        //                customfield7 = value;
+                        //                break;
+                        //            case "customfield8":
+                        //                customfield8 = value;
+                        //                break;
+                        //            case "customfield9":
+                        //                customfield9 = value;
+                        //                break;
+                        //            default:
+                        //                break;
+                        //        }
+                        //    }
+                        //}
+                        //break;
                 }
             }
         }
@@ -3199,6 +3247,12 @@ namespace MissionPlanner
                 version = new Version();
                 voltageflag = (uint)MAVLink.MAV_POWER_STATUS.USB_CONNECTED;
                 capabilities = 0;
+
+                //Protar
+                payloadIginteReceived = false;
+                payloadToIgnite = 0;
+
+
             }
         }
 
@@ -3395,7 +3449,7 @@ namespace MissionPlanner
         public void dowindcalc()
         {
             //Wind Fixed gain Observer
-            //Ryan Beall 
+            //Ryan Beall
             //8FEB10
 
             var Kw = 0.010; // 0.01 // 0.10
