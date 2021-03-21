@@ -10,82 +10,135 @@ using System.Windows.Forms;
 
 namespace MissionPlanner.Controls
 {
-    public enum Payload { left1 = 0, left2, left3, left4, right1, right2, right3, right4, rear1, rear2 }
-    public enum PayloadType { empty, smoke, flare }
 
     public partial class payloadcontrol : UserControl
     {
-        private string[] payloads = { "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY" };
-        private List<Button> buttons;
 
-        public List<Payload> toIgnite;
+        private List<Payload> payloads;
 
         public event EventHandler igniteClicked;
+        public int igniteMask;
 
         public payloadcontrol()
         {
             InitializeComponent();
-            buttons = new List<Button>();
-            buttons.Add(l1);
-            buttons.Add(l2);
-            buttons.Add(l3);
-            buttons.Add(l4);
 
-            buttons.Add(r1);
-            buttons.Add(r2);
-            buttons.Add(r3);
-            buttons.Add(r4);
+            payloads = new List<Payload>();
+            payloads.Add(new Payload(PayloadPos.left1, l1, 1));
+            payloads.Add(new Payload(PayloadPos.left2, l2, 2));
+            payloads.Add(new Payload(PayloadPos.left3, l3, 4));
+            payloads.Add(new Payload(PayloadPos.left4, l4, 8));
 
-            buttons.Add(rear1);
-            buttons.Add(rear2);
-            resetControls();
+            payloads.Add(new Payload(PayloadPos.right1, r1, 16));
+            payloads.Add(new Payload(PayloadPos.right2, r2, 32));
+            payloads.Add(new Payload(PayloadPos.right3, r3, 64));
+            payloads.Add(new Payload(PayloadPos.right4, r4, 128));
 
-            setPayloads(Payload.right1, PayloadType.flare);
+            payloads.Add(new Payload(PayloadPos.rear1, rear1, 256));
+            payloads.Add(new Payload(PayloadPos.rear2, rear2, 512));
+
+            redrawControls();
+
+            setPayloadType(PayloadPos.right1, PayloadType.flare);
+            setPayloadType(PayloadPos.rear2, PayloadType.smoke);
+            setPayloadType(PayloadPos.left1, PayloadType.flare);
 
         }
 
         private void payload_Click(object sender, EventArgs e)
         {
             var btn = (Button)sender;
-            if (btn.Text == "EMPTY") return;
-            if (btn.BackColor == Color.Lime) btn.BackColor = Color.Yellow;
-            else btn.BackColor = Color.Lime;
+            foreach (Payload p in payloads)
+            {
+                if (p.btn == btn)
+                {
+                    if ((p.state == PayloadState.ready) && (p.type != PayloadType.empty))
+                    {
+                        p.state = PayloadState.selected;
+                    }
+                    else if (p.state == PayloadState.selected)
+                    {
+                        p.state = PayloadState.ready;
+                    }
+                }
+            }
+            redrawControls();
+        }
 
+        public void updateAll(List<Payload> u)
+        {
+            foreach (Payload from in u)
+            {
+                foreach (Payload to in payloads)
+                {
+                    if (from.pos == to.pos)
+                    {
+                        to.state = from.state;
+                        to.type = from.type;
+                    }
+                }
+            }
+            redrawControls();
+        }
+
+        public void setPayloadStatus(PayloadPos position, PayloadState state)
+        {
+            foreach (Payload p in payloads)
+            {
+                if (p.pos == position) p.state = state;
+            }
+            redrawControls();
         }
 
 
-        public void setPayloads(Payload position, PayloadType type)
+        public void setPayloadType(PayloadPos position, PayloadType type)
         {
-            switch (type)
+
+            foreach (Payload p in payloads)
             {
-                case PayloadType.empty:
-                    payloads[(int)position] = "EMPTY";
-                    break;
-                case PayloadType.flare:
-                    payloads[(int)position] = "FLARE";
-                    break;
-                case PayloadType.smoke:
-                    payloads[(int)position] = "SMOKE";
-                    break;
+                if (p.pos == position) p.type = type;
             }
-            resetControls();
-
-
+            redrawControls();
         }
 
-        public void resetControls()
+        public void redrawControls()
         {
-            var a = 0;
-            foreach (Button b in buttons)
+
+            foreach (Payload p in payloads)
             {
-                b.Text = payloads[a++];
-
-                if (b.Text == "EMPTY") b.BackColor = Color.Gray;
-                else b.BackColor = Color.Lime;
-
-                b.ForeColor = Color.DarkSlateGray;
+                switch (p.type)
+                {
+                    case PayloadType.empty:
+                        p.btn.Text = "EMPTY";
+                        p.btn.BackColor = Color.Gray;
+                        break;
+                    case PayloadType.smoke:
+                        p.btn.Text = "SMOKE";
+                        p.btn.BackColor = Color.Lime;
+                        break;
+                    case PayloadType.flare:
+                        p.btn.Text = "FLARE";
+                        p.btn.BackColor = Color.Green;
+                        break;
+                    default:
+                        break;
+                }
+                switch (p.state)
+                {
+                    case PayloadState.ready:
+                        break;
+                    case PayloadState.selected:
+                        p.btn.BackColor = Color.Yellow;
+                        break;
+                    case PayloadState.ignited:
+                        p.btn.BackColor = Color.Maroon;
+                        break;
+                    default:
+                        break;
+                }
 
             }
+
             btnIgnite.ForeColor = Color.DarkSlateGray;
             btnIgnite.BackColor = Color.Red;
 
@@ -94,21 +147,17 @@ namespace MissionPlanner.Controls
 
         private void btnIgnite_Click(object sender, EventArgs e)
         {
-
-            toIgnite = new List<Payload>();
-
-            var a = 0;
-            foreach (Button b in buttons)
+            igniteMask = 0;
+            foreach (Payload p in payloads)
             {
-                if (b.BackColor == Color.Yellow)
+                if (p.state == PayloadState.selected)
                 {
-                    toIgnite.Add((Payload)a);
-                    b.BackColor = Color.Gray;
-                    b.Text = "EMPTY";
-                }
-                a++;
-            }
+                    igniteMask += p.bitMask;
+                    p.state = PayloadState.ignited;
 
+                }
+            }
+            redrawControls();
             this.OnIgniteClicked(EventArgs.Empty);
         }
 
@@ -120,9 +169,56 @@ namespace MissionPlanner.Controls
                 handler(this, e);
             }
         }
+    }
+
+    public enum PayloadPos { none = -1, left1 = 0, left2, left3, left4, right1, right2, right3, right4, rear1, rear2 }
+    public enum PayloadType { empty, smoke, flare }
+    public enum PayloadState { ready, selected, ignited };
 
 
+    public class Payload
+    {
+        public PayloadPos pos { get; set; }
+        public PayloadType type { get; set; }
+        public PayloadState state { get; set; }
+        public Button btn { get; set; }
+        public int bitMask { get; set; }
+
+        public Payload()
+        {
+            pos = PayloadPos.none;
+            type = PayloadType.empty;
+            state = PayloadState.ready;
+            btn = null;
+            bitMask = 0;
+        }
+
+        public Payload(PayloadPos p)
+        {
+            pos = p;
+            type = PayloadType.empty;
+            state = PayloadState.ready;
+            btn = null;
+            bitMask = 0;
+
+        }
+
+        public Payload(PayloadPos p, Button b, int bit)
+        {
+            pos = p;
+            type = PayloadType.empty;
+            state = PayloadState.ready;
+            btn = b;
+            bitMask = bit;
+
+        }
+
+        public void ignite()
+        {
+            state = PayloadState.ignited;
+        }
 
     }
+
 
 }

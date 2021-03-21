@@ -40,6 +40,12 @@ namespace MissionPlanner
         [GroupText("Protar")]
         public static float payloadToIgnite { get; set; }
 
+        [DisplayText("Plane ID")]
+        [GroupText("Protar")]
+        public static int planeID { get; set; }
+
+
+
         // multipliers
         public static float multiplierdist = 1;
         public static string DistanceUnit = "";

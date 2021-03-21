@@ -705,6 +705,10 @@ namespace MissionPlanner
         public static preflightForm prefForm = new preflightForm();
         public static messagesStatusForm msgForm = new messagesStatusForm();
         public static startProcessForm startForm = new startProcessForm();
+        public static payloadIgnite payloadToIgnite = new payloadIgnite();
+
+
+        public static List<Payload> payloadSetup = new List<Payload>();
 
         public MainV2()
         {
@@ -1384,6 +1388,10 @@ namespace MissionPlanner
             MyView.ShowScreen("FlightData");
         }
 
+        public void showPlanner()
+        {
+            MyView.ShowScreen("FlightPlanner");
+        }
         private void MenuFlightPlanner_Click(object sender, EventArgs e)
         {
             MyView.ShowScreen("FlightPlanner");
@@ -3104,14 +3112,36 @@ namespace MissionPlanner
 
 
 
-
-
-
             prefForm.controlStatusUpdated += preflightStatusChanged;
             airspeedForm.controlStatusUpdated += airspeedStatusChanged;
+            payloadForm.payloadSetupUpdated += PayloadForm_payloadSetupUpdated;
 
             engineForm.armClicked += engineForm_armClicked;
 
+            //Setup empty payload list
+            payloadSetup.Add(new Payload(PayloadPos.left1));
+            payloadSetup.Add(new Payload(PayloadPos.left2));
+            payloadSetup.Add(new Payload(PayloadPos.left3));
+            payloadSetup.Add(new Payload(PayloadPos.left4));
+
+            payloadSetup.Add(new Payload(PayloadPos.right1));
+            payloadSetup.Add(new Payload(PayloadPos.right2));
+            payloadSetup.Add(new Payload(PayloadPos.right3));
+            payloadSetup.Add(new Payload(PayloadPos.right4));
+
+            payloadSetup.Add(new Payload(PayloadPos.rear1));
+            payloadSetup.Add(new Payload(PayloadPos.rear2));
+
+
+            foreach (Payload pld in payloadSetup)
+            {
+                if (pld.pos == PayloadPos.left2) pld.type = PayloadType.smoke;
+                if (pld.pos == PayloadPos.left4) pld.type = PayloadType.flare;
+                if (pld.pos == PayloadPos.rear2) pld.type = PayloadType.flare;
+            }
+
+
+            payloadForm.updatePayloads(payloadSetup);
 
 
             MyView.AddScreen(new MainSwitcher.Screen("FlightData", FlightData, true));
@@ -4629,6 +4659,23 @@ namespace MissionPlanner
             }
 
 
+        }
+
+        private void PayloadForm_payloadSetupUpdated(object sender, EventArgs e)
+        {
+            FlightData.updatePayloadState(payloadForm.plStat);
+            //Also update the status
+            foreach (Payload from in payloadForm.plStat)
+            {
+                foreach (Payload to in payloadSetup)
+                {
+                    if (from.pos == to.pos)
+                    {
+                        to.state = from.state;
+                        to.type = from.type;
+                    }
+                }
+            }
         }
 
         private void hideAllForms()

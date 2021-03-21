@@ -7,127 +7,141 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MissionPlanner.Utilities;
 
 namespace MissionPlanner.Controls
 {
+    [PreventTheming]
     public partial class payloadsetup : UserControl
     {
-        private string[] payloads = { "SMOKE", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY" };
-        private bool[] payload_status = { true, true, true, true, true, true, true, true, true, true };
-
-        private List<Button> buttons;
-
-        public List<Payload> toIgnite;
+        public List<Payload> payloadSetup;
 
         public event EventHandler igniteClicked;
 
         public payloadsetup()
         {
             InitializeComponent();
-            buttons = new List<Button>();
-            buttons.Add(l1);
-            buttons.Add(l2);
-            buttons.Add(l3);
-            buttons.Add(l4);
 
-            buttons.Add(r1);
-            buttons.Add(r2);
-            buttons.Add(r3);
-            buttons.Add(r4);
+            payloadSetup = new List<Payload>();
+            payloadSetup.Add(new Payload(PayloadPos.left1, l1, 1));
+            payloadSetup.Add(new Payload(PayloadPos.left2, l2, 2));
+            payloadSetup.Add(new Payload(PayloadPos.left3, l3, 4));
+            payloadSetup.Add(new Payload(PayloadPos.left4, l4, 8));
 
-            buttons.Add(rear1);
-            buttons.Add(rear2);
+            payloadSetup.Add(new Payload(PayloadPos.right1, r1, 16));
+            payloadSetup.Add(new Payload(PayloadPos.right2, r2, 32));
+            payloadSetup.Add(new Payload(PayloadPos.right3, r3, 64));
+            payloadSetup.Add(new Payload(PayloadPos.right4, r4, 128));
 
-            refreshControls();
+            payloadSetup.Add(new Payload(PayloadPos.rear1, rear1, 256));
+            payloadSetup.Add(new Payload(PayloadPos.rear2, rear2, 512));
 
+            redrawControls();
         }
 
         private void payload_Click(object sender, EventArgs e)
         {
             var btn = (Button)sender;
-            if (btn.Text == "EMPTY")
+            foreach (Payload p in payloadSetup)
             {
-                btn.Text = "FLARE";
-                btn.BackColor = Color.Lime;
-            }
-            else if (btn.Text == "FLARE")
-            {
-                btn.Text = "SMOKE";
-                btn.BackColor = Color.Green;
-            }
-            else if (btn.Text == "SMOKE")
-            {
-                btn.Text = "EMPTY";
-                btn.BackColor = Color.Gray;
-            }
-
-        }
-
-
-        public void setPayloads(Payload position, PayloadType type)
-        {
-            switch (type)
-            {
-                case PayloadType.empty:
-                    payloads[(int)position] = "EMPTY";
-                    break;
-                case PayloadType.flare:
-                    payloads[(int)position] = "FLARE";
-                    break;
-                case PayloadType.smoke:
-                    payloads[(int)position] = "SMOKE";
-                    break;
-            }
-            refreshControls();
-        }
-
-
-        public void updateStatus()
-        {
-
-        }
-
-        public void refreshControls()
-        {
-            var a = 0;
-
-            this.SuspendLayout();
-
-            foreach (Button b in buttons)
-            {
-                b.Text = payloads[a++];
-
-                if (b.Text == "FLARE")
+                if (p.btn == btn)
                 {
-                    b.BackColor = Color.Lime;
+                    switch (p.type)
+                    {
+                        case PayloadType.empty:
+                            p.type = PayloadType.smoke;
+                            break;
+                        case PayloadType.smoke:
+                            p.type = PayloadType.flare;
+                            break;
+                        case PayloadType.flare:
+                            p.type = PayloadType.empty;
+                            break;
+                        default:
+                            break;
+                    }
+
+
+
                 }
-                else if (b.Text == "SMOKE")
+            }
+            redrawControls();
+        }
+
+        public void updateAll(List<Payload> u)
+        {
+            foreach (Payload from in u)
+            {
+                foreach (Payload to in payloadSetup)
                 {
-                    b.BackColor = Color.Green;
+                    if (from.pos == to.pos)
+                    {
+                        to.state = from.state;
+                        to.type = from.type;
+                    }
                 }
-                else b.BackColor = Color.Gray;
+            }
+            redrawControls();
+        }
 
+        public void setPayloads(PayloadPos position, PayloadType type)
+        {
 
-                b.ForeColor = Color.DarkSlateGray;
+            foreach (Payload p in payloadSetup)
+            {
+                if (p.pos == position) p.type = type;
+            }
+            redrawControls();
+        }
+
+        public void redrawControls()
+        {
+
+            foreach (Payload p in payloadSetup)
+            {
+                switch (p.type)
+                {
+                    case PayloadType.empty:
+                        p.btn.Text = "EMPTY";
+                        p.btn.BackColor = Color.Gray;
+                        break;
+                    case PayloadType.smoke:
+                        p.btn.Text = "SMOKE";
+                        p.btn.BackColor = Color.Lime;
+                        break;
+                    case PayloadType.flare:
+                        p.btn.Text = "FLARE";
+                        p.btn.BackColor = Color.Green;
+                        break;
+                    default:
+                        break;
+                }
+                switch (p.state)
+                {
+                    case PayloadState.ready:
+                        break;
+                    case PayloadState.selected:
+                        p.btn.BackColor = Color.Yellow;
+                        break;
+                    case PayloadState.ignited:
+                        p.btn.BackColor = Color.Maroon;
+                        break;
+                    default:
+                        break;
+                }
 
             }
+
             btnIgnite.ForeColor = Color.DarkSlateGray;
             btnIgnite.BackColor = Color.Red;
-            this.ResumeLayout();
 
 
         }
 
         private void btnIgnite_Click(object sender, EventArgs e)
         {
-            var a = 0;
 
-            foreach (Button b in buttons)
-            {
-
-                payloads[a++] = b.Text;
-            }
-
+            redrawControls();
             this.OnIgniteClicked(EventArgs.Empty);
         }
 
@@ -139,6 +153,9 @@ namespace MissionPlanner.Controls
                 handler(this, e);
             }
         }
+
+
+
 
     }
 

@@ -38,6 +38,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using MissionPlanner.StatusForms;
 #if !LIB
 using GDAL;
 #endif
@@ -242,8 +243,10 @@ namespace MissionPlanner.GCSViews
             }
 
             Commands.Columns[Delete.Index].CellTemplate.Value = "X";
+            Commands.Columns[PayloadCol.Index].CellTemplate.Value = "Pyl Iginte";
             Commands.Columns[Up.Index].CellTemplate.Value = Resources.up;
             Commands.Columns[Down.Index].CellTemplate.Value = Resources.down;
+
 
             Up.Image = Resources.up;
             Down.Image = Resources.down;
@@ -2124,6 +2127,21 @@ namespace MissionPlanner.GCSViews
                     Commands.Rows.Insert(e.RowIndex + 1, myrow);
                     writeKML();
                 }
+                if ((e.ColumnIndex == PayloadCol.Index))
+                {
+
+                    string mode = Commands.CurrentRow.Cells[Command.Index].Value.ToString();
+
+                    if (mode == "WAYPOINT")
+                    {
+                        MainV2.payloadToIgnite.igniteMask = Convert.ToInt16(Commands.CurrentRow.Cells[Param1.Index].Value);
+                        MainV2.payloadToIgnite.ShowDialog();
+                        Commands.CurrentRow.Cells[Param1.Index].Value = MainV2.payloadToIgnite.igniteMask;
+                    }
+                }
+
+
+
             }
             catch (Exception)
             {
@@ -2188,6 +2206,7 @@ namespace MissionPlanner.GCSViews
         {
             e.Row.Cells[Frame.Index].Value = CMB_altmode.SelectedValue;
             e.Row.Cells[Delete.Index].Value = "X";
+            e.Row.Cells[PayloadCol.Index].Value = "Pyl Ignite";
             e.Row.Cells[Up.Index].Value = Resources.up;
             e.Row.Cells[Down.Index].Value = Resources.down;
         }
@@ -2263,6 +2282,7 @@ namespace MissionPlanner.GCSViews
                 cell.Value = "WAYPOINT";
                 cell.DropDownWidth = 200;
                 Commands.Rows[e.RowIndex].Cells[Delete.Index].Value = "X";
+                Commands.Rows[e.RowIndex].Cells[PayloadCol.Index].Value = "SET PAYLOAD";
                 if (!quickadd)
                 {
                     Commands_RowEnter(sender, new DataGridViewCellEventArgs(0, e.RowIndex - 0)); // do header labels
@@ -7343,5 +7363,42 @@ Column 1: Field type (RALLY is the only one at the moment -- may have RALLY_LAND
             if (MainMap.Zoom < 17)
                 MainMap.Zoom = 17;
         }
+
+        private static ContextMenuStrip strip;
+        private static ToolStripMenuItem options;
+
+        private void Commands_CellContextMenuStripNeeded(object sender, DataGridViewCellContextMenuStripNeededEventArgs e)
+        {
+            if (strip != null)
+            {
+                strip = new ContextMenuStrip();
+                strip.Name = "Payloads";
+                strip.Size = new System.Drawing.Size(181, 26);
+                options = new ToolStripMenuItem("Payloads to Ignite");
+
+                for (int i = 0; i < 10; i++)
+                {
+                    var checkoption = new ToolStripMenuItem("position " + i);
+                    checkoption.CheckOnClick = true;
+                    options.DropDownItems.Add(checkoption);
+                }
+                options.DropDown.Closing += DropDown_Closing;
+                strip.Items.Add(options);
+            }
+
+            if (e.ColumnIndex == 3)
+            {
+                e.ContextMenuStrip = strip;
+            }
+
+        }
+
+        private void DropDown_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        {
+            e.Cancel = (e.CloseReason == ToolStripDropDownCloseReason.ItemClicked);
+        }
+
+
+
     }
 }

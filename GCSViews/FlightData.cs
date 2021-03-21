@@ -321,6 +321,10 @@ namespace MissionPlanner.GCSViews
         {
             log.Info("Activate Called");
 
+
+            payloadcontrol1.updateAll(MainV2.payloadSetup);
+            payloadcontrol1.redrawControls();
+
             OnResize(EventArgs.Empty);
 
             if (CB_tuning.Checked)
@@ -4401,7 +4405,7 @@ namespace MissionPlanner.GCSViews
         {
             Messagetabtimer.Stop();
 
-            if (tabControlactions.SelectedTab == tabPayloadControl) payloadcontrol1.resetControls();
+            if (tabControlactions.SelectedTab == tabPayloadControl) payloadcontrol1.redrawControls();
 
 
             if (tabControlactions.SelectedTab == tabFlightControl)
@@ -5366,6 +5370,13 @@ namespace MissionPlanner.GCSViews
         }
 
 
+        public void updatePayloadState(List<Payload> p)
+        {
+            payloadcontrol1.updateAll(p);
+            payloadcontrol1.redrawControls();
+        }
+
+
         public void setFlighControlMode(string mode)
         {
             Color dark = Color.FromArgb(64, 64, 64);
@@ -5395,5 +5406,25 @@ namespace MissionPlanner.GCSViews
             }
         }
 
+        private void myButton6_Click(object sender, EventArgs e)
+        {
+            MainV2.instance.showPlanner();
+        }
+
+        private void payloadcontrol1_igniteClicked(object sender, EventArgs e)
+        {
+            // Just send out a Mavlink to ignite payload
+            // payloadcontrol1.igniteMask
+
+            byte[] c = Encoding.Default.GetBytes("P");
+            MainV2.comPort.sendPacket(new MAVLink.mavlink_named_value_float_t() { name = c, time_boot_ms = 0, value = (float)payloadcontrol1.igniteMask }, MainV2.comPort.sysidcurrent, MainV2.comPort.compidcurrent);
+
+
+        }
+
+        private void modifyandSetSpeed_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

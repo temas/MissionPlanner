@@ -659,6 +659,12 @@
     <Compile Include="StatusForms\messagesStatusForm.Designer.cs">
       <DependentUpon>messagesStatusForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="StatusForms\payloadIgnite.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatusForms\payloadIgnite.Designer.cs">
+      <DependentUpon>payloadIgnite.cs</DependentUpon>
+    </Compile>
     <Compile Include="StatusForms\payloadStatusForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -691,6 +697,7 @@
       <DependentUpon>UserPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="Utilities\NativeLibrary.cs" />
+    <Compile Include="Utilities\protarComm.cs" />
     <Compile Include="Utilities\Speech.cs" />
     <Compile Include="Utilities\SSHTerminal.cs" />
     <Compile Include="Grid\camerainfo.cs" />
@@ -905,6 +912,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\messagesStatusForm.resx">
       <DependentUpon>messagesStatusForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatusForms\payloadIgnite.resx">
+      <DependentUpon>payloadIgnite.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\payloadStatusForm.resx">
       <DependentUpon>payloadStatusForm.cs</DependentUpon>
@@ -4594,6 +4604,12 @@
     </Content>
     <Content Include="Controls\ready.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="protarPayloadBG.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="protarpayloads.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="quaternion.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

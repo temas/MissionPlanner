@@ -29,7 +29,6 @@ namespace MissionPlanner.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(payloadcontrol));
             this.payloadLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.l1 = new System.Windows.Forms.Button();
             this.l2 = new System.Windows.Forms.Button();
@@ -45,12 +44,12 @@ namespace MissionPlanner.Controls
             this.payloadLayoutPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // tableLayoutPanel1
+            // payloadLayoutPanel
             // 
             this.payloadLayoutPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.payloadLayoutPanel.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("tableLayoutPanel1.BackgroundImage")));
+            this.payloadLayoutPanel.BackgroundImage = global::MissionPlanner.Properties.Resources.protarPayloadBG;
             this.payloadLayoutPanel.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.payloadLayoutPanel.ColumnCount = 4;
             this.payloadLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 29F));
@@ -87,16 +86,15 @@ namespace MissionPlanner.Controls
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.l1.BackColor = System.Drawing.Color.Lime;
-            this.l1.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.l1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.l1.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.l1.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.l1.Location = new System.Drawing.Point(3, 10);
             this.l1.Name = "l1";
             this.l1.Size = new System.Drawing.Size(94, 61);
             this.l1.TabIndex = 0;
             this.l1.Text = "FLARE";
             this.l1.UseVisualStyleBackColor = false;
-            this.l1.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.l1.Click += new System.EventHandler(this.payload_Click);
             // 
             // l2
@@ -105,9 +103,9 @@ namespace MissionPlanner.Controls
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.l2.BackColor = System.Drawing.Color.Lime;
-            this.l2.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.l2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.l2.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.l2.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.l2.Location = new System.Drawing.Point(3, 77);
             this.l2.Name = "l2";
             this.l2.Size = new System.Drawing.Size(94, 61);
@@ -122,9 +120,9 @@ namespace MissionPlanner.Controls
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.l3.BackColor = System.Drawing.Color.Lime;
-            this.l3.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.l3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.l3.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.l3.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.l3.Location = new System.Drawing.Point(3, 144);
             this.l3.Name = "l3";
             this.l3.Size = new System.Drawing.Size(94, 61);
@@ -139,9 +137,9 @@ namespace MissionPlanner.Controls
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.l4.BackColor = System.Drawing.Color.Lime;
-            this.l4.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.l4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.l4.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.l4.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.l4.Location = new System.Drawing.Point(3, 211);
             this.l4.Name = "l4";
             this.l4.Size = new System.Drawing.Size(94, 61);
@@ -156,9 +154,9 @@ namespace MissionPlanner.Controls
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.r1.BackColor = System.Drawing.Color.Lime;
-            this.r1.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.r1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.r1.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r1.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.r1.Location = new System.Drawing.Point(248, 10);
             this.r1.Name = "r1";
             this.r1.Size = new System.Drawing.Size(97, 61);
@@ -173,9 +171,9 @@ namespace MissionPlanner.Controls
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.r2.BackColor = System.Drawing.Color.Lime;
-            this.r2.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.r2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.r2.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r2.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.r2.Location = new System.Drawing.Point(248, 77);
             this.r2.Name = "r2";
             this.r2.Size = new System.Drawing.Size(97, 61);
@@ -190,9 +188,9 @@ namespace MissionPlanner.Controls
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.r3.BackColor = System.Drawing.Color.Lime;
-            this.r3.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.r3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.r3.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r3.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.r3.Location = new System.Drawing.Point(248, 144);
             this.r3.Name = "r3";
             this.r3.Size = new System.Drawing.Size(97, 61);
@@ -207,9 +205,9 @@ namespace MissionPlanner.Controls
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.r4.BackColor = System.Drawing.Color.Lime;
-            this.r4.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.r4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.r4.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.r4.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.r4.Location = new System.Drawing.Point(248, 211);
             this.r4.Name = "r4";
             this.r4.Size = new System.Drawing.Size(97, 61);
@@ -224,9 +222,9 @@ namespace MissionPlanner.Controls
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rear1.BackColor = System.Drawing.Color.Lime;
-            this.rear1.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.rear1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rear1.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rear1.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.rear1.Location = new System.Drawing.Point(3, 300);
             this.rear1.Name = "rear1";
             this.rear1.Size = new System.Drawing.Size(94, 64);
@@ -241,9 +239,9 @@ namespace MissionPlanner.Controls
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rear2.BackColor = System.Drawing.Color.Lime;
-            this.rear2.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.rear2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.rear2.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rear2.ForeColor = System.Drawing.Color.DarkSlateGray;
             this.rear2.Location = new System.Drawing.Point(103, 300);
             this.rear2.Name = "rear2";
             this.rear2.Size = new System.Drawing.Size(94, 64);

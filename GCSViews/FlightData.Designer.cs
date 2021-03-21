@@ -534,7 +534,6 @@
             this.tabControlactions.Controls.Add(this.tablogbrowse);
             this.tabControlactions.Controls.Add(this.tabFlightControl);
             this.tabControlactions.Controls.Add(this.tabPayloadControl);
-            this.tabControlactions.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
             this.tabControlactions.Name = "tabControlactions";
             this.tabControlactions.SelectedIndex = 0;
             this.tabControlactions.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
@@ -831,6 +830,7 @@
             0,
             0});
             this.modifyandSetSpeed.Click += new System.EventHandler(this.modifyandSetSpeed_Click);
+            this.modifyandSetSpeed.Load += new System.EventHandler(this.modifyandSetSpeed_Load);
             this.modifyandSetSpeed.ParentChanged += new System.EventHandler(this.modifyandSetSpeed_ParentChanged);
             // 
             // CMB_setwp
@@ -2142,6 +2142,7 @@
             // 
             resources.ApplyResources(this.payloadcontrol1, "payloadcontrol1");
             this.payloadcontrol1.Name = "payloadcontrol1";
+            this.payloadcontrol1.igniteClicked += new System.EventHandler(this.payloadcontrol1_igniteClicked);
             // 
             // tableMap
             // 
@@ -2345,7 +2346,7 @@
             this.windDir1.BackColor = System.Drawing.Color.Transparent;
             this.windDir1.DataBindings.Add(new System.Windows.Forms.Binding("Direction", this.bindingSource1, "wind_dir", true, System.Windows.Forms.DataSourceUpdateMode.Never));
             this.windDir1.DataBindings.Add(new System.Windows.Forms.Binding("Speed", this.bindingSource1, "wind_vel", true, System.Windows.Forms.DataSourceUpdateMode.Never));
-            this.windDir1.Direction = 180D;
+            this.windDir1.Direction = 360D;
             resources.ApplyResources(this.windDir1, "windDir1");
             this.windDir1.Name = "windDir1";
             this.windDir1.Speed = 0D;
@@ -2478,6 +2479,7 @@
             resources.ApplyResources(this.myButton6, "myButton6");
             this.myButton6.Name = "myButton6";
             this.myButton6.UseVisualStyleBackColor = true;
+            this.myButton6.Click += new System.EventHandler(this.myButton6_Click);
             // 
             // myButton5
             // 
