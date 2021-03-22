@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace MissionPlanner.Utilities
 {
 
-    enum packetID
+    public enum packetID
     {
         heartBeat = 0,
         chklistApproved,
@@ -25,7 +25,7 @@ namespace MissionPlanner.Utilities
         notify
     }
 
-    enum nodeID
+    public enum nodeID
     {
         supervisor = 0,
         plane1 = 1,
@@ -34,7 +34,7 @@ namespace MissionPlanner.Utilities
     }
 
 
-    class protarComm
+    public static class protarComm
     {
 
         public static int serverIpPort { get; set; } = 11000;
@@ -48,7 +48,7 @@ namespace MissionPlanner.Utilities
 
         public static byte myNodeID { get; set; }
 
-        public static bool lastConnectOK { get; set; } = false;
+        public static bool lastConnectOK { get; set; } = true;  //Is it either OK or we just start and assuming that it will be OK
 
         // Incoming data from the client.
         private static string data = null;

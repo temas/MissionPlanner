@@ -490,10 +490,13 @@ namespace MissionPlanner
 
         bool joystickthreadrun = false;
 
+        bool protarcommthreadrun = false;
+
         Thread httpthread;
         Thread joystickthread;
         Thread serialreaderthread;
         Thread pluginthread;
+        Thread protarcommthread;
 
         //Annunciator check trackings
         private DateTime lastGpsCheck = DateTime.Now;
@@ -504,6 +507,9 @@ namespace MissionPlanner
         private DateTime lastVibeCheck = DateTime.Now;
         private DateTime lastStartCheck = DateTime.Now;
         private DateTime lastConnectCheck = DateTime.Now;
+
+        //Protar comm timer for queuing and dequeueing
+        private DateTime lastSupervisorHB = DateTime.Now;
 
 
         private int messagecount;
@@ -604,63 +610,63 @@ namespace MissionPlanner
 
                 //if (DisplayConfiguration.displayAdvActionsTab && !t.TabPages.Contains(FlightData.tabActions))
                 //{
-                    t.TabPages.Add(FlightData.tabActions);
+                t.TabPages.Add(FlightData.tabActions);
                 //}
                 //else if (!DisplayConfiguration.displayAdvActionsTab && t.TabPages.Contains(FlightData.tabActions))
                 //{
-                    //t.TabPages.Remove(FlightData.tabActions);
+                //t.TabPages.Remove(FlightData.tabActions);
                 //}
 
 
 
                 //if (DisplayConfiguration.displaySimpleActionsTab && !t.TabPages.Contains(FlightData.tabActionsSimple))
                 //{
-                    //t.TabPages.Add(FlightData.tabActionsSimple);
+                //t.TabPages.Add(FlightData.tabActionsSimple);
                 //}
                 //else if (!DisplayConfiguration.displaySimpleActionsTab && t.TabPages.Contains(FlightData.tabActionsSimple))
                 //{
-                    t.TabPages.Remove(FlightData.tabActionsSimple);
+                t.TabPages.Remove(FlightData.tabActionsSimple);
                 //}
 
                 //if (DisplayConfiguration.displayGaugesTab && !t.TabPages.Contains(FlightData.tabGauges))
                 //{
-                    //t.TabPages.Add(FlightData.tabGauges);
+                //t.TabPages.Add(FlightData.tabGauges);
                 //}
                 //else if (!DisplayConfiguration.displayGaugesTab && t.TabPages.Contains(FlightData.tabGauges))
                 //{
-                    t.TabPages.Remove(FlightData.tabGauges);
+                t.TabPages.Remove(FlightData.tabGauges);
                 //}
                 //if (DisplayConfiguration.displayStatusTab && !t.TabPages.Contains(FlightData.tabStatus))
                 //{
-                    //t.TabPages.Add(FlightData.tabStatus);
+                //t.TabPages.Add(FlightData.tabStatus);
                 //}
                 //else if (!DisplayConfiguration.displayStatusTab && t.TabPages.Contains(FlightData.tabStatus))
                 //{
-                    t.TabPages.Remove(FlightData.tabStatus);
+                t.TabPages.Remove(FlightData.tabStatus);
                 //}
                 //if (DisplayConfiguration.displayServoTab && !t.TabPages.Contains(FlightData.tabServo))
                 //{
-                    //t.TabPages.Add(FlightData.tabServo);
+                //t.TabPages.Add(FlightData.tabServo);
                 //}
                 //else if (!DisplayConfiguration.displayServoTab && t.TabPages.Contains(FlightData.tabServo))
                 //{
-                    t.TabPages.Remove(FlightData.tabServo);
+                t.TabPages.Remove(FlightData.tabServo);
                 //}
                 //if (DisplayConfiguration.displayScriptsTab && !t.TabPages.Contains(FlightData.tabScripts))
                 //{
-                    //t.TabPages.Add(FlightData.tabScripts);
+                //t.TabPages.Add(FlightData.tabScripts);
                 //}
                 //else if (!DisplayConfiguration.displayScriptsTab && t.TabPages.Contains(FlightData.tabScripts))
                 //{
-                    t.TabPages.Remove(FlightData.tabScripts);
+                t.TabPages.Remove(FlightData.tabScripts);
                 //}
                 //if (DisplayConfiguration.displayTelemetryTab && !t.TabPages.Contains(FlightData.tabTLogs))
                 //{
-                    //t.TabPages.Add(FlightData.tabTLogs);
+                //t.TabPages.Add(FlightData.tabTLogs);
                 //}
                 //else if (!DisplayConfiguration.displayTelemetryTab && t.TabPages.Contains(FlightData.tabTLogs))
                 //{
-                    t.TabPages.Remove(FlightData.tabTLogs);
+                t.TabPages.Remove(FlightData.tabTLogs);
                 //}
                 //if (DisplayConfiguration.displayDataflashTab && !t.TabPages.Contains(FlightData.tablogbrowse))
                 //{
@@ -668,15 +674,15 @@ namespace MissionPlanner
                 //}
                 //else if (!DisplayConfiguration.displayDataflashTab && t.TabPages.Contains(FlightData.tablogbrowse))
                 //{
-                    t.TabPages.Remove(FlightData.tablogbrowse);
+                t.TabPages.Remove(FlightData.tablogbrowse);
                 //}
                 //if (DisplayConfiguration.displayMessagesTab && !t.TabPages.Contains(FlightData.tabPagemessages))
                 //{
-                    //t.TabPages.Add(FlightData.tabPagemessages);
+                //t.TabPages.Add(FlightData.tabPagemessages);
                 //}
                 //else if (!DisplayConfiguration.displayMessagesTab && t.TabPages.Contains(FlightData.tabPagemessages))
                 //{
-                    t.TabPages.Remove(FlightData.tabPagemessages);
+                t.TabPages.Remove(FlightData.tabPagemessages);
                 //}
 
                 t.SelectedIndex = 0;
@@ -806,7 +812,7 @@ namespace MissionPlanner
 
             try
             {
-                if(speechEngine == null)
+                if (speechEngine == null)
                     speechEngine = new Speech();
                 MAVLinkInterface.Speech = speechEngine;
                 CurrentState.Speech = speechEngine;
@@ -1128,16 +1134,16 @@ namespace MissionPlanner
 #endif
 #endif
 
-//            if (Program.IconFile != null)
-//            {
-//                this.Icon = Icon.FromHandle(((Bitmap)Program.IconFile).GetHicon());
-//            }
+            //            if (Program.IconFile != null)
+            //            {
+            //                this.Icon = Icon.FromHandle(((Bitmap)Program.IconFile).GetHicon());
+            //            }
 
             //MenuArduPilot.Image = new Bitmap(Properties.Resources._0d92fed790a3a70170e61a86db103f399a595c70, (int)(200), 31);
             //MenuArduPilot.Width = MenuArduPilot.Image.Width;
 
-//            if (Program.Logo2 != null)
-//                MenuArduPilot.Image = Program.Logo2;
+            //            if (Program.Logo2 != null)
+            //                MenuArduPilot.Image = Program.Logo2;
 
             Application.DoEvents();
 
@@ -1289,7 +1295,7 @@ namespace MissionPlanner
                         new adsb.PointLatLngAltHdg(adsb.Lat, adsb.Lng,
                                 adsb.Alt, adsb.Heading, adsb.Speed, id,
                                 DateTime.Now)
-                            {CallSign = adsb.CallSign, Squawk = adsb.Squawk, Raw = adsb.Raw};
+                        { CallSign = adsb.CallSign, Squawk = adsb.Squawk, Raw = adsb.Raw };
                 }
 
                 try
@@ -1707,7 +1713,7 @@ namespace MissionPlanner
                 if (getparams)
                 {
                     var ftpfile = false;
-                    if ((MainV2.comPort.MAV.cs.capabilities & (int) MAVLink.MAV_PROTOCOL_CAPABILITY.FTP) > 0)
+                    if ((MainV2.comPort.MAV.cs.capabilities & (int)MAVLink.MAV_PROTOCOL_CAPABILITY.FTP) > 0)
                     {
                         var prd = new ProgressReporterDialogue();
                         prd.DoWork += (IProgressReporterDialogue sender) =>
@@ -1747,9 +1753,9 @@ namespace MissionPlanner
                                             a.Type;
                                         MainV2.comPort.SaveToTlog(gen.GenerateMAVLinkPacket10(
                                             MAVLink.MAVLINK_MSG_ID.PARAM_VALUE,
-                                            new MAVLink.mavlink_param_value_t((float) a.Value, (ushort) mavlist.Count,
+                                            new MAVLink.mavlink_param_value_t((float)a.Value, (ushort)mavlist.Count,
                                                 0,
-                                                a.Name.MakeBytesSize(16), (byte) a.Type)));
+                                                a.Name.MakeBytesSize(16), (byte)a.Type)));
                                     });
 
                                     ftpfile = true;
@@ -2477,50 +2483,50 @@ namespace MissionPlanner
         private void UpdateConnectIcon()
         {
 
-/*
+            /*
 
 
-            if ((DateTime.Now - connectButtonUpdate).Milliseconds > 500)
-            {
-                //                        Console.WriteLine(DateTime.Now.Millisecond);
-                if (comPort.BaseStream.IsOpen)
-                {
-                    if (this.MenuConnect.Image == null || (string)this.MenuConnect.Image.Tag != "Disconnect")
-                    {
-                        this.BeginInvoke((MethodInvoker)delegate
-                       {
-                           this.MenuConnect.Image = displayicons.disconnect;
-                           this.MenuConnect.Image.Tag = "Disconnect";
-                           this.MenuConnect.Text = Strings.DISCONNECTc;
-                           _connectionControl.IsConnected(true);
-                       });
-                    }
-                }
-                else
-                {
-                    if (this.MenuConnect.Image != null && (string)this.MenuConnect.Image.Tag != "Connect")
-                    {
-                        this.BeginInvoke((MethodInvoker)delegate
-                       {
-                           this.MenuConnect.Image = displayicons.connect;
-                           this.MenuConnect.Image.Tag = "Connect";
-                           this.MenuConnect.Text = Strings.CONNECTc;
-                           _connectionControl.IsConnected(false);
-                           if (_connectionStats != null)
-                           {
-                               _connectionStats.StopUpdates();
-                           }
-                       });
-                    }
+                        if ((DateTime.Now - connectButtonUpdate).Milliseconds > 500)
+                        {
+                            //                        Console.WriteLine(DateTime.Now.Millisecond);
+                            if (comPort.BaseStream.IsOpen)
+                            {
+                                if (this.MenuConnect.Image == null || (string)this.MenuConnect.Image.Tag != "Disconnect")
+                                {
+                                    this.BeginInvoke((MethodInvoker)delegate
+                                   {
+                                       this.MenuConnect.Image = displayicons.disconnect;
+                                       this.MenuConnect.Image.Tag = "Disconnect";
+                                       this.MenuConnect.Text = Strings.DISCONNECTc;
+                                       _connectionControl.IsConnected(true);
+                                   });
+                                }
+                            }
+                            else
+                            {
+                                if (this.MenuConnect.Image != null && (string)this.MenuConnect.Image.Tag != "Connect")
+                                {
+                                    this.BeginInvoke((MethodInvoker)delegate
+                                   {
+                                       this.MenuConnect.Image = displayicons.connect;
+                                       this.MenuConnect.Image.Tag = "Connect";
+                                       this.MenuConnect.Text = Strings.CONNECTc;
+                                       _connectionControl.IsConnected(false);
+                                       if (_connectionStats != null)
+                                       {
+                                           _connectionStats.StopUpdates();
+                                       }
+                                   });
+                                }
 
-                    if (comPort.logreadmode)
-                    {
-                        this.BeginInvoke((MethodInvoker)delegate { _connectionControl.IsConnected(true); });
-                    }
-                }
-                connectButtonUpdate = DateTime.Now;
-            }
-*/
+                                if (comPort.logreadmode)
+                                {
+                                    this.BeginInvoke((MethodInvoker)delegate { _connectionControl.IsConnected(true); });
+                                }
+                            }
+                            connectButtonUpdate = DateTime.Now;
+                        }
+            */
         }
 
 
@@ -2878,7 +2884,7 @@ namespace MissionPlanner
                         {
                             this.BeginInvokeIfRequired(() =>
                                 instance.status1.Percent =
-                                    (comPort.MAV.param.TotalReceived / (double) comPort.MAV.param.TotalReported) *
+                                    (comPort.MAV.param.TotalReceived / (double)comPort.MAV.param.TotalReported) *
                                     100.0);
                         }
                     }
@@ -2887,6 +2893,9 @@ namespace MissionPlanner
                     //update annunciator status forms (if needed)
                     updateAnnunciatorForms();
 
+
+                    //update communication with the supervisor station
+                    updateSupervisorComms();
 
                     //update FlightControl
                     if (lastmode != comPort.MAV.cs.mode)
@@ -3105,7 +3114,7 @@ namespace MissionPlanner
             //Set up annunciator
 
             //annunciator1.btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "CHUTE", "TERM", "CPULT", "PRFLT", "MSG" };
-            annunciator1.btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "ROUTE", "CHUTE", "PRFLT", "START", "MSG"};
+            annunciator1.btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "ROUTE", "CHUTE", "PRFLT", "START", "MSG" };
 
 
             setAnnunciatorInitialState();
@@ -3181,11 +3190,11 @@ namespace MissionPlanner
             //}
             //else
             //{
-                this.PerformLayout();
-                log.Info("show FlightData");
-                MenuFlightData_Click(this, e);
-                log.Info("show FlightData... Done");
-                //MainMenu_ItemClicked(this, new ToolStripItemClickedEventArgs(MenuFlightData));
+            this.PerformLayout();
+            log.Info("show FlightData");
+            MenuFlightData_Click(this, e);
+            log.Info("show FlightData... Done");
+            //MainMenu_ItemClicked(this, new ToolStripItemClickedEventArgs(MenuFlightData));
             //}
 
             // for long running tasks using own threads.
@@ -3267,6 +3276,19 @@ namespace MissionPlanner
             }
 
             */
+
+            log.Info("start protarcomm thread");
+            protarComm.myNodeID = (byte)nodeID.plane1;
+
+            protarcommthread = new Thread(protarComm.ClientThread)
+                {
+                    IsBackground = true,
+                    Name = "protar supervisor client"
+
+                };
+                protarcommthread.Start();
+            protarComm.isRunning = true;
+
 
             ThreadPool.QueueUserWorkItem(LoadGDALImages);
 
@@ -3517,7 +3539,7 @@ namespace MissionPlanner
             MissionPlanner.Utilities.Tracking.AddTiming("AppLoad", "Load Time",
                 (DateTime.Now - Program.starttime).TotalMilliseconds, "");
 
-            int p = (int) Environment.OSVersion.Platform;
+            int p = (int)Environment.OSVersion.Platform;
             bool isWin = (p != 4) && (p != 6) && (p != 128);
             bool winXp = isWin && Environment.OSVersion.Version.Major == 5;
             if (winXp)
@@ -3580,19 +3602,19 @@ namespace MissionPlanner
                 if (cmds.ContainsKey("script") && File.Exists(cmds["script"]))
                 {
                     // invoke for after onload finished
-                    this.BeginInvoke((Action) delegate()
-                    {
-                        try
-                        {
-                            FlightData.selectedscript = cmds["script"];
+                    this.BeginInvoke((Action)delegate ()
+                   {
+                       try
+                       {
+                           FlightData.selectedscript = cmds["script"];
 
-                            FlightData.BUT_run_script_Click(null, null);
-                        }
-                        catch (Exception ex)
-                        {
-                            CustomMessageBox.Show("Start script failed: " + ex.ToString(), Strings.ERROR);
-                        }
-                    });
+                           FlightData.BUT_run_script_Click(null, null);
+                       }
+                       catch (Exception ex)
+                       {
+                           CustomMessageBox.Show("Start script failed: " + ex.ToString(), Strings.ERROR);
+                       }
+                   });
                 }
 
                 if (cmds.ContainsKey("joy") && cmds.ContainsKey("type"))
@@ -3676,7 +3698,7 @@ namespace MissionPlanner
                         if (CustomMessageBox.Show(
                                 "A video stream has been detected, but gstreamer has not been configured/installed.\nDo you want to install/config it now?",
                                 "GStreamer", System.Windows.Forms.MessageBoxButtons.YesNo) ==
-                            (int) System.Windows.Forms.DialogResult.Yes)
+                            (int)System.Windows.Forms.DialogResult.Yes)
                         {
                             GStreamerUI.DownloadGStreamer();
                         }
@@ -3684,7 +3706,7 @@ namespace MissionPlanner
 
                     try
                     {
-                        new Thread(delegate()
+                        new Thread(delegate ()
                             {
                                 // 36 retrys
                                 for (int i = 0; i < 36; i++)
@@ -3719,7 +3741,7 @@ namespace MissionPlanner
                                     }
                                 }
                             })
-                            {IsBackground = true, Name = "Gstreamer cli"}.Start();
+                        { IsBackground = true, Name = "Gstreamer cli" }.Start();
                     }
                     catch (Exception ex)
                     {
@@ -4234,14 +4256,14 @@ namespace MissionPlanner
 
         private void MainMenu_MouseLeave(object sender, EventArgs e)
         {
-/*            if (_connectionControl.PointToClient(Control.MousePosition).Y < MainMenu.Height)
-                return;
+            /*            if (_connectionControl.PointToClient(Control.MousePosition).Y < MainMenu.Height)
+                            return;
 
-            this.SuspendLayout();
+                        this.SuspendLayout();
 
-            panel1.Visible = false;
+                        panel1.Visible = false;
 
-            this.ResumeLayout();*/
+                        this.ResumeLayout();*/
         }
 
         /*
@@ -4806,6 +4828,56 @@ namespace MissionPlanner
             }
 
         }
+
+
+        private void updateSupervisorComms()
+        {
+            if ((DateTime.Now - lastSupervisorHB) >= TimeSpan.FromSeconds(1))
+            {
+                lastSupervisorHB = DateTime.Now;
+                if (protarComm.lastConnectOK)
+                {
+                    protarComm.outQueue[0].Enqueue(protarComm.createPacket(packetID.heartBeat));
+                }
+                else
+                {
+                    Console.WriteLine("No comm with supervisor !");
+                }
+
+                byte[] command;
+
+                if (protarComm.inQueue.Count > 0)
+                {
+                    protarComm.inQueue.TryDequeue(out command);
+                    switch ((packetID)command[0])
+                    {
+                        case packetID.catapultAssigned:
+                            Console.WriteLine("Catapult assigned");
+                            break;
+                        case packetID.routeUploaded:
+                            Console.WriteLine("Route Uploaded bye Supervisor");
+                            break;
+                        case packetID.fenceUploaded:
+                            Console.WriteLine("Fence Uploaded bye Supervisor");
+                            break;
+                        case packetID.chklistApproved:
+                            Console.WriteLine("Checklist approved");
+                            break;
+                        case packetID.termStatus:
+                            Console.WriteLine("Term Status");
+                            break;
+                        case packetID.routeApproved:
+                            Console.WriteLine("Rooute approved");
+                            break;
+                        default:
+                            Console.WriteLine("Unknown packet received");
+                            break;
+                    }
+                }
+            }
+        }
+
+
 
         private void setAnnunciatorInitialState()
         {
