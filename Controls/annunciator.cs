@@ -142,6 +142,8 @@ namespace MissionPlanner.Controls
         {
 
             var b = (Button)sender;
+            //Not enabled, not clicked :)
+            if (b.BackColor == Color.DarkSlateGray) return;
 
             _clickedButtonName = b.Text;
             if (b.FlatAppearance.BorderSize == 1)

@@ -4729,6 +4729,8 @@ namespace MissionPlanner
         {
             Form f = null;
 
+            //if a button is disabled then we cannot click on the button :)
+
             switch (annunciator1.clickedButtonName)
             {
                 case "EKF":
@@ -4754,9 +4756,6 @@ namespace MissionPlanner
                     break;
                 case "MAG":
                     f = magForm;
-                    break;
-                case "FENCE":
-                    f = fenceForm;
                     break;
                 case "AIRSPD":
                     f = airspeedForm;
@@ -4792,16 +4791,34 @@ namespace MissionPlanner
 
                 }
             }
+            //FENCE
+            else if (annunciator1.clickedButtonName == "FENCE")
+            {
+                if (FlightData.plannerShown)
+                {
+                    FlightData.but_Click(null, EventArgs.Empty);
+                    annunciator1.setStatus("FENCE", Stat.NOMINAL);
+
+                }
+                else
+                {
+                    FlightData.flightPlannerToolStripMenuItem_Click(null, EventArgs.Empty);
+                    FlightPlanner.GeoFencedownloadToolStripMenuItem_Click(null, EventArgs.Empty);
+                }
+            }
             //Route
             else if (annunciator1.clickedButtonName == "ROUTE")
             {
                 if (FlightData.plannerShown)
                 {
                     FlightData.but_Click(null, EventArgs.Empty);
+                    annunciator1.setStatus("ROUTE", Stat.NOMINAL);
+
                 }
                 else
                 {
                     FlightData.flightPlannerToolStripMenuItem_Click(null, EventArgs.Empty);
+                    FlightPlanner.cmb_missiontype.SelectedIndex = 0;
                     FlightPlanner.BUT_read_Click(null, EventArgs.Empty);
                 }
             }
@@ -4858,12 +4875,32 @@ namespace MissionPlanner
                     {
                         case packetID.catapultAssigned:
                             Console.WriteLine("Catapult assigned");
+                            MainV2.instance.BeginInvoke((MethodInvoker)(() =>
+                            {
+                                startForm.setItem(StartItem.catapultAllocated, true);
+                            }));
+                            break;
+                        case packetID.catapultReady:
+                            Console.WriteLine("Catapult ready");
+                            MainV2.instance.BeginInvoke((MethodInvoker)(() =>
+                            {
+                                startForm.setItem(StartItem.catapultReady, true);
+                            }));
+                            break;
+                        case packetID.motorAtMax:
+                            Console.WriteLine("Max throttle");
+                            MainV2.instance.BeginInvoke((MethodInvoker)(() =>
+                            {
+                                startForm.setItem(StartItem.fullThrottle, true);
+                            }));
                             break;
                         case packetID.routeUploaded:
-                            Console.WriteLine("Route Uploaded bye Supervisor");
+                            Console.WriteLine("Route Uploaded by Supervisor");
+                            annunciator1.setStatus("ROUTE", Stat.ALERT);
                             break;
                         case packetID.fenceUploaded:
                             Console.WriteLine("Fence Uploaded bye Supervisor");
+                            annunciator1.setStatus("FENCE", Stat.ALERT);
                             break;
                         case packetID.chklistApproved:
                             Console.WriteLine("Checklist approved");
@@ -4916,14 +4953,18 @@ namespace MissionPlanner
         {
             annunciator1.setStatus("AIRSPD", Stat.ALERT); airspeedForm.addText("AIRSPEED SENSOR NOT CALIBRATED!");
             annunciator1.setStatus("PRFLT", Stat.ALERT);
+            annunciator1.setStatus("ROUTE", Stat.DISABLED);
+            annunciator1.setStatus("FENCE", Stat.DISABLED);
 
 
-
-            startForm.setItem(StartItem.catapultAllocated,true);
-            startForm.setItem(StartItem.catapultReady, true);
-            startForm.setItem(StartItem.aircraftArmed, true);
-            startForm.setItem(StartItem.takeoffMode, true);
-            startForm.setItem(StartItem.fullThrottle, true);
+            MainV2.instance.BeginInvoke((MethodInvoker)(() =>
+            {
+                startForm.setItem(StartItem.catapultAllocated, false);
+                startForm.setItem(StartItem.catapultReady, false);
+                startForm.setItem(StartItem.aircraftArmed, false);
+                startForm.setItem(StartItem.takeoffMode, false);
+                startForm.setItem(StartItem.fullThrottle, true);
+            }));
         }
 
         private void updateAnnunciatorForms()
@@ -4954,11 +4995,12 @@ namespace MissionPlanner
             {
 
                 lastStartCheck = DateTime.Now;
-
-                startForm.setItem(StartItem.aircraftArmed, comPort.MAV.cs.armed);
-                if (comPort.MAV.cs.mode == "TAKEOFF") startForm.setItem(StartItem.takeoffMode, true);
-                else startForm.setItem(StartItem.takeoffMode, false);
-
+                MainV2.instance.BeginInvoke((MethodInvoker)(() =>
+                {
+                    startForm.setItem(StartItem.aircraftArmed, comPort.MAV.cs.armed);
+                    if (comPort.MAV.cs.mode == "TAKEOFF") startForm.setItem(StartItem.takeoffMode, true);
+                    else startForm.setItem(StartItem.takeoffMode, false);
+                }));
 
 
 

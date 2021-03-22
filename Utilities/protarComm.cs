@@ -23,7 +23,9 @@ namespace MissionPlanner.Utilities
         catapultAssigned,
         fenceUploaded,
         notify,
-        payloadSetup
+        payloadSetup,
+        catapultReady,
+        motorAtMax
     }
 
     public enum nodeID
