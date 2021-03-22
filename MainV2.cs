@@ -4698,6 +4698,11 @@ namespace MissionPlanner
                     }
                 }
             }
+
+            //Send out packet to supervisor station about update
+            // TODO: add outbound packet
+
+
         }
 
         private void hideAllForms()
@@ -4869,6 +4874,34 @@ namespace MissionPlanner
                         case packetID.routeApproved:
                             Console.WriteLine("Rooute approved");
                             break;
+                        case packetID.payloadSetup:
+                            foreach (Payload pld in payloadSetup)
+                            {
+                                if (pld.pos == PayloadPos.left1) pld.type = (PayloadType)command[1];
+                                if (pld.pos == PayloadPos.left2) pld.type = (PayloadType)command[2];
+                                if (pld.pos == PayloadPos.left3) pld.type = (PayloadType)command[3];
+                                if (pld.pos == PayloadPos.left4) pld.type = (PayloadType)command[4];
+
+                                if (pld.pos == PayloadPos.right1) pld.type = (PayloadType)command[5];
+                                if (pld.pos == PayloadPos.right2) pld.type = (PayloadType)command[6];
+                                if (pld.pos == PayloadPos.right3) pld.type = (PayloadType)command[7];
+                                if (pld.pos == PayloadPos.right4) pld.type = (PayloadType)command[8];
+
+                                if (pld.pos == PayloadPos.rear1) pld.type = (PayloadType)command[9];
+                                if (pld.pos == PayloadPos.rear2) pld.type = (PayloadType)command[10];
+                            }
+
+
+                            MainV2.instance.BeginInvoke((MethodInvoker)(() =>
+                            {
+                                FlightData.updatePayloadState(payloadSetup);
+                                payloadForm.updatePayloads(payloadSetup);
+
+                            }));
+                            Console.WriteLine("Payload Setup Updated");
+                            break;
+
+
                         default:
                             Console.WriteLine("Unknown packet received");
                             break;

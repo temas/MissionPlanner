@@ -22,7 +22,8 @@ namespace MissionPlanner.Utilities
         routeUploaded,
         catapultAssigned,
         fenceUploaded,
-        notify
+        notify,
+        payloadSetup
     }
 
     public enum nodeID
@@ -313,6 +314,14 @@ namespace MissionPlanner.Utilities
             packet[2] = data2;
             packet[3] = data3;
             packet[4] = data4;
+            return packet;
+
+        }
+        public static byte[] createPacket(packetID id, byte[] p)
+        {
+            byte[] packet = new byte[p.Length + 1];
+            packet[0] = (byte)id;
+            Buffer.BlockCopy(p, 0, packet, 1, p.Length);
             return packet;
 
         }
