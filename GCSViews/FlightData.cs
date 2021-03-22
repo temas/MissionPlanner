@@ -5417,6 +5417,7 @@ namespace MissionPlanner.GCSViews
 
             byte[] c = Encoding.Default.GetBytes("P");
             MainV2.comPort.sendPacket(new MAVLink.mavlink_named_value_float_t() { name = c, time_boot_ms = 0, value = (float)payloadcontrol1.igniteMask }, MainV2.comPort.sysidcurrent, MainV2.comPort.compidcurrent);
+            MainV2.comPort.sendPacket(new MAVLink.mavlink_named_value_float_t() { name = c, time_boot_ms = 0, value = (float)payloadcontrol1.igniteMask }, MainV2.comPort.sysidcurrent, MainV2.comPort.compidcurrent);
 
 
         }

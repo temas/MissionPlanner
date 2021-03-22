@@ -37,6 +37,26 @@ namespace MissionPlanner.Maps
             }
         }
 
+        public GMapMarkerWP(PointLatLng p, string wpno, bool payloadAction)
+            : base(p, GMarkerGoogleType.orange)
+        {
+            this.wpno = wpno;
+            if (font == null)
+                font = SystemFonts.DefaultFont;
+
+            if (!fontBitmaps.ContainsKey(wpno))
+            {
+                Bitmap temp = new Bitmap(100, 40, PixelFormat.Format32bppArgb);
+                using (Graphics g = Graphics.FromImage(temp))
+                {
+                    txtsize = g.MeasureString(wpno, font);
+
+                    g.DrawString(wpno, font, Brushes.Black, new PointF(0, 0));
+                }
+                fontBitmaps[wpno] = temp;
+            }
+        }
+
         public override void OnRender(IGraphics g)
         {
             if (selected)
