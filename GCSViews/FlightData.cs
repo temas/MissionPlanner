@@ -1953,8 +1953,7 @@ namespace MissionPlanner.GCSViews
 
                 // set databinding for value
                 ((QuickView) checkbox.Tag).DataBindings.Clear();
-                ((QuickView) checkbox.Tag).DataBindings.Add(new Binding("number", bindingSourceQuickTab, checkbox.Name,
-                    true));
+                ((QuickView) checkbox.Tag).DataBindings.Add(new Binding("number", bindingSourceQuickTab, checkbox.Name,true));
 
                 // close selection form
                 ((Form) checkbox.Parent).Close();
@@ -5424,6 +5423,12 @@ namespace MissionPlanner.GCSViews
 
         private void modifyandSetSpeed_Load(object sender, EventArgs e)
         {
+
+        }
+
+        private void bindingSource1_CurrentChanged(object sender, EventArgs e)
+        {
+
 
         }
     }

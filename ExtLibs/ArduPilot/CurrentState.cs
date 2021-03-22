@@ -19,31 +19,6 @@ namespace MissionPlanner
 
         [JsonIgnore] [IgnoreDataMember] public static ISpeech Speech;
 
-        //Protar added parameters
-        [DisplayText("Jet RPM")]
-        [GroupText("Protar")]
-        public static float jetRpm { get; set; }
-
-        [DisplayText("Jet Temp")]
-        [GroupText("Protar")]
-        public static float jetTemp { get; set; }
-
-        [DisplayText("Fuel level")]
-        [GroupText("Protar")]
-        public static float fuelLevel { get; set; }
-
-        [DisplayText("Ignite received")]
-        [GroupText("Protar")]
-        public static bool payloadIginteReceived { get; set; }
-
-        [DisplayText("Payload to ignite")]
-        [GroupText("Protar")]
-        public static float payloadToIgnite { get; set; }
-
-        [DisplayText("Plane ID")]
-        [GroupText("Protar")]
-        public static int planeID { get; set; }
-
 
 
         // multipliers
@@ -246,6 +221,28 @@ namespace MissionPlanner
         public float customfield7 { get; set; }
         public float customfield8 { get; set; }
         public float customfield9 { get; set; }
+
+
+
+        public float jetRpm { get; set; }
+
+        public float jetTemp { get; set; }
+
+        public float fuelLevel { get; set; }
+
+        [GroupText("Protar")]
+        [DisplayText("Ignite received")]
+        public  bool payloadIginteReceived { get; set; }
+
+        [GroupText("Protar")]
+        [DisplayText("Payload to ignite")]
+        public float payloadToIgnite { get; set; }
+
+        [GroupText("Protar")]
+        [DisplayText("Plane ID")]
+        public int planeID { get; set; }
+
+
 
         // orientation - rads
         [DisplayText("Roll (deg)")]
@@ -1758,7 +1755,8 @@ namespace MissionPlanner
         {
             if (mavLinkMessage.sysid == parent.sysid && mavLinkMessage.compid == parent.compid
                 || mavLinkMessage.msgid == (uint)MAVLink.MAVLINK_MSG_ID.RADIO // propagate the RADIO/RADIO_STATUS message across all devices on this link
-                || mavLinkMessage.msgid == (uint)MAVLink.MAVLINK_MSG_ID.RADIO_STATUS)
+                || mavLinkMessage.msgid == (uint)MAVLink.MAVLINK_MSG_ID.RADIO_STATUS
+                || mavLinkMessage.msgid == (uint)MAVLink.MAVLINK_MSG_ID.NAMED_VALUE_FLOAT)
             {
                 switch (mavLinkMessage.msgid)
                 {
