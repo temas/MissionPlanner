@@ -712,6 +712,7 @@ namespace MissionPlanner
         public static messagesStatusForm msgForm = new messagesStatusForm();
         public static startProcessForm startForm = new startProcessForm();
         public static payloadIgnite payloadToIgnite = new payloadIgnite();
+        public static chuteStatusForm chuteForm = new chuteStatusForm();
 
 
         public static List<Payload> payloadSetup = new List<Payload>();
@@ -1912,7 +1913,10 @@ namespace MissionPlanner
 
         private void MenuConnect_Click(object sender, EventArgs e)
         {
+            MainV2.instance.MenuConnect.Visible = false;
+            MainV2._connectionControl.Visible = false;
             Connect();
+
         }
 
         private void Connect()
@@ -2482,51 +2486,47 @@ namespace MissionPlanner
         /// </summary>
         private void UpdateConnectIcon()
         {
+              if ((DateTime.Now - connectButtonUpdate).Milliseconds > 500)
+              {
+                  //                        Console.WriteLine(DateTime.Now.Millisecond);
+                  if (comPort.BaseStream.IsOpen)
+                  {
+                      if (this.MenuConnect.Image == null || (string)this.MenuConnect.Image.Tag != "Disconnect")
+                      {
+                          this.BeginInvoke((MethodInvoker)delegate
+                         {
+                             this.MenuConnect.Image = displayicons.disconnect;
+                             this.MenuConnect.Image.Tag = "Disconnect";
+                             this.MenuConnect.Text = Strings.DISCONNECTc;
+                             _connectionControl.IsConnected(true);
+                         });
+                      }
+                  }
+                  else
+                  {
+                      if (this.MenuConnect.Image != null && (string)this.MenuConnect.Image.Tag != "Connect")
+                      {
+                          this.BeginInvoke((MethodInvoker)delegate
+                         {
+                             this.MenuConnect.Image = displayicons.connect;
+                             this.MenuConnect.Image.Tag = "Connect";
+                             this.MenuConnect.Text = Strings.CONNECTc;
+                             _connectionControl.IsConnected(false);
+                             if (_connectionStats != null)
+                             {
+                                 _connectionStats.StopUpdates();
+                             }
+                         });
+                      }
 
-            /*
+                      if (comPort.logreadmode)
+                      {
+                          this.BeginInvoke((MethodInvoker)delegate { _connectionControl.IsConnected(true); });
+                      }
+                  }
+                  connectButtonUpdate = DateTime.Now;
+              }
 
-
-                        if ((DateTime.Now - connectButtonUpdate).Milliseconds > 500)
-                        {
-                            //                        Console.WriteLine(DateTime.Now.Millisecond);
-                            if (comPort.BaseStream.IsOpen)
-                            {
-                                if (this.MenuConnect.Image == null || (string)this.MenuConnect.Image.Tag != "Disconnect")
-                                {
-                                    this.BeginInvoke((MethodInvoker)delegate
-                                   {
-                                       this.MenuConnect.Image = displayicons.disconnect;
-                                       this.MenuConnect.Image.Tag = "Disconnect";
-                                       this.MenuConnect.Text = Strings.DISCONNECTc;
-                                       _connectionControl.IsConnected(true);
-                                   });
-                                }
-                            }
-                            else
-                            {
-                                if (this.MenuConnect.Image != null && (string)this.MenuConnect.Image.Tag != "Connect")
-                                {
-                                    this.BeginInvoke((MethodInvoker)delegate
-                                   {
-                                       this.MenuConnect.Image = displayicons.connect;
-                                       this.MenuConnect.Image.Tag = "Connect";
-                                       this.MenuConnect.Text = Strings.CONNECTc;
-                                       _connectionControl.IsConnected(false);
-                                       if (_connectionStats != null)
-                                       {
-                                           _connectionStats.StopUpdates();
-                                       }
-                                   });
-                                }
-
-                                if (comPort.logreadmode)
-                                {
-                                    this.BeginInvoke((MethodInvoker)delegate { _connectionControl.IsConnected(true); });
-                                }
-                            }
-                            connectButtonUpdate = DateTime.Now;
-                        }
-            */
         }
 
 
@@ -3140,14 +3140,6 @@ namespace MissionPlanner
 
             payloadSetup.Add(new Payload(PayloadPos.rear1));
             payloadSetup.Add(new Payload(PayloadPos.rear2));
-
-
-            foreach (Payload pld in payloadSetup)
-            {
-                if (pld.pos == PayloadPos.left2) pld.type = PayloadType.smoke;
-                if (pld.pos == PayloadPos.left4) pld.type = PayloadType.flare;
-                if (pld.pos == PayloadPos.rear2) pld.type = PayloadType.flare;
-            }
 
 
             payloadForm.updatePayloads(payloadSetup);
@@ -4722,6 +4714,7 @@ namespace MissionPlanner
             startForm.Hide();
             prefForm.Hide();
             msgForm.Hide();
+            chuteForm.Hide();
 
         }
 
@@ -4768,6 +4761,9 @@ namespace MissionPlanner
                     break;
                 case "START":
                     f = startForm;
+                    break;
+                case "CHUTE":
+                    f = chuteForm;
                     break;
                 default:
                     f = null;
@@ -4964,6 +4960,11 @@ namespace MissionPlanner
                 startForm.setItem(StartItem.aircraftArmed, false);
                 startForm.setItem(StartItem.takeoffMode, false);
                 startForm.setItem(StartItem.fullThrottle, true);
+
+
+                chuteForm.setAirSpeedStatus(true);
+                chuteForm.setFuelStatus(true);
+
             }));
         }
 

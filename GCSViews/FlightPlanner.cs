@@ -2137,6 +2137,7 @@ namespace MissionPlanner.GCSViews
                         MainV2.payloadToIgnite.igniteMask = Convert.ToInt16(Commands.CurrentRow.Cells[Param1.Index].Value);
                         MainV2.payloadToIgnite.ShowDialog();
                         Commands.CurrentRow.Cells[Param1.Index].Value = MainV2.payloadToIgnite.igniteMask;
+                        writeKML();
                     }
                 }
 

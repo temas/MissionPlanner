@@ -623,6 +623,12 @@
     <Compile Include="StatusForms\batteryStatus.Designer.cs">
       <DependentUpon>batteryStatus.cs</DependentUpon>
     </Compile>
+    <Compile Include="StatusForms\chuteStatusForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="StatusForms\chuteStatusForm.Designer.cs">
+      <DependentUpon>chuteStatusForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="StatusForms\engineStatusForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -822,6 +828,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\batteryStatus.resx">
       <DependentUpon>batteryStatus.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="StatusForms\chuteStatusForm.resx">
+      <DependentUpon>chuteStatusForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StatusForms\EKFStatus.ko-KR.resx">
       <DependentUpon>EKFStatus.cs</DependentUpon>
@@ -4617,6 +4626,7 @@
     <None Include="Resources\notready.png" />
     <None Include="Resources\ready.png" />
     <None Include="Resources\noimage.png" />
+    <None Include="Resources\splashdark1.jpg" />
     <Content Include="rotmat.py">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
