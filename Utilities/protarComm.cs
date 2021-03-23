@@ -173,7 +173,7 @@ namespace MissionPlanner.Utilities
                             // This example uses port 11000 on the local computer.
 
                             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-                            IPAddress ipAddress = IPAddress.Parse("192.168.0.100");
+                            IPAddress ipAddress = IPAddress.Parse("192.168.0.111");
                             IPEndPoint remoteEP = new IPEndPoint(ipAddress, 11000);
 
                             // Create a TCP/IP  socket.
