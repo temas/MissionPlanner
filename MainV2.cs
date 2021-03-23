@@ -507,6 +507,7 @@ namespace MissionPlanner
         private DateTime lastVibeCheck = DateTime.Now;
         private DateTime lastStartCheck = DateTime.Now;
         private DateTime lastConnectCheck = DateTime.Now;
+        private DateTime lastStatusCheck = DateTime.Now;
 
         //Protar comm timer for queuing and dequeueing
         private DateTime lastSupervisorHB = DateTime.Now;
@@ -4989,10 +4990,28 @@ namespace MissionPlanner
 
             //Id we disconnected then all buttons are disabled
             if (!comPort.MAV.cs.connected) return;
+            
+            //Status (Safety pin)
+            
+            if ((DateTime.Now - lastStatusCheck) >= TimeSpan.FromSeconds(1))
+            {
 
-
-
-            if ((DateTime.Now - lastStartCheck) >= TimeSpan.FromSeconds(1))
+                lastStatusCheck = DateTime.Now;
+                MainV2.instance.BeginInvoke((MethodInvoker)(() =>
+                {
+                    if (comPort.MAV.cs.planeStatus > 1000)
+                    {
+                        annunciator1.setStatus("PAYLD", Stat.NOMINAL);
+                        payloadForm.setSafetyPinStatus(true);
+                    }
+                    else
+                    {
+                        annunciator1.setStatus("PAYLD", Stat.WARNING);
+                        payloadForm.setSafetyPinStatus(false);
+                    }
+                }));
+            }
+                if ((DateTime.Now - lastStartCheck) >= TimeSpan.FromSeconds(1))
             {
 
                 lastStartCheck = DateTime.Now;

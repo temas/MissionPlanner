@@ -130,11 +130,14 @@ namespace MissionPlanner.Controls
 
             Button b = layoutPanel.Controls.Find(panelName, false).FirstOrDefault() as Button;
             int index = Array.IndexOf(_btnLabels,panelName);
-            if (_btnStatus[index] != c)
+            if (index >= 0)
             {
-                _btnStatus[index] = c;
-                setButtonColor(b, c);
-                this.Invalidate();
+                if (_btnStatus[index] != c)
+                {
+                    _btnStatus[index] = c;
+                    setButtonColor(b, c);
+                    this.Invalidate();
+                }
             }
         }
 

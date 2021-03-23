@@ -24,18 +24,18 @@ namespace MissionPlanner.Controls
             InitializeComponent();
 
             payloads = new List<Payload>();
-            payloads.Add(new Payload(PayloadPos.left1, l1, 1));
-            payloads.Add(new Payload(PayloadPos.left2, l2, 2));
-            payloads.Add(new Payload(PayloadPos.left3, l3, 4));
-            payloads.Add(new Payload(PayloadPos.left4, l4, 8));
+            payloads.Add(new Payload(PayloadPos.left1, l1, 64));
+            payloads.Add(new Payload(PayloadPos.left2, l2, 128));
+            payloads.Add(new Payload(PayloadPos.left3, l3, 256));
+            payloads.Add(new Payload(PayloadPos.left4, l4, 512));
 
-            payloads.Add(new Payload(PayloadPos.right1, r1, 16));
-            payloads.Add(new Payload(PayloadPos.right2, r2, 32));
-            payloads.Add(new Payload(PayloadPos.right3, r3, 64));
-            payloads.Add(new Payload(PayloadPos.right4, r4, 128));
+            payloads.Add(new Payload(PayloadPos.right1, r1, 4));
+            payloads.Add(new Payload(PayloadPos.right2, r2, 8));
+            payloads.Add(new Payload(PayloadPos.right3, r3, 16));
+            payloads.Add(new Payload(PayloadPos.right4, r4, 32));
 
-            payloads.Add(new Payload(PayloadPos.rear1, rear1, 256));
-            payloads.Add(new Payload(PayloadPos.rear2, rear2, 512));
+            payloads.Add(new Payload(PayloadPos.rear1, rear1, 2));
+            payloads.Add(new Payload(PayloadPos.rear2, rear2, 1));
 
             redrawControls();
 

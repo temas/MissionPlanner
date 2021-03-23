@@ -242,7 +242,7 @@ namespace MissionPlanner
         [DisplayText("Plane ID")]
         public int planeID { get; set; }
 
-
+        public float planeStatus { get; set; }
 
         // orientation - rads
         [DisplayText("Roll (deg)")]
@@ -3129,7 +3129,7 @@ namespace MissionPlanner
                                     fuelLevel = value;
                                     break;
                                 case 'S':
-                                    //Todo: Status info processing.
+                                    planeStatus = value;
                                     break;
                                 default:
                                     break;

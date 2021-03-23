@@ -73,7 +73,7 @@ namespace MissionPlanner.Utilities
             // Dns.GetHostName returns the name of the
             // host running the application.
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = IPAddress.Parse("192.168.0.100");
+            IPAddress ipAddress = IPAddress.Parse("192.168.0.111");
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, serverIpPort);
 
             // Create a TCP/IP socket.
@@ -216,15 +216,15 @@ namespace MissionPlanner.Utilities
                             }
                             catch (ArgumentNullException ane)
                             {
-                                //Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
+                                Console.WriteLine("ArgumentNullException : {0}", ane.ToString());
                             }
                             catch (SocketException se)
                             {
-                                //Console.WriteLine("SocketException : {0}", se.ToString());
+                                Console.WriteLine("SocketException : {0}", se.ToString());
                             }
                             catch (Exception e)
                             {
-                                //Console.WriteLine("Unexpected exception : {0}", e.ToString());
+                                Console.WriteLine("Unexpected exception : {0}", e.ToString());
                             }
 
                         }
