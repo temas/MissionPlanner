@@ -3114,9 +3114,12 @@ namespace MissionPlanner
 
             //Set up annunciator
 
-            //annunciator1.btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "CHUTE", "TERM", "CPULT", "PRFLT", "MSG" };
-            annunciator1.btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "ROUTE", "CHUTE", "PRFLT", "START", "MSG" };
+            string[] btnLabels = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "GEO"+ Environment.NewLine +"FENCE",
+                "AIR"+ Environment.NewLine +"SPEED", "MAG", "PAY"+ Environment.NewLine +"LOAD", "ROUTE", "PARA"+ Environment.NewLine +"CHUTE",
+                "PRE"+ Environment.NewLine +"FLIGHT", "START", "MSG" };
 
+            string[] btnNames = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "ROUTE", "CHUTE", "PRFLT", "START", "MSG" };
+            annunciator1.setPanels(btnNames, btnLabels);
 
             setAnnunciatorInitialState();
 
@@ -4990,9 +4993,9 @@ namespace MissionPlanner
 
             //Id we disconnected then all buttons are disabled
             if (!comPort.MAV.cs.connected) return;
-            
+
             //Status (Safety pin)
-            
+
             if ((DateTime.Now - lastStatusCheck) >= TimeSpan.FromSeconds(1))
             {
 

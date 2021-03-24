@@ -43,7 +43,7 @@ namespace MissionPlanner
             this.connectionOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectionListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.annunciator1 = new MissionPlanner.Controls.annunciator();
+            this.annunciator1 = new MissionPlanner.Controls.annunciator(16, new System.Drawing.Size(83,54));
             this.status1 = new MissionPlanner.Controls.Status();
             this.connectionControl1 = new MissionPlanner.Controls.ConnectionControl();
             this.MenuConnect = new MissionPlanner.Controls.MyButton();
@@ -106,23 +106,6 @@ namespace MissionPlanner
             // 
             resources.ApplyResources(this.annunciator1, "annunciator1");
             this.annunciator1.BackColor = System.Drawing.Color.Black;
-            this.annunciator1.btnLabels = new string[] {
-        "ENGINE",
-        "EKF",
-        "BATT",
-        "COMM",
-        "GPS",
-        "FUEL",
-        "VIBE",
-        "NONE",
-        "NONE",
-        "NONE",
-        "NONE",
-        "NONE",
-        "NONE",
-        "NONE",
-        "NONE",
-        "NONE"};
             this.annunciator1.Name = "annunciator1";
             this.annunciator1.buttonClicked += new System.EventHandler(this.annunciator1_buttonClicked);
             // 

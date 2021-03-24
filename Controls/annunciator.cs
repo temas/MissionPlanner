@@ -11,22 +11,17 @@ using MissionPlanner.Utilities;
 
 namespace MissionPlanner.Controls
 {
-    public enum Stat { NOMINAL, WARNING, ALERT, DISABLED }
+    public enum Stat { NOMINAL, WARNING, ALERT, DISABLED, NOTEXIST }
 
 
     [PreventTheming]
     public partial class annunciator : UserControl
     {
+        private List<panelItem> panelItems = new List<panelItem>();
 
-        private string[] _btnLabels = { "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE", "NONE" };
-        private Stat[] _btnStatus = { Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED, Stat.DISABLED };
-
-
-        [Browsable(true)]
-        [Category("Action")]
         public event EventHandler buttonClicked;
 
-        private string _clickedButtonName = "NONE";
+        private string _clickedButtonName;
 
         public string clickedButtonName
         {
@@ -34,137 +29,118 @@ namespace MissionPlanner.Controls
 
         }
 
-        [System.ComponentModel.Browsable(true)]
-        public string[] btnLabels
-        {
-
-            get { return _btnLabels; }
-            set
-            {
-                _btnLabels = value;
-                int a = 0;
-                foreach (Button b in layoutPanel.Controls)
-                {
-                    b.Text = _btnLabels[a];
-                    b.Name = _btnLabels[a];
-                    a++;
-                }
-            }
-        }
+        private bool _blinkStat = true;
 
         public annunciator()
         {
             InitializeComponent();
-            int a = 0;
-            foreach (Button b in layoutPanel.Controls)
+        }
+
+        public annunciator(int btnCount, Size btnSize)
+        {
+            InitializeComponent();
+
+            for (int i = 0; i < btnCount; i++)
             {
-                b.Text = _btnLabels[a];
-                b.Name = _btnLabels[a];
-                _btnStatus[a] = Stat.NOMINAL;
-                setButtonColor(b, _btnStatus[a]);
-                b.Click += new System.EventHandler(this.panel_Click);
-                a++;
+                panelItem item = new panelItem();
+
+                item.btn.Size = btnSize;
+                item.btn.Name = "button" + i.ToString();
+                item.btn.Location = new Point(i * (btnSize.Width), 0);
+                item.btn.Margin = new Padding(1, 1, 1, 1);
+                item.btn.Click += new System.EventHandler(this.panel_Click);
+                item.btn.FlatAppearance.BorderSize = 1;
+                item.btn.FlatAppearance.BorderColor = Color.Black;
+                item.btn.FlatStyle = FlatStyle.Flat;
+                item.btn.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+                item.btn.panelName = "EMPTY";
+                item.setStatus(Stat.NOMINAL);
+
+                item.name = "EMPTY";
+                item._disabled = true;
+
+                layoutPanel.Controls.Add(item.btn);
+                panelItems.Add(item);
             }
 
             timer1.Interval = 500;
             timer1.Tick += Timer_Tick;
             timer1.Enabled = false;
+
             if (!this.DesignMode)
             {
                 timer1.Enabled = true;
             }
         }
 
-
-        private void setButtonColor(Button b, Stat s)
+        public void setPanels(string[] panelNames, string[] panelLabels)
         {
-            switch (s)
+
+            if (panelLabels.Count() != panelNames.Count()) return;
+            if (panelLabels.Count() == 0) return;
+            if (panelLabels.Count() > panelItems.Count) Array.Resize(ref panelLabels, panelItems.Count);
+
+            int index = 0;
+            foreach (panelItem i in panelItems)
             {
-                case Stat.DISABLED:
-                    b.BackColor = Color.DarkSlateGray;
-                    b.ForeColor = Color.LightSlateGray;
-                    break;
-                case Stat.NOMINAL:
-                    b.BackColor = Color.Lime;
-                    b.ForeColor = Color.DarkSlateGray;
-                    break;
-                case Stat.WARNING:
-                    b.BackColor = Color.Yellow;
-                    b.ForeColor = Color.DarkSlateGray;
-                    break;
-                case Stat.ALERT:
-                    b.BackColor = Color.Red;
-                    b.ForeColor = Color.White;
-                    break;
+                i.name = panelNames[index];
+                i.btn.Text = panelLabels[index++];
             }
-            b.FlatAppearance.BorderSize = 1;
-            b.FlatAppearance.BorderColor = Color.Black;
         }
-
-
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            foreach (Button b in layoutPanel.Controls)
+            _blinkStat = !_blinkStat;
+
+            foreach (panelItem i in panelItems)
             {
-                if (b.BackColor == Color.Red) b.BackColor = Color.DarkRed;
-                else if (b.BackColor == Color.DarkRed) b.BackColor = Color.Red;
-
-                if (b.BackColor == Color.Yellow) b.BackColor = Color.Gold;
-                else if (b.BackColor == Color.Gold) b.BackColor = Color.Yellow;
-
+                i.blink(_blinkStat);
             }
         }
 
-
         public Stat getStatus(string panelName)
         {
-            Button b = layoutPanel.Controls.Find(panelName, false).FirstOrDefault() as Button;
-            int index = Array.IndexOf(_btnLabels, panelName);
-            return _btnStatus[index];
+
+            panelItem p = panelItems.Find(x => x.name == panelName);
+
+            if (p is null) return Stat.NOTEXIST;
+            else return p.status;
+
         }
 
 
         public void setStatus(string panelName, Stat c)
         {
-
-            Button b = layoutPanel.Controls.Find(panelName, false).FirstOrDefault() as Button;
-            int index = Array.IndexOf(_btnLabels,panelName);
-            if (index >= 0)
+            panelItem p = panelItems.Find(x => x.name == panelName);
+            if (p != null)
             {
-                if (_btnStatus[index] != c)
-                {
-                    _btnStatus[index] = c;
-                    setButtonColor(b, c);
-                    this.Invalidate();
-                }
+                p.status = c;
             }
         }
 
         private void panel_Click(object sender, EventArgs e)
         {
 
-            var b = (Button)sender;
-            //Not enabled, not clicked :)
-            if (b.BackColor == Color.DarkSlateGray) return;
+            var b = (panelButton)sender;
+            //find the panel by the button
+            panelItem p = panelItems.Find(x => x.name == b.panelName);
 
-            _clickedButtonName = b.Text;
-            if (b.FlatAppearance.BorderSize == 1)
+            if ((p.status == Stat.DISABLED) && (b.BackColor == Color.DarkSlateGray)) return;
+
+
+            if (b.FlatAppearance.BorderSize == 3)
             {
-                foreach(Button btn in layoutPanel.Controls)
-                {
-                    btn.FlatAppearance.BorderSize = 1;
-                    btn.FlatAppearance.BorderColor = Color.Black; ;
-                }
-                b.FlatAppearance.BorderSize = 3;
-                b.FlatAppearance.BorderColor = Color.White;
+                p.deselect();
             }
             else
             {
-                b.FlatAppearance.BorderSize = 1;
-                b.FlatAppearance.BorderColor = Color.Black; ;
-            }
+                _clickedButtonName = p.name;
 
+                foreach (panelItem i in panelItems)
+                    i.deselect();
+
+                p.select();
+            }
 
 
             EventHandler handler = this.buttonClicked;
@@ -179,23 +155,181 @@ namespace MissionPlanner.Controls
         {
             if (this.Enabled)
             {
-                int a = 0;
-                foreach (Button b in layoutPanel.Controls)
+                foreach (panelItem i in panelItems)
                 {
-                    setButtonColor(b, _btnStatus[a++]);
+                    i.enable();
                 }
             }
             else
             {
-                foreach (Button b in layoutPanel.Controls)
+                foreach (panelItem i in panelItems)
                 {
-                    b.BackColor = Color.DarkSlateGray;
-                    b.ForeColor = Color.LightSlateGray;
+                    i.disable();
                 }
             }
 
+        }
 
+
+
+    }
+
+    public partial class panelButton : Button
+    {
+        public string panelName { get; set; }
+    }
+
+
+    public class panelItem : IEquatable<panelItem>
+    {
+
+        public panelButton btn { get; set; }
+
+        private string _name;
+
+        public string name
+        {
+            get
+            {
+                return _name;
+            }
+            set
+            {
+                _name = value;
+                btn.panelName = _name;
+            }
+        }
+
+        private Stat _status;
+
+        public Stat status
+        {
+            get
+            {
+                return _status;
+            }
+            set
+            {
+                _status = value;
+            }
+        }
+
+        public bool _disabled { get; set; }
+
+        private Color _disabledBGColor = Color.DarkSlateGray;
+        private Color _disabledFGColor = Color.LightSlateGray;
+
+        private Color _nominalBGColor = Color.Lime;
+        private Color _nominalFGColor = Color.DarkSlateGray;
+
+        private Color _warningBGColor = Color.Yellow;
+        private Color _warningBGColorBlink = Color.Gold;
+        private Color _warningFGColor = Color.DarkSlateGray;
+
+        private Color _alertBGColor = Color.Red;
+        private Color _alertBGColorBlink = Color.DarkRed;
+        private Color _alertFGColor = Color.White;
+
+
+        public panelItem()
+        {
+            btn = new panelButton();
+        }
+
+
+        public override string ToString()
+        {
+            return name;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null) return false;
+            panelItem objAsPart = obj as panelItem;
+            if (objAsPart == null) return false;
+            else return Equals(objAsPart);
+        }
+
+        public override int GetHashCode()
+        {
+            return name.GetHashCode();
+        }
+        public bool Equals(panelItem other)
+        {
+            if (other == null) return false;
+            return (this.name.Equals(other.name));
+        }
+
+
+        public void disable()
+        {
+            this.btn.BackColor = _disabledBGColor;
+            this.btn.ForeColor = _disabledFGColor;
+            this._disabled = true;
+        }
+
+        public void enable()
+        {
+            setStatus(this.status);
+            this._disabled = false;
+        }
+
+        public void select()
+        {
+            this.btn.FlatAppearance.BorderSize = 3;
+            this.btn.FlatAppearance.BorderColor = Color.White;
+        }
+
+        public void deselect()
+        {
+            this.btn.FlatAppearance.BorderSize = 1;
+            this.btn.FlatAppearance.BorderColor = Color.Black;
+        }
+
+        public void setStatus(Stat s)
+        {
+            switch (s)
+            {
+                case Stat.NOMINAL:
+                    this.btn.BackColor = _nominalBGColor;
+                    this.btn.ForeColor = _nominalFGColor;
+                    break;
+                case Stat.WARNING:
+                    this.btn.BackColor = _warningBGColor;
+                    this.btn.ForeColor = _warningFGColor;
+                    break;
+                case Stat.ALERT:
+                    this.btn.BackColor = _alertBGColor;
+                    this.btn.ForeColor = _alertFGColor;
+                    break;
+                case Stat.DISABLED:
+                    this.btn.BackColor = _disabledBGColor;
+                    this.btn.ForeColor = _disabledFGColor;
+                    break;
+                default:
+                    break;
+            }
+            status = s;
+        }
+
+        public void blink(bool b)
+        {
+
+            if (!this._disabled)
+            {
+                if (b)
+                {
+                    if (status == Stat.ALERT) this.btn.BackColor = _alertBGColorBlink;
+                    else if (status == Stat.WARNING) this.btn.BackColor = _warningBGColorBlink;
+                }
+                else
+                {
+                    if (status == Stat.ALERT) this.btn.BackColor = _alertBGColor;
+                    else if (status == Stat.WARNING) this.btn.BackColor = _warningBGColor;
+                }
+            }
         }
     }
+
 
 }
