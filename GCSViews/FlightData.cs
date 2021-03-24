@@ -64,7 +64,7 @@ namespace MissionPlanner.GCSViews
         AviWriter aviwriter;
         private bool CameraOverlap;
         GMapMarker center = new GMarkerGoogle(new PointLatLng(0.0, 0.0), GMarkerGoogleType.none);
-        bool huddropout;
+        bool hudDetached;
         bool huddropoutresize;
 
         /// <summary>
@@ -2085,41 +2085,7 @@ namespace MissionPlanner.GCSViews
             POI.POIDelete((GMapMarkerPOI) CurrentGMapMarker);
         }
 
-        void dropout_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            (sender as Form).SaveStartupLocation();
-            //GetFormFromGuid(GetOrCreateGuid("fd_hud_guid")).Controls.Add(hud1);
-            SubMainLeft.Panel1.Controls.Add(hud1);
-            SubMainLeft.Panel1Collapsed = false;
-            huddropout = false;
-        }
 
-        void dropout_Resize(object sender, EventArgs e)
-        {
-            if (huddropoutresize)
-                return;
-
-            huddropoutresize = true;
-
-            int hudh = hud1.Height;
-            int formh = ((Form) sender).Height - 30;
-
-            if (((Form) sender).Height < hudh)
-            {
-                if (((Form) sender).WindowState == FormWindowState.Maximized)
-                {
-                    Point tl = ((Form) sender).DesktopLocation;
-                    ((Form) sender).WindowState = FormWindowState.Normal;
-                    ((Form) sender).Location = tl;
-                }
-
-                ((Form) sender).Width = (int) (formh * (hud1.SixteenXNine ? 1.777f : 1.333f));
-                ((Form) sender).Height = formh + 20;
-            }
-
-            hud1.Refresh();
-            huddropoutresize = false;
-        }
 
         private void dropOutToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -2719,20 +2685,65 @@ namespace MissionPlanner.GCSViews
 
         private void hud1_DoubleClick(object sender, EventArgs e)
         {
-            if (huddropout)
+            if (hudDetached)
                 return;
 
             SubMainLeft.Panel1Collapsed = true;
-            Form dropout = new Form();
-            dropout.Text = "HUD Dropout";
+            FloatingForm dropout = new FloatingForm();
+            dropout.Caption = "HUD (Plane 1)";
             dropout.Size = new Size(hud1.Width, hud1.Height + 20);
             SubMainLeft.Panel1.Controls.Remove(hud1);
             dropout.Controls.Add(hud1);
-            dropout.Resize += dropout_Resize;
-            dropout.FormClosed += dropout_FormClosed;
+            dropout.Resize += dropoutHud_Resize;
+            dropout.FormClosed += dropoutHud_FormClosed;
             dropout.RestoreStartupLocation();
             dropout.Show();
-            huddropout = true;
+
+            hudDetached = true;
+            hideLeftPanel();
+
+        }
+
+        void dropoutHud_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            (sender as Form).SaveStartupLocation();
+            showLeftPanel();
+
+            SubMainLeft.Panel1.Controls.Add(hud1);
+            SubMainLeft.Panel1Collapsed = false;
+            hudDetached = false;
+
+            SubMainLeft.SplitterDistance = 400;
+            SubMainLeft.Panel1.Invalidate();
+            //hud1_Resize(null, null);
+
+        }
+
+        void dropoutHud_Resize(object sender, EventArgs e)
+        {
+            if (huddropoutresize)
+                return;
+
+            huddropoutresize = true;
+
+            int hudh = hud1.Height;
+            int formh = ((Form)sender).Height - 30;
+
+            if (((Form)sender).Height < hudh)
+            {
+                if (((Form)sender).WindowState == FormWindowState.Maximized)
+                {
+                    Point tl = ((Form)sender).DesktopLocation;
+                    ((Form)sender).WindowState = FormWindowState.Normal;
+                    ((Form)sender).Location = tl;
+                }
+
+                ((Form)sender).Width = (int)(formh * (hud1.SixteenXNine ? 1.777f : 1.333f));
+                ((Form)sender).Height = formh + 20;
+            }
+
+            hud1.Refresh();
+            huddropoutresize = false;
         }
 
         private void hud1_ekfclick(object sender, EventArgs e)
@@ -4354,7 +4365,7 @@ namespace MissionPlanner.GCSViews
 
         private void SwapHud1AndMap()
         {
-            if (this.huddropout)
+            if (this.hudDetached)
                 return;
 
             MainH.Panel2.SuspendLayout();
@@ -4709,6 +4720,11 @@ namespace MissionPlanner.GCSViews
                if (MainV2.gpsForm.Visible) MainV2.comPort.MAV.cs.UpdateCurrentSettings(MainV2.gpsForm.bindingSourceGPSStatus.UpdateDataSource(MainV2.comPort.MAV.cs));
                if (MainV2.airspeedForm.Visible) MainV2.comPort.MAV.cs.UpdateCurrentSettings(MainV2.airspeedForm.bindingSourceAirpseedForm.UpdateDataSource(MainV2.comPort.MAV.cs));
 
+                if (tabQuickDetached)
+                {
+                    MainV2.comPort.MAV.cs.UpdateCurrentSettings(
+                        bindingSourceQuickTab.UpdateDataSource(MainV2.comPort.MAV.cs));
+                }
 
                 if (this.Visible)
                 {
@@ -5422,15 +5438,170 @@ namespace MissionPlanner.GCSViews
 
         }
 
-        private void modifyandSetSpeed_Load(object sender, EventArgs e)
+        private bool tabQuickDetached = false;
+        private bool tabPayloadDetached = false;
+        private bool tabFlightControlDetached = false;
+
+
+        private void undockToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            FloatingForm dropout = new FloatingForm();
+            TabControl tab = new TabControl();
+            dropout.Size = new Size(200, 400);
+            tabQuickDetached = true;
+            tab.Appearance = TabAppearance.FlatButtons;
+            tab.ItemSize = new Size(0, 0);
+            tab.SizeMode = TabSizeMode.Fixed;
+            tab.Size = new Size(200, 400);
+            tab.Location = new Point(-2, -1);
+
+            tab.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+
+            dropout.Caption = "Flight DATA (Plane 1)";
+            dropout.Text = "quicktab1";
+            tabControlactions.Controls.Remove(tabQuick);
+            tab.Controls.Add(tabQuick);
+            tabQuick.BorderStyle = BorderStyle.Fixed3D;
+            dropout.FormClosed += dropoutQuick_FormClosed;
+            dropout.Controls.Add(tab);
+            dropout.RestoreStartupLocation();
+            dropout.Show();
+
+            hideLeftPanel();
 
         }
 
-        private void bindingSource1_CurrentChanged(object sender, EventArgs e)
+            void dropoutQuick_FormClosed(object sender, FormClosedEventArgs e)
         {
+            (sender as Form).SaveStartupLocation();
+            showLeftPanel();
+            tabControlactions.Controls.Add(tabQuick);
+            tabControlactions.SelectedTab = tabQuick;
+            tabQuickDetached = false;
+        }
+
+
+        private void undockDockToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FloatingForm dropout = new FloatingForm();
+            TabControl tab = new TabControl();
+            dropout.Size = new Size(200, 400);
+            tabPayloadDetached = true;
+            tab.Appearance = TabAppearance.FlatButtons;
+            tab.ItemSize = new Size(0, 0);
+            tab.SizeMode = TabSizeMode.Fixed;
+            tab.Size = new Size(200, 400);
+            tab.Location = new Point(-2, -1);
+
+            tab.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+
+            dropout.Caption = "Payload Control (Plane 1)";
+            dropout.Text = "payload_control1";
+            tabControlactions.Controls.Remove(tabPayloadControl);
+            tab.Controls.Add(tabPayloadControl);
+            tabQuick.BorderStyle = BorderStyle.Fixed3D;
+            dropout.FormClosed += dropoutPayload_FormClosed;
+            dropout.Controls.Add(tab);
+            dropout.RestoreStartupLocation();
+            dropout.Show();
+
+            hideLeftPanel();
+
+        }
+
+            void dropoutPayload_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            (sender as Form).SaveStartupLocation();
+            showLeftPanel();
+            tabControlactions.Controls.Add(tabPayloadControl);
+            tabControlactions.SelectedTab = tabPayloadControl;
+            tabPayloadDetached = false;
+        }
+
+        private void undockDockToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            FloatingForm dropout = new FloatingForm();
+            TabControl tab = new TabControl();
+            dropout.Size = new Size(200, 400);
+            tabFlightControlDetached = true;
+            tab.Appearance = TabAppearance.FlatButtons;
+            tab.ItemSize = new Size(0, 0);
+            tab.SizeMode = TabSizeMode.Fixed;
+            tab.Size = new Size(200, 400);
+            tab.Location = new Point(-2, -1);
+
+            tab.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+
+            dropout.Caption = "Flight Control (Plane 1)";
+            dropout.Text = "flight_control1";
+            tabControlactions.Controls.Remove(tabFlightControl);
+            tab.Controls.Add(tabFlightControl);
+            tabQuick.BorderStyle = BorderStyle.Fixed3D;
+            dropout.FormClosed += dropoutFlightControl_FormClosed;
+            dropout.Controls.Add(tab);
+            dropout.RestoreStartupLocation();
+            dropout.Show();
+            hideLeftPanel();
+
+        }
+
+            void dropoutFlightControl_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            (sender as Form).SaveStartupLocation();
+            showLeftPanel();
+            tabControlactions.Controls.Add(tabFlightControl);
+            tabControlactions.SelectedTab = tabFlightControl;
+            tabFlightControlDetached = false;
+
 
 
         }
+
+        private void hideLeftPanel()
+        {
+            if (hudDetached && tabQuickDetached && tabPayloadDetached && tabFlightControlDetached)
+            {
+                MainH.Panel1MinSize = 0;
+                MainH.SplitterDistance = 0;
+                MainH.Panel1Collapsed = true;
+                MainH.Panel2.Invalidate();
+            }
+
+        }
+
+        private void showLeftPanel()
+        {
+            MainH.Panel1MinSize = 300;
+
+            if(MainH.SplitterDistance == 0) MainH.SplitterDistance = 300;
+            MainH.Panel1Collapsed = false;
+            MainH.Panel2.Invalidate();
+            MainH.Panel1.Invalidate();
+            SubMainLeft.Invalidate();
+            SubMainLeft.Panel1.Invalidate();
+
+
+        }
+
+        private void undockDockToolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            MainH.Panel2.Controls.Remove(tableMap);
+            Form dropout = new Form();
+            dropout.Controls.Add(tableMap);
+            dropout.Text = "map";
+            dropout.Size = new Size(700, 500);
+            dropout.RestoreStartupLocation();
+            dropout.FormClosed += dropoutMap_FormClosed;
+            dropout.Show();
+        }
+        void dropoutMap_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            (sender as Form).SaveStartupLocation();
+            (sender as Form).Controls.Remove(tableMap);
+            MainH.Panel2.Controls.Add(tableMap);
+        }
+
+
+
     }
 }

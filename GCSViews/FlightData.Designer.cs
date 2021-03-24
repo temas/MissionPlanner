@@ -35,6 +35,7 @@
             this.quickView6 = new MissionPlanner.Controls.QuickView();
             this.contextMenuStripQuickView = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setViewCountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.undockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.bindingSourceQuickTab = new System.Windows.Forms.BindingSource(this.components);
             this.quickView5 = new MissionPlanner.Controls.QuickView();
             this.quickView4 = new MissionPlanner.Controls.QuickView();
@@ -145,6 +146,8 @@
             this.BUT_loganalysis = new MissionPlanner.Controls.MyButton();
             this.tabFlightControl = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.contextMenuStripFlightControl = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.undockDockToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.bFC2 = new System.Windows.Forms.Button();
             this.bFC1 = new System.Windows.Forms.Button();
             this.bFC3 = new System.Windows.Forms.Button();
@@ -155,6 +158,8 @@
             this.bFCExecute = new System.Windows.Forms.Button();
             this.tabPayloadControl = new System.Windows.Forms.TabPage();
             this.payloadcontrol1 = new MissionPlanner.Controls.payloadcontrol();
+            this.contextMenuStripPayloadControl = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.undockDockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableMap = new System.Windows.Forms.TableLayoutPanel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.zg1 = new ZedGraph.ZedGraphControl();
@@ -200,13 +205,14 @@
             this.label1 = new MissionPlanner.Controls.MyLabel();
             this.CHK_autopan = new System.Windows.Forms.CheckBox();
             this.CB_tuning = new System.Windows.Forms.CheckBox();
-            this.bindingSourceGaugesTab = new System.Windows.Forms.BindingSource(this.components);
             this.ZedGraphTimer = new System.Windows.Forms.Timer(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.openScriptDialog = new System.Windows.Forms.OpenFileDialog();
             this.scriptChecker = new System.Windows.Forms.Timer(this.components);
             this.Messagetabtimer = new System.Windows.Forms.Timer(this.components);
+            this.bindingSourceGaugesTab = new System.Windows.Forms.BindingSource(this.components);
             this.bindingSourceStatusTab = new System.Windows.Forms.BindingSource(this.components);
+            this.undockDockToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.MainH)).BeginInit();
             this.MainH.Panel1.SuspendLayout();
             this.MainH.Panel2.SuspendLayout();
@@ -248,7 +254,9 @@
             this.tableLayoutPanel2.SuspendLayout();
             this.tabFlightControl.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
+            this.contextMenuStripFlightControl.SuspendLayout();
             this.tabPayloadControl.SuspendLayout();
+            this.contextMenuStripPayloadControl.SuspendLayout();
             this.tableMap.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -587,7 +595,8 @@
             // contextMenuStripQuickView
             // 
             this.contextMenuStripQuickView.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.setViewCountToolStripMenuItem});
+            this.setViewCountToolStripMenuItem,
+            this.undockToolStripMenuItem});
             this.contextMenuStripQuickView.Name = "contextMenuStripQuickView";
             resources.ApplyResources(this.contextMenuStripQuickView, "contextMenuStripQuickView");
             // 
@@ -596,6 +605,12 @@
             this.setViewCountToolStripMenuItem.Name = "setViewCountToolStripMenuItem";
             resources.ApplyResources(this.setViewCountToolStripMenuItem, "setViewCountToolStripMenuItem");
             this.setViewCountToolStripMenuItem.Click += new System.EventHandler(this.setViewCountToolStripMenuItem_Click);
+            // 
+            // undockToolStripMenuItem
+            // 
+            this.undockToolStripMenuItem.Name = "undockToolStripMenuItem";
+            resources.ApplyResources(this.undockToolStripMenuItem, "undockToolStripMenuItem");
+            this.undockToolStripMenuItem.Click += new System.EventHandler(this.undockToolStripMenuItem_Click);
             // 
             // bindingSourceQuickTab
             // 
@@ -623,7 +638,6 @@
             this.quickView4.number = 0D;
             this.quickView4.numberColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(83)))));
             this.quickView4.numberformat = "0.00";
-            this.quickView4.DoubleClick += new System.EventHandler(this.quickView_DoubleClick);
             // 
             // quickView3
             // 
@@ -830,7 +844,6 @@
             0,
             0});
             this.modifyandSetSpeed.Click += new System.EventHandler(this.modifyandSetSpeed_Click);
-            this.modifyandSetSpeed.Load += new System.EventHandler(this.modifyandSetSpeed_Load);
             this.modifyandSetSpeed.ParentChanged += new System.EventHandler(this.modifyandSetSpeed_ParentChanged);
             // 
             // CMB_setwp
@@ -2049,6 +2062,7 @@
             // 
             resources.ApplyResources(this.tableLayoutPanel3, "tableLayoutPanel3");
             this.tableLayoutPanel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.tableLayoutPanel3.ContextMenuStrip = this.contextMenuStripFlightControl;
             this.tableLayoutPanel3.Controls.Add(this.bFC2, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this.bFC1, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.bFC3, 0, 2);
@@ -2058,6 +2072,19 @@
             this.tableLayoutPanel3.Controls.Add(this.bFCClear, 0, 6);
             this.tableLayoutPanel3.Controls.Add(this.bFCExecute, 1, 6);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
+            // 
+            // contextMenuStripFlightControl
+            // 
+            this.contextMenuStripFlightControl.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.undockDockToolStripMenuItem1});
+            this.contextMenuStripFlightControl.Name = "contextMenuStripFlightControl";
+            resources.ApplyResources(this.contextMenuStripFlightControl, "contextMenuStripFlightControl");
+            // 
+            // undockDockToolStripMenuItem1
+            // 
+            this.undockDockToolStripMenuItem1.Name = "undockDockToolStripMenuItem1";
+            resources.ApplyResources(this.undockDockToolStripMenuItem1, "undockDockToolStripMenuItem1");
+            this.undockDockToolStripMenuItem1.Click += new System.EventHandler(this.undockDockToolStripMenuItem1_Click);
             // 
             // bFC2
             // 
@@ -2141,8 +2168,22 @@
             // payloadcontrol1
             // 
             resources.ApplyResources(this.payloadcontrol1, "payloadcontrol1");
+            this.payloadcontrol1.ContextMenuStrip = this.contextMenuStripPayloadControl;
             this.payloadcontrol1.Name = "payloadcontrol1";
             this.payloadcontrol1.igniteClicked += new System.EventHandler(this.payloadcontrol1_igniteClicked);
+            // 
+            // contextMenuStripPayloadControl
+            // 
+            this.contextMenuStripPayloadControl.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.undockDockToolStripMenuItem});
+            this.contextMenuStripPayloadControl.Name = "contextMenuStripPayloadControl";
+            resources.ApplyResources(this.contextMenuStripPayloadControl, "contextMenuStripPayloadControl");
+            // 
+            // undockDockToolStripMenuItem
+            // 
+            this.undockDockToolStripMenuItem.Name = "undockDockToolStripMenuItem";
+            resources.ApplyResources(this.undockDockToolStripMenuItem, "undockDockToolStripMenuItem");
+            this.undockDockToolStripMenuItem.Click += new System.EventHandler(this.undockDockToolStripMenuItem_Click);
             // 
             // tableMap
             // 
@@ -2203,7 +2244,8 @@
             this.setHomeHereToolStripMenuItem,
             this.takeOffToolStripMenuItem,
             this.onOffCameraOverlapToolStripMenuItem,
-            this.altitudeAngelSettingsToolStripMenuItem});
+            this.altitudeAngelSettingsToolStripMenuItem,
+            this.undockDockToolStripMenuItem2});
             this.contextMenuStripMap.Name = "contextMenuStrip1";
             resources.ApplyResources(this.contextMenuStripMap, "contextMenuStripMap");
             // 
@@ -2560,10 +2602,6 @@
             this.CB_tuning.UseVisualStyleBackColor = true;
             this.CB_tuning.CheckedChanged += new System.EventHandler(this.CB_tuning_CheckedChanged);
             // 
-            // bindingSourceGaugesTab
-            // 
-            this.bindingSourceGaugesTab.DataSource = typeof(MissionPlanner.CurrentState);
-            // 
             // ZedGraphTimer
             // 
             this.ZedGraphTimer.Tick += new System.EventHandler(this.timer1_Tick);
@@ -2586,9 +2624,19 @@
             this.Messagetabtimer.Interval = 200;
             this.Messagetabtimer.Tick += new System.EventHandler(this.Messagetabtimer_Tick);
             // 
+            // bindingSourceGaugesTab
+            // 
+            this.bindingSourceGaugesTab.DataSource = typeof(MissionPlanner.CurrentState);
+            // 
             // bindingSourceStatusTab
             // 
             this.bindingSourceStatusTab.DataSource = typeof(MissionPlanner.CurrentState);
+            // 
+            // undockDockToolStripMenuItem2
+            // 
+            this.undockDockToolStripMenuItem2.Name = "undockDockToolStripMenuItem2";
+            resources.ApplyResources(this.undockDockToolStripMenuItem2, "undockDockToolStripMenuItem2");
+            this.undockDockToolStripMenuItem2.Click += new System.EventHandler(this.undockDockToolStripMenuItem2_Click);
             // 
             // FlightData
             // 
@@ -2648,7 +2696,9 @@
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tabFlightControl.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
+            this.contextMenuStripFlightControl.ResumeLayout(false);
             this.tabPayloadControl.ResumeLayout(false);
+            this.contextMenuStripPayloadControl.ResumeLayout(false);
             this.tableMap.ResumeLayout(false);
             this.tableMap.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -2870,5 +2920,11 @@
         private Controls.MyButton myButton6;
         private Controls.MyButton myButton5;
         private Controls.MyButton myButton8;
+        private System.Windows.Forms.ToolStripMenuItem undockToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripPayloadControl;
+        private System.Windows.Forms.ToolStripMenuItem undockDockToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripFlightControl;
+        private System.Windows.Forms.ToolStripMenuItem undockDockToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem undockDockToolStripMenuItem2;
     }
 }
