@@ -2690,15 +2690,15 @@ namespace MissionPlanner.GCSViews
 
             SubMainLeft.Panel1Collapsed = true;
             FloatingForm dropout = new FloatingForm();
-            dropout.Caption = "HUD (Plane 1)";
-            dropout.Size = new Size(hud1.Width, hud1.Height + 20);
+            dropout.Text = "HUD (Plane 1)";
+            dropout.Size = new Size(hud1.Width, hud1.Height+30);
             SubMainLeft.Panel1.Controls.Remove(hud1);
             dropout.Controls.Add(hud1);
+
             dropout.Resize += dropoutHud_Resize;
             dropout.FormClosed += dropoutHud_FormClosed;
             dropout.RestoreStartupLocation();
             dropout.Show();
-
             hudDetached = true;
             hideLeftPanel();
 
@@ -2715,7 +2715,6 @@ namespace MissionPlanner.GCSViews
 
             SubMainLeft.SplitterDistance = 400;
             SubMainLeft.Panel1.Invalidate();
-            //hud1_Resize(null, null);
 
         }
 
@@ -2739,9 +2738,8 @@ namespace MissionPlanner.GCSViews
                 }
 
                 ((Form)sender).Width = (int)(formh * (hud1.SixteenXNine ? 1.777f : 1.333f));
-                ((Form)sender).Height = formh + 20;
+                ((Form)sender).Height = formh+ 20;
             }
-
             hud1.Refresh();
             huddropoutresize = false;
         }
@@ -5447,18 +5445,17 @@ namespace MissionPlanner.GCSViews
         {
             FloatingForm dropout = new FloatingForm();
             TabControl tab = new TabControl();
-            dropout.Size = new Size(200, 400);
+            dropout.Size = new Size(300, 450);
             tabQuickDetached = true;
             tab.Appearance = TabAppearance.FlatButtons;
             tab.ItemSize = new Size(0, 0);
             tab.SizeMode = TabSizeMode.Fixed;
-            tab.Size = new Size(200, 400);
-            tab.Location = new Point(-2, -1);
+            tab.Size = new Size(dropout.ClientSize.Width, dropout.ClientSize.Height+22);
+            tab.Location = new Point(0, -22);
 
             tab.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 
-            dropout.Caption = "Flight DATA (Plane 1)";
-            dropout.Text = "quicktab1";
+            dropout.Text = "Flight DATA (Plane 1)";
             tabControlactions.Controls.Remove(tabQuick);
             tab.Controls.Add(tabQuick);
             tabQuick.BorderStyle = BorderStyle.Fixed3D;
@@ -5471,7 +5468,7 @@ namespace MissionPlanner.GCSViews
 
         }
 
-            void dropoutQuick_FormClosed(object sender, FormClosedEventArgs e)
+        void dropoutQuick_FormClosed(object sender, FormClosedEventArgs e)
         {
             (sender as Form).SaveStartupLocation();
             showLeftPanel();
@@ -5485,18 +5482,17 @@ namespace MissionPlanner.GCSViews
         {
             FloatingForm dropout = new FloatingForm();
             TabControl tab = new TabControl();
-            dropout.Size = new Size(200, 400);
+            dropout.Size = new Size(300, 450);
             tabPayloadDetached = true;
             tab.Appearance = TabAppearance.FlatButtons;
             tab.ItemSize = new Size(0, 0);
             tab.SizeMode = TabSizeMode.Fixed;
-            tab.Size = new Size(200, 400);
-            tab.Location = new Point(-2, -1);
+            tab.Size = new Size(dropout.ClientSize.Width, dropout.ClientSize.Height + 22);
+            tab.Location = new Point(0, -22);
 
             tab.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 
-            dropout.Caption = "Payload Control (Plane 1)";
-            dropout.Text = "payload_control1";
+            dropout.Text = "Payload Control (Plane 1)";
             tabControlactions.Controls.Remove(tabPayloadControl);
             tab.Controls.Add(tabPayloadControl);
             tabQuick.BorderStyle = BorderStyle.Fixed3D;
@@ -5509,7 +5505,7 @@ namespace MissionPlanner.GCSViews
 
         }
 
-            void dropoutPayload_FormClosed(object sender, FormClosedEventArgs e)
+        void dropoutPayload_FormClosed(object sender, FormClosedEventArgs e)
         {
             (sender as Form).SaveStartupLocation();
             showLeftPanel();
@@ -5522,18 +5518,17 @@ namespace MissionPlanner.GCSViews
         {
             FloatingForm dropout = new FloatingForm();
             TabControl tab = new TabControl();
-            dropout.Size = new Size(200, 400);
+            dropout.Size = new Size(300, 450);
             tabFlightControlDetached = true;
             tab.Appearance = TabAppearance.FlatButtons;
             tab.ItemSize = new Size(0, 0);
             tab.SizeMode = TabSizeMode.Fixed;
-            tab.Size = new Size(200, 400);
-            tab.Location = new Point(-2, -1);
+            tab.Size = new Size(dropout.ClientSize.Width, dropout.ClientSize.Height + 22);
+            tab.Location = new Point(0, -22);
 
             tab.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
 
-            dropout.Caption = "Flight Control (Plane 1)";
-            dropout.Text = "flight_control1";
+            dropout.Text = "Flight Control (Plane 1)";
             tabControlactions.Controls.Remove(tabFlightControl);
             tab.Controls.Add(tabFlightControl);
             tabQuick.BorderStyle = BorderStyle.Fixed3D;
@@ -5545,7 +5540,7 @@ namespace MissionPlanner.GCSViews
 
         }
 
-            void dropoutFlightControl_FormClosed(object sender, FormClosedEventArgs e)
+        void dropoutFlightControl_FormClosed(object sender, FormClosedEventArgs e)
         {
             (sender as Form).SaveStartupLocation();
             showLeftPanel();
@@ -5573,7 +5568,7 @@ namespace MissionPlanner.GCSViews
         {
             MainH.Panel1MinSize = 300;
 
-            if(MainH.SplitterDistance == 0) MainH.SplitterDistance = 300;
+            if (MainH.SplitterDistance == 0) MainH.SplitterDistance = 300;
             MainH.Panel1Collapsed = false;
             MainH.Panel2.Invalidate();
             MainH.Panel1.Invalidate();

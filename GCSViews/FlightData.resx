@@ -4532,7 +4532,7 @@
     <value>0, 0</value>
   </data>
   <data name="payloadcontrol1.Size" type="System.Drawing.Size, System.Drawing">
-    <value>301, 175</value>
+    <value>293, 175</value>
   </data>
   <data name="payloadcontrol1.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -4829,7 +4829,7 @@
     <value>Undock/Dock</value>
   </data>
   <data name="contextMenuStripMap.Size" type="System.Drawing.Size, System.Drawing">
-    <value>196, 312</value>
+    <value>196, 290</value>
   </data>
   <data name="&gt;&gt;contextMenuStripMap.Name" xml:space="preserve">
     <value>contextMenuStripMap</value>
