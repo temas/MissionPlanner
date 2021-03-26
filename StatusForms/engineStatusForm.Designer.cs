@@ -29,318 +29,317 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(engineStatusForm));
-            this.Gspeed = new AGaugeApp.AGauge();
-            this.aGauge1 = new AGaugeApp.AGauge();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.engineRpmGauge = new AGaugeApp.AGauge();
+            this.engineTempGauge = new AGaugeApp.AGauge();
+            this.engineStatusText = new System.Windows.Forms.TextBox();
             this.myButtonNoTheme1 = new MissionPlanner.Controls.myButtonNoTheme();
             this.myButtonNoTheme2 = new MissionPlanner.Controls.myButtonNoTheme();
             this.btnArmVehicle = new MissionPlanner.Controls.myButtonNoTheme();
             this.SuspendLayout();
             // 
-            // Gspeed
+            // engineRpmGauge
             // 
-            this.Gspeed.BackColor = System.Drawing.Color.Transparent;
-            this.Gspeed.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Gspeed.BackgroundImage")));
-            this.Gspeed.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.Gspeed.BaseArcColor = System.Drawing.Color.Transparent;
-            this.Gspeed.BaseArcRadius = 70;
-            this.Gspeed.BaseArcStart = 135;
-            this.Gspeed.BaseArcSweep = 270;
-            this.Gspeed.BaseArcWidth = 2;
-            this.Gspeed.Cap_Idx = ((byte)(1));
-            this.Gspeed.CapColor = System.Drawing.Color.White;
-            this.Gspeed.CapColors = new System.Drawing.Color[] {
+            this.engineRpmGauge.BackColor = System.Drawing.Color.Transparent;
+            this.engineRpmGauge.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("engineRpmGauge.BackgroundImage")));
+            this.engineRpmGauge.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.engineRpmGauge.BaseArcColor = System.Drawing.Color.Transparent;
+            this.engineRpmGauge.BaseArcRadius = 70;
+            this.engineRpmGauge.BaseArcStart = 135;
+            this.engineRpmGauge.BaseArcSweep = 270;
+            this.engineRpmGauge.BaseArcWidth = 2;
+            this.engineRpmGauge.Cap_Idx = ((byte)(1));
+            this.engineRpmGauge.CapColor = System.Drawing.Color.White;
+            this.engineRpmGauge.CapColors = new System.Drawing.Color[] {
         System.Drawing.Color.White,
         System.Drawing.Color.White,
         System.Drawing.Color.Black,
         System.Drawing.Color.Black,
         System.Drawing.Color.Black};
-            this.Gspeed.CapPosition = new System.Drawing.Point(62, 110);
-            this.Gspeed.CapsPosition = new System.Drawing.Point[] {
+            this.engineRpmGauge.CapPosition = new System.Drawing.Point(62, 110);
+            this.engineRpmGauge.CapsPosition = new System.Drawing.Point[] {
         new System.Drawing.Point(47, 85),
         new System.Drawing.Point(62, 110),
         new System.Drawing.Point(10, 10),
         new System.Drawing.Point(10, 10),
         new System.Drawing.Point(10, 10)};
-            this.Gspeed.CapsText = new string[] {
+            this.engineRpmGauge.CapsText = new string[] {
         "RPM x1000",
         "28600",
         "",
         "",
         ""};
-            this.Gspeed.CapText = "28600";
-            this.Gspeed.Center = new System.Drawing.Point(75, 75);
-            this.Gspeed.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Gspeed.Location = new System.Drawing.Point(9, 9);
-            this.Gspeed.Margin = new System.Windows.Forms.Padding(0);
-            this.Gspeed.MaxValue = 135F;
-            this.Gspeed.MinValue = 0F;
-            this.Gspeed.Name = "Gspeed";
-            this.Gspeed.Need_Idx = ((byte)(3));
-            this.Gspeed.NeedleColor1 = AGaugeApp.AGauge.NeedleColorEnum.Gray;
-            this.Gspeed.NeedleColor2 = System.Drawing.Color.Brown;
-            this.Gspeed.NeedleEnabled = false;
-            this.Gspeed.NeedleRadius = 70;
-            this.Gspeed.NeedlesColor1 = new AGaugeApp.AGauge.NeedleColorEnum[] {
+            this.engineRpmGauge.CapText = "28600";
+            this.engineRpmGauge.Center = new System.Drawing.Point(75, 75);
+            this.engineRpmGauge.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.engineRpmGauge.Location = new System.Drawing.Point(9, 9);
+            this.engineRpmGauge.Margin = new System.Windows.Forms.Padding(0);
+            this.engineRpmGauge.MaxValue = 135F;
+            this.engineRpmGauge.MinValue = 0F;
+            this.engineRpmGauge.Name = "engineRpmGauge";
+            this.engineRpmGauge.Need_Idx = ((byte)(0));
+            this.engineRpmGauge.NeedleColor1 = AGaugeApp.AGauge.NeedleColorEnum.Red;
+            this.engineRpmGauge.NeedleColor2 = System.Drawing.Color.White;
+            this.engineRpmGauge.NeedleEnabled = true;
+            this.engineRpmGauge.NeedleRadius = 60;
+            this.engineRpmGauge.NeedlesColor1 = new AGaugeApp.AGauge.NeedleColorEnum[] {
         AGaugeApp.AGauge.NeedleColorEnum.Red,
         AGaugeApp.AGauge.NeedleColorEnum.Red,
         AGaugeApp.AGauge.NeedleColorEnum.Blue,
         AGaugeApp.AGauge.NeedleColorEnum.Gray};
-            this.Gspeed.NeedlesColor2 = new System.Drawing.Color[] {
+            this.engineRpmGauge.NeedlesColor2 = new System.Drawing.Color[] {
         System.Drawing.Color.White,
         System.Drawing.Color.White,
         System.Drawing.Color.White,
         System.Drawing.Color.Brown};
-            this.Gspeed.NeedlesEnabled = new bool[] {
+            this.engineRpmGauge.NeedlesEnabled = new bool[] {
         true,
         false,
         false,
         false};
-            this.Gspeed.NeedlesRadius = new int[] {
+            this.engineRpmGauge.NeedlesRadius = new int[] {
         60,
         50,
         70,
         70};
-            this.Gspeed.NeedlesType = new int[] {
+            this.engineRpmGauge.NeedlesType = new int[] {
         0,
         0,
         0,
         0};
-            this.Gspeed.NeedlesWidth = new int[] {
+            this.engineRpmGauge.NeedlesWidth = new int[] {
         2,
         1,
         2,
         2};
-            this.Gspeed.NeedleType = 0;
-            this.Gspeed.NeedleWidth = 2;
-            this.Gspeed.Range_Idx = ((byte)(2));
-            this.Gspeed.RangeColor = System.Drawing.Color.Orange;
-            this.Gspeed.RangeEnabled = true;
-            this.Gspeed.RangeEndValue = 120F;
-            this.Gspeed.RangeInnerRadius = 60;
-            this.Gspeed.RangeOuterRadius = 70;
-            this.Gspeed.RangesColor = new System.Drawing.Color[] {
+            this.engineRpmGauge.NeedleType = 0;
+            this.engineRpmGauge.NeedleWidth = 2;
+            this.engineRpmGauge.Range_Idx = ((byte)(2));
+            this.engineRpmGauge.RangeColor = System.Drawing.Color.Orange;
+            this.engineRpmGauge.RangeEnabled = true;
+            this.engineRpmGauge.RangeEndValue = 120F;
+            this.engineRpmGauge.RangeInnerRadius = 60;
+            this.engineRpmGauge.RangeOuterRadius = 70;
+            this.engineRpmGauge.RangesColor = new System.Drawing.Color[] {
         System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0))))),
         System.Drawing.Color.Lime,
         System.Drawing.Color.Orange,
         System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0))))),
         System.Drawing.SystemColors.Control};
-            this.Gspeed.RangesEnabled = new bool[] {
+            this.engineRpmGauge.RangesEnabled = new bool[] {
         true,
         true,
         true,
         true,
         false};
-            this.Gspeed.RangesEndValue = new float[] {
+            this.engineRpmGauge.RangesEndValue = new float[] {
         20F,
         90F,
         120F,
         135F,
         0F};
-            this.Gspeed.RangesInnerRadius = new int[] {
+            this.engineRpmGauge.RangesInnerRadius = new int[] {
         60,
         60,
         60,
         60,
         70};
-            this.Gspeed.RangesOuterRadius = new int[] {
+            this.engineRpmGauge.RangesOuterRadius = new int[] {
         70,
         70,
         70,
         70,
         80};
-            this.Gspeed.RangesStartValue = new float[] {
+            this.engineRpmGauge.RangesStartValue = new float[] {
         0F,
         20F,
         90F,
         120F,
         0F};
-            this.Gspeed.RangeStartValue = 90F;
-            this.Gspeed.ScaleLinesInterColor = System.Drawing.Color.White;
-            this.Gspeed.ScaleLinesInterInnerRadius = 52;
-            this.Gspeed.ScaleLinesInterOuterRadius = 60;
-            this.Gspeed.ScaleLinesInterWidth = 1;
-            this.Gspeed.ScaleLinesMajorColor = System.Drawing.Color.White;
-            this.Gspeed.ScaleLinesMajorInnerRadius = 50;
-            this.Gspeed.ScaleLinesMajorOuterRadius = 60;
-            this.Gspeed.ScaleLinesMajorStepValue = 15F;
-            this.Gspeed.ScaleLinesMajorWidth = 2;
-            this.Gspeed.ScaleLinesMinorColor = System.Drawing.Color.White;
-            this.Gspeed.ScaleLinesMinorInnerRadius = 55;
-            this.Gspeed.ScaleLinesMinorNumOf = 9;
-            this.Gspeed.ScaleLinesMinorOuterRadius = 60;
-            this.Gspeed.ScaleLinesMinorWidth = 1;
-            this.Gspeed.ScaleNumbersColor = System.Drawing.Color.White;
-            this.Gspeed.ScaleNumbersFormat = null;
-            this.Gspeed.ScaleNumbersRadius = 42;
-            this.Gspeed.ScaleNumbersRotation = 0;
-            this.Gspeed.ScaleNumbersStartScaleLine = 1;
-            this.Gspeed.ScaleNumbersStepScaleLines = 1;
-            this.Gspeed.Size = new System.Drawing.Size(209, 209);
-            this.Gspeed.TabIndex = 80;
-            this.Gspeed.Value = 40F;
-            this.Gspeed.Value0 = 28.6F;
-            this.Gspeed.Value1 = 0F;
-            this.Gspeed.Value2 = 0F;
-            this.Gspeed.Value3 = 40F;
+            this.engineRpmGauge.RangeStartValue = 90F;
+            this.engineRpmGauge.ScaleLinesInterColor = System.Drawing.Color.White;
+            this.engineRpmGauge.ScaleLinesInterInnerRadius = 52;
+            this.engineRpmGauge.ScaleLinesInterOuterRadius = 60;
+            this.engineRpmGauge.ScaleLinesInterWidth = 1;
+            this.engineRpmGauge.ScaleLinesMajorColor = System.Drawing.Color.White;
+            this.engineRpmGauge.ScaleLinesMajorInnerRadius = 50;
+            this.engineRpmGauge.ScaleLinesMajorOuterRadius = 60;
+            this.engineRpmGauge.ScaleLinesMajorStepValue = 15F;
+            this.engineRpmGauge.ScaleLinesMajorWidth = 2;
+            this.engineRpmGauge.ScaleLinesMinorColor = System.Drawing.Color.White;
+            this.engineRpmGauge.ScaleLinesMinorInnerRadius = 55;
+            this.engineRpmGauge.ScaleLinesMinorNumOf = 9;
+            this.engineRpmGauge.ScaleLinesMinorOuterRadius = 60;
+            this.engineRpmGauge.ScaleLinesMinorWidth = 1;
+            this.engineRpmGauge.ScaleNumbersColor = System.Drawing.Color.White;
+            this.engineRpmGauge.ScaleNumbersFormat = null;
+            this.engineRpmGauge.ScaleNumbersRadius = 42;
+            this.engineRpmGauge.ScaleNumbersRotation = 0;
+            this.engineRpmGauge.ScaleNumbersStartScaleLine = 1;
+            this.engineRpmGauge.ScaleNumbersStepScaleLines = 1;
+            this.engineRpmGauge.Size = new System.Drawing.Size(209, 209);
+            this.engineRpmGauge.TabIndex = 80;
+            this.engineRpmGauge.Value = 0F;
+            this.engineRpmGauge.Value0 = 0F;
+            this.engineRpmGauge.Value1 = 0F;
+            this.engineRpmGauge.Value2 = 0F;
+            this.engineRpmGauge.Value3 = 40F;
             // 
-            // aGauge1
+            // engineTempGauge
             // 
-            this.aGauge1.BackColor = System.Drawing.Color.Transparent;
-            this.aGauge1.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("aGauge1.BackgroundImage")));
-            this.aGauge1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.aGauge1.BaseArcColor = System.Drawing.Color.Transparent;
-            this.aGauge1.BaseArcRadius = 70;
-            this.aGauge1.BaseArcStart = 135;
-            this.aGauge1.BaseArcSweep = 270;
-            this.aGauge1.BaseArcWidth = 2;
-            this.aGauge1.Cap_Idx = ((byte)(0));
-            this.aGauge1.CapColor = System.Drawing.Color.White;
-            this.aGauge1.CapColors = new System.Drawing.Color[] {
+            this.engineTempGauge.BackColor = System.Drawing.Color.Transparent;
+            this.engineTempGauge.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("engineTempGauge.BackgroundImage")));
+            this.engineTempGauge.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.engineTempGauge.BaseArcColor = System.Drawing.Color.Transparent;
+            this.engineTempGauge.BaseArcRadius = 70;
+            this.engineTempGauge.BaseArcStart = 135;
+            this.engineTempGauge.BaseArcSweep = 270;
+            this.engineTempGauge.BaseArcWidth = 2;
+            this.engineTempGauge.Cap_Idx = ((byte)(1));
+            this.engineTempGauge.CapColor = System.Drawing.Color.White;
+            this.engineTempGauge.CapColors = new System.Drawing.Color[] {
         System.Drawing.Color.White,
         System.Drawing.Color.White,
         System.Drawing.Color.Black,
         System.Drawing.Color.Black,
         System.Drawing.Color.Black};
-            this.aGauge1.CapPosition = new System.Drawing.Point(47, 85);
-            this.aGauge1.CapsPosition = new System.Drawing.Point[] {
+            this.engineTempGauge.CapPosition = new System.Drawing.Point(62, 110);
+            this.engineTempGauge.CapsPosition = new System.Drawing.Point[] {
         new System.Drawing.Point(47, 85),
         new System.Drawing.Point(62, 110),
         new System.Drawing.Point(10, 10),
         new System.Drawing.Point(10, 10),
         new System.Drawing.Point(10, 10)};
-            this.aGauge1.CapsText = new string[] {
+            this.engineTempGauge.CapsText = new string[] {
         "EXH. TEMP",
         "364 C°",
         "",
         "",
         ""};
-            this.aGauge1.CapText = "EXH. TEMP";
-            this.aGauge1.Center = new System.Drawing.Point(75, 75);
-            this.aGauge1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.aGauge1.Location = new System.Drawing.Point(218, 9);
-            this.aGauge1.Margin = new System.Windows.Forms.Padding(0);
-            this.aGauge1.MaxValue = 750F;
-            this.aGauge1.MinValue = 150F;
-            this.aGauge1.Name = "aGauge1";
-            this.aGauge1.Need_Idx = ((byte)(3));
-            this.aGauge1.NeedleColor1 = AGaugeApp.AGauge.NeedleColorEnum.Gray;
-            this.aGauge1.NeedleColor2 = System.Drawing.Color.Brown;
-            this.aGauge1.NeedleEnabled = false;
-            this.aGauge1.NeedleRadius = 70;
-            this.aGauge1.NeedlesColor1 = new AGaugeApp.AGauge.NeedleColorEnum[] {
+            this.engineTempGauge.CapText = "364 C°";
+            this.engineTempGauge.Center = new System.Drawing.Point(75, 75);
+            this.engineTempGauge.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.engineTempGauge.Location = new System.Drawing.Point(218, 9);
+            this.engineTempGauge.Margin = new System.Windows.Forms.Padding(0);
+            this.engineTempGauge.MaxValue = 750F;
+            this.engineTempGauge.MinValue = 150F;
+            this.engineTempGauge.Name = "engineTempGauge";
+            this.engineTempGauge.Need_Idx = ((byte)(0));
+            this.engineTempGauge.NeedleColor1 = AGaugeApp.AGauge.NeedleColorEnum.Red;
+            this.engineTempGauge.NeedleColor2 = System.Drawing.Color.White;
+            this.engineTempGauge.NeedleEnabled = true;
+            this.engineTempGauge.NeedleRadius = 60;
+            this.engineTempGauge.NeedlesColor1 = new AGaugeApp.AGauge.NeedleColorEnum[] {
         AGaugeApp.AGauge.NeedleColorEnum.Red,
         AGaugeApp.AGauge.NeedleColorEnum.Red,
         AGaugeApp.AGauge.NeedleColorEnum.Blue,
         AGaugeApp.AGauge.NeedleColorEnum.Gray};
-            this.aGauge1.NeedlesColor2 = new System.Drawing.Color[] {
+            this.engineTempGauge.NeedlesColor2 = new System.Drawing.Color[] {
         System.Drawing.Color.White,
         System.Drawing.Color.White,
         System.Drawing.Color.White,
         System.Drawing.Color.Brown};
-            this.aGauge1.NeedlesEnabled = new bool[] {
+            this.engineTempGauge.NeedlesEnabled = new bool[] {
         true,
         false,
         false,
         false};
-            this.aGauge1.NeedlesRadius = new int[] {
+            this.engineTempGauge.NeedlesRadius = new int[] {
         60,
         50,
         70,
         70};
-            this.aGauge1.NeedlesType = new int[] {
+            this.engineTempGauge.NeedlesType = new int[] {
         0,
         0,
         0,
         0};
-            this.aGauge1.NeedlesWidth = new int[] {
+            this.engineTempGauge.NeedlesWidth = new int[] {
         2,
         1,
         2,
         2};
-            this.aGauge1.NeedleType = 0;
-            this.aGauge1.NeedleWidth = 2;
-            this.aGauge1.Range_Idx = ((byte)(2));
-            this.aGauge1.RangeColor = System.Drawing.Color.Orange;
-            this.aGauge1.RangeEnabled = true;
-            this.aGauge1.RangeEndValue = 650F;
-            this.aGauge1.RangeInnerRadius = 60;
-            this.aGauge1.RangeOuterRadius = 70;
-            this.aGauge1.RangesColor = new System.Drawing.Color[] {
+            this.engineTempGauge.NeedleType = 0;
+            this.engineTempGauge.NeedleWidth = 2;
+            this.engineTempGauge.Range_Idx = ((byte)(2));
+            this.engineTempGauge.RangeColor = System.Drawing.Color.Orange;
+            this.engineTempGauge.RangeEnabled = true;
+            this.engineTempGauge.RangeEndValue = 650F;
+            this.engineTempGauge.RangeInnerRadius = 60;
+            this.engineTempGauge.RangeOuterRadius = 70;
+            this.engineTempGauge.RangesColor = new System.Drawing.Color[] {
         System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0))))),
         System.Drawing.Color.Lime,
         System.Drawing.Color.Orange,
         System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0))))),
         System.Drawing.SystemColors.Control};
-            this.aGauge1.RangesEnabled = new bool[] {
+            this.engineTempGauge.RangesEnabled = new bool[] {
         true,
         true,
         true,
         true,
         false};
-            this.aGauge1.RangesEndValue = new float[] {
+            this.engineTempGauge.RangesEndValue = new float[] {
         250F,
         550F,
         650F,
         750F,
         0F};
-            this.aGauge1.RangesInnerRadius = new int[] {
+            this.engineTempGauge.RangesInnerRadius = new int[] {
         60,
         60,
         60,
         60,
         70};
-            this.aGauge1.RangesOuterRadius = new int[] {
+            this.engineTempGauge.RangesOuterRadius = new int[] {
         70,
         70,
         70,
         70,
         80};
-            this.aGauge1.RangesStartValue = new float[] {
+            this.engineTempGauge.RangesStartValue = new float[] {
         150F,
         250F,
         550F,
         650F,
         0F};
-            this.aGauge1.RangeStartValue = 550F;
-            this.aGauge1.ScaleLinesInterColor = System.Drawing.Color.White;
-            this.aGauge1.ScaleLinesInterInnerRadius = 52;
-            this.aGauge1.ScaleLinesInterOuterRadius = 60;
-            this.aGauge1.ScaleLinesInterWidth = 1;
-            this.aGauge1.ScaleLinesMajorColor = System.Drawing.Color.White;
-            this.aGauge1.ScaleLinesMajorInnerRadius = 50;
-            this.aGauge1.ScaleLinesMajorOuterRadius = 60;
-            this.aGauge1.ScaleLinesMajorStepValue = 150F;
-            this.aGauge1.ScaleLinesMajorWidth = 2;
-            this.aGauge1.ScaleLinesMinorColor = System.Drawing.Color.White;
-            this.aGauge1.ScaleLinesMinorInnerRadius = 55;
-            this.aGauge1.ScaleLinesMinorNumOf = 5;
-            this.aGauge1.ScaleLinesMinorOuterRadius = 60;
-            this.aGauge1.ScaleLinesMinorWidth = 1;
-            this.aGauge1.ScaleNumbersColor = System.Drawing.Color.White;
-            this.aGauge1.ScaleNumbersFormat = null;
-            this.aGauge1.ScaleNumbersRadius = 42;
-            this.aGauge1.ScaleNumbersRotation = 0;
-            this.aGauge1.ScaleNumbersStartScaleLine = 1;
-            this.aGauge1.ScaleNumbersStepScaleLines = 1;
-            this.aGauge1.Size = new System.Drawing.Size(209, 209);
-            this.aGauge1.TabIndex = 81;
-            this.aGauge1.Value = 40F;
-            this.aGauge1.Value0 = 340F;
-            this.aGauge1.Value1 = 0F;
-            this.aGauge1.Value2 = 0F;
-            this.aGauge1.Value3 = 40F;
+            this.engineTempGauge.RangeStartValue = 550F;
+            this.engineTempGauge.ScaleLinesInterColor = System.Drawing.Color.White;
+            this.engineTempGauge.ScaleLinesInterInnerRadius = 52;
+            this.engineTempGauge.ScaleLinesInterOuterRadius = 60;
+            this.engineTempGauge.ScaleLinesInterWidth = 1;
+            this.engineTempGauge.ScaleLinesMajorColor = System.Drawing.Color.White;
+            this.engineTempGauge.ScaleLinesMajorInnerRadius = 50;
+            this.engineTempGauge.ScaleLinesMajorOuterRadius = 60;
+            this.engineTempGauge.ScaleLinesMajorStepValue = 150F;
+            this.engineTempGauge.ScaleLinesMajorWidth = 2;
+            this.engineTempGauge.ScaleLinesMinorColor = System.Drawing.Color.White;
+            this.engineTempGauge.ScaleLinesMinorInnerRadius = 55;
+            this.engineTempGauge.ScaleLinesMinorNumOf = 5;
+            this.engineTempGauge.ScaleLinesMinorOuterRadius = 60;
+            this.engineTempGauge.ScaleLinesMinorWidth = 1;
+            this.engineTempGauge.ScaleNumbersColor = System.Drawing.Color.White;
+            this.engineTempGauge.ScaleNumbersFormat = null;
+            this.engineTempGauge.ScaleNumbersRadius = 42;
+            this.engineTempGauge.ScaleNumbersRotation = 0;
+            this.engineTempGauge.ScaleNumbersStartScaleLine = 1;
+            this.engineTempGauge.ScaleNumbersStepScaleLines = 1;
+            this.engineTempGauge.Size = new System.Drawing.Size(209, 209);
+            this.engineTempGauge.TabIndex = 81;
+            this.engineTempGauge.Value = 150F;
+            this.engineTempGauge.Value0 = 150F;
+            this.engineTempGauge.Value1 = 0F;
+            this.engineTempGauge.Value2 = 0F;
+            this.engineTempGauge.Value3 = 40F;
             // 
-            // textBox1
+            // engineStatusText
             // 
-            this.textBox1.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.textBox1.Location = new System.Drawing.Point(9, 221);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(209, 219);
-            this.textBox1.TabIndex = 83;
-            this.textBox1.Text = "Engine flameout!\r\nRestart in progress...";
+            this.engineStatusText.Font = new System.Drawing.Font("Arial Narrow", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.engineStatusText.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.engineStatusText.Location = new System.Drawing.Point(9, 221);
+            this.engineStatusText.Multiline = true;
+            this.engineStatusText.Name = "engineStatusText";
+            this.engineStatusText.Size = new System.Drawing.Size(209, 219);
+            this.engineStatusText.TabIndex = 83;
             // 
             // myButtonNoTheme1
             // 
@@ -387,9 +386,9 @@
             this.Controls.Add(this.btnArmVehicle);
             this.Controls.Add(this.myButtonNoTheme2);
             this.Controls.Add(this.myButtonNoTheme1);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.aGauge1);
-            this.Controls.Add(this.Gspeed);
+            this.Controls.Add(this.engineStatusText);
+            this.Controls.Add(this.engineTempGauge);
+            this.Controls.Add(this.engineRpmGauge);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "engineStatusForm";
             this.Text = "engineStatusForm";
@@ -400,9 +399,9 @@
 
         #endregion
 
-        private AGaugeApp.AGauge Gspeed;
-        private AGaugeApp.AGauge aGauge1;
-        private System.Windows.Forms.TextBox textBox1;
+        private AGaugeApp.AGauge engineRpmGauge;
+        private AGaugeApp.AGauge engineTempGauge;
+        private System.Windows.Forms.TextBox engineStatusText;
         private Controls.myButtonNoTheme myButtonNoTheme1;
         private Controls.myButtonNoTheme myButtonNoTheme2;
         private Controls.myButtonNoTheme btnArmVehicle;

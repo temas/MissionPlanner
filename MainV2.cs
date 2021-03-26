@@ -508,6 +508,7 @@ namespace MissionPlanner
         private DateTime lastStartCheck = DateTime.Now;
         private DateTime lastConnectCheck = DateTime.Now;
         private DateTime lastStatusCheck = DateTime.Now;
+        private DateTime lastEngineCheck = DateTime.Now;
 
         //Protar comm timer for queuing and dequeueing
         private DateTime lastSupervisorHB = DateTime.Now;
@@ -4988,7 +4989,22 @@ namespace MissionPlanner
         private void updateAnnunciatorForms()
         {
 
+            //Update engine form values
+            if ((DateTime.Now - lastEngineCheck) >= TimeSpan.FromSeconds(1))
+            {
+                lastEngineCheck = DateTime.Now;
+                MainV2.instance.BeginInvoke((MethodInvoker)(() =>
+                {
+                    engineForm.setRPM(comPort.MAV.cs.jetRpm);
+                    engineForm.setTemp(comPort.MAV.cs.jetTemp);
 
+                    //Later add text as well from engine comm
+
+                }));
+            }
+
+
+            //Connection Check to enable/disable annunciator
             if ((DateTime.Now - lastConnectCheck) >= TimeSpan.FromSeconds(1))
             {
 

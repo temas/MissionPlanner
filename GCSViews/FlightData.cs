@@ -4717,6 +4717,7 @@ namespace MissionPlanner.GCSViews
 
                if (MainV2.gpsForm.Visible) MainV2.comPort.MAV.cs.UpdateCurrentSettings(MainV2.gpsForm.bindingSourceGPSStatus.UpdateDataSource(MainV2.comPort.MAV.cs));
                if (MainV2.airspeedForm.Visible) MainV2.comPort.MAV.cs.UpdateCurrentSettings(MainV2.airspeedForm.bindingSourceAirpseedForm.UpdateDataSource(MainV2.comPort.MAV.cs));
+               if (MainV2.fuelForm.Visible) MainV2.comPort.MAV.cs.UpdateCurrentSettings(MainV2.fuelForm.bindingSourceFuelForm.UpdateDataSource(MainV2.comPort.MAV.cs));
 
                 if (tabQuickDetached)
                 {

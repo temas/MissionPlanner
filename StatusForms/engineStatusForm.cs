@@ -21,7 +21,37 @@ namespace MissionPlanner.StatusForms
             InitializeComponent();
         }
 
-        //pass arming click up 
+        public void setRPM(float rpm)
+        {
+            engineRpmGauge.Value0 = rpm;
+            engineRpmGauge.Cap_Idx = 1;
+            engineRpmGauge.CapText = (rpm * 1000).ToString("F0");
+        }
+
+        public void setTemp(float temp)
+        {
+
+            float t;
+            t = temp;
+
+            if (temp < 150)
+            {
+                t = 150;
+            }
+
+            engineTempGauge.Value0 = t;
+            engineTempGauge.Cap_Idx = 1;
+            engineTempGauge.CapText = temp.ToString("F0") + " C°";
+
+        }
+
+        public void setText(string text)
+        {
+            engineStatusText.Text += (text + Environment.NewLine);
+        }
+
+
+        //pass arming click up
         private void btnArmVehicle_Click(object sender, EventArgs e)
         {
             EventHandler handler = this.armClicked;
