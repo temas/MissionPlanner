@@ -736,6 +736,9 @@ namespace MissionPlanner
 
         [DisplayText("RX Rssi")] public int rxrssi { get; set; }
 
+        [DisplayText("System ID")] public int sysid { get; set; }
+
+
         public float crit_AOA
         {
             get
@@ -2283,6 +2286,9 @@ namespace MissionPlanner
                             }
                             else
                             {
+
+                                sysid = mavLinkMessage.sysid;
+
                                 armed = (hb.base_mode & (byte)MAVLink.MAV_MODE_FLAG.SAFETY_ARMED) ==
                                         (byte)MAVLink.MAV_MODE_FLAG.SAFETY_ARMED;
 
