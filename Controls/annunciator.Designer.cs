@@ -33,6 +33,8 @@ namespace MissionPlanner.Controls
             this.components = new System.ComponentModel.Container();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.layoutPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.contextMenu1 = new System.Windows.Forms.ContextMenu();
+            this.menuUndockDock = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
             // layoutPanel
@@ -43,6 +45,17 @@ namespace MissionPlanner.Controls
             this.layoutPanel.Name = "layoutPanel";
             this.layoutPanel.Size = new System.Drawing.Size(1300, 100);
             this.layoutPanel.TabIndex = 0;
+            // 
+            // contextMenu1
+            // 
+            this.contextMenu1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.menuUndockDock});
+            // 
+            // menuUndockDock
+            // 
+            this.menuUndockDock.Index = 0;
+            this.menuUndockDock.Text = "Undock/Dock";
+            this.menuUndockDock.Click += new System.EventHandler(this.menuUndockDock_Click);
             // 
             // annunciator
             // 
@@ -60,5 +73,7 @@ namespace MissionPlanner.Controls
         #endregion
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.FlowLayoutPanel layoutPanel;
+        private System.Windows.Forms.ContextMenu contextMenu1;
+        private System.Windows.Forms.MenuItem menuUndockDock;
     }
 }

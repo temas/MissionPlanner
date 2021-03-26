@@ -20,6 +20,7 @@ namespace MissionPlanner.Controls
         private List<panelItem> panelItems = new List<panelItem>();
 
         public event EventHandler buttonClicked;
+        public event EventHandler undock;
 
         private string _clickedButtonName;
 
@@ -54,6 +55,7 @@ namespace MissionPlanner.Controls
                 item.btn.FlatStyle = FlatStyle.Flat;
                 item.btn.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 item.btn.panelName = "EMPTY";
+                item.btn.ContextMenu = contextMenu1;
                 item.setStatus(Stat.NOMINAL);
 
                 item.name = "EMPTY";
@@ -114,7 +116,8 @@ namespace MissionPlanner.Controls
             panelItem p = panelItems.Find(x => x.name == panelName);
             if (p != null)
             {
-                p.status = c;
+                //p.status = c;
+                p.setStatus(c);
             }
         }
 
@@ -170,6 +173,14 @@ namespace MissionPlanner.Controls
 
         }
 
+        private void menuUndockDock_Click(object sender, EventArgs e)
+        {
+            EventHandler handler = this.undock;
+            if (handler != null)
+            {
+                handler(this, e);
+            }
+        }
 
 
     }

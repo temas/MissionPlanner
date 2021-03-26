@@ -714,9 +714,12 @@ namespace MissionPlanner
         public static startProcessForm startForm = new startProcessForm();
         public static payloadIgnite payloadToIgnite = new payloadIgnite();
         public static chuteStatusForm chuteForm = new chuteStatusForm();
-
+        public static FloatingForm annunciatorForm = new FloatingForm();
 
         public static List<Payload> payloadSetup = new List<Payload>();
+
+        public static bool annunciatorUndocked = false;
+
 
         public MainV2()
         {
@@ -4787,7 +4790,11 @@ namespace MissionPlanner
                     f.FormBorderStyle = FormBorderStyle.None;
                     f.Owner = this;
                     f.Show();
-                    f.Location = new Point(this.Location.X + this.Size.Width - f.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+                    if (annunciatorUndocked)
+                        f.Location = new Point(annunciatorForm.Location.X + annunciatorForm.Size.Width, annunciatorForm.Location.Y);
+                    else
+                        f.Location = new Point(this.Location.X + this.Size.Width - f.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+
 
                 }
             }
@@ -4830,7 +4837,10 @@ namespace MissionPlanner
                     hideAllForms();
                     ShowConnectionStatsForm();
                     connectionStatsForm.Owner = this;
-                    connectionStatsForm.Location = new Point(this.Location.X + this.Size.Width - connectionStatsForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+                    if (annunciatorUndocked)
+                        connectionStatsForm.Location = new Point(annunciatorForm.Location.X + annunciatorForm.Size.Width, annunciatorForm.Location.Y);
+                    else
+                        connectionStatsForm.Location = new Point(this.Location.X + this.Size.Width - connectionStatsForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
                 }
                 else
                 {
@@ -4843,7 +4853,10 @@ namespace MissionPlanner
                         hideAllForms();
                         ShowConnectionStatsForm();
                         connectionStatsForm.Owner = this;
-                        connectionStatsForm.Location = new Point(this.Location.X + this.Size.Width - connectionStatsForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
+                        if (annunciatorUndocked)
+                            connectionStatsForm.Location = new Point(annunciatorForm.Location.X + annunciatorForm.Size.Width, annunciatorForm.Location.Y);
+                        else
+                            connectionStatsForm.Location = new Point(this.Location.X + this.Size.Width - connectionStatsForm.Size.Width, this.Location.Y + this.annunciator1.Location.Y + 61);
 
                     }
                 }
@@ -5255,6 +5268,30 @@ namespace MissionPlanner
 
         }
 
+
+        private void annunciator1_undock(object sender, EventArgs e)
+        {
+            annunciatorForm = new FloatingForm();
+            annunciatorForm.Size = new Size(300,450 );
+            annunciatorForm.Text = "Plane Status (Plane 1)";
+            MainV2.instance.panel1.Controls.Remove(annunciator1);
+            annunciator1.Size = annunciatorForm.ClientSize;
+            annunciator1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            annunciatorForm.Controls.Add(annunciator1);
+            annunciatorForm.FormClosed += dropoutQuick_FormClosed;
+            annunciatorForm.RestoreStartupLocation();
+            annunciatorUndocked = true;
+            annunciatorForm.Show();
+        }
+
+        void dropoutQuick_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            (sender as Form).SaveStartupLocation();
+            MainV2.instance.panel1.Controls.Add(annunciator1);
+            annunciator1.Size = MainV2.instance.panel1.Size;
+            annunciatorUndocked = false;
+            this.Dispose();
+        }
 
 
     }

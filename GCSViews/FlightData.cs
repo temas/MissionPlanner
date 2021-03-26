@@ -5589,6 +5589,7 @@ namespace MissionPlanner.GCSViews
             dropout.FormClosed += dropoutMap_FormClosed;
             dropout.Show();
         }
+
         void dropoutMap_FormClosed(object sender, FormClosedEventArgs e)
         {
             (sender as Form).SaveStartupLocation();
