@@ -5175,7 +5175,23 @@ namespace MissionPlanner
                         annunciator1.setStatus("PAYLD", Stat.WARNING);
                         payloadForm.setSafetyPinStatus(false);
                     }
+
+                    if (comPort.MAV.cs.armed && comPort.MAV.cs.alt > 2)
+                    {
+                        annunciator1.setStatus("START", Stat.NOMINAL);
+                    }
+                    else
+                    {
+                        annunciator1.setStatus("START", Stat.WARNING);
+                    }
+
+
                 }));
+
+
+                
+
+
             }
                 if ((DateTime.Now - lastStartCheck) >= TimeSpan.FromSeconds(1))
             {
