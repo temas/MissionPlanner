@@ -37,6 +37,10 @@ namespace MissionPlanner.Controls
             this.menuUndockDock = new System.Windows.Forms.MenuItem();
             this.SuspendLayout();
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            // 
             // layoutPanel
             // 
             this.layoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;

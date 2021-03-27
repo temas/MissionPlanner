@@ -25,7 +25,9 @@ namespace MissionPlanner.Utilities
         notify,
         payloadSetup,
         catapultReady,
-        motorAtMax
+        motorAtMax,
+        airpseedCalibrated,
+        preflightChanged
     }
 
     public enum nodeID
@@ -41,6 +43,8 @@ namespace MissionPlanner.Utilities
     {
 
         public static int serverIpPort { get; set; } = 11000;
+        public static string serverIP { get; set; } = "127.0.0.1";
+
 
         //input queue from all planes
         public static ConcurrentQueue<byte[]> inQueue = new ConcurrentQueue<byte[]>();
@@ -73,7 +77,7 @@ namespace MissionPlanner.Utilities
             // Dns.GetHostName returns the name of the
             // host running the application.
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-            IPAddress ipAddress = IPAddress.Parse("192.168.0.111");
+            IPAddress ipAddress = IPAddress.Parse(serverIP);
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, serverIpPort);
 
             // Create a TCP/IP socket.
@@ -87,6 +91,7 @@ namespace MissionPlanner.Utilities
                 listener.Bind(localEndPoint);
                 listener.Listen(10);
                 isRunning = true;
+                Console.WriteLine("Protar Server thread started");
                 // Start listening for connections.
                 while (true)
                 {
@@ -101,7 +106,6 @@ namespace MissionPlanner.Utilities
                     byte senderID;
                     if (processReceivedPacket(out payload, ref buff, out senderID))
                     {
-                        //Console.WriteLine("Packet received.");
 
                         // On the server side we are not supposed to receive packets with zero ID (Server)
                         if (senderID != 0)
@@ -173,8 +177,8 @@ namespace MissionPlanner.Utilities
                             // This example uses port 11000 on the local computer.
 
                             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName());
-                            IPAddress ipAddress = IPAddress.Parse("192.168.0.111");
-                            IPEndPoint remoteEP = new IPEndPoint(ipAddress, 11000);
+                            IPAddress ipAddress = IPAddress.Parse(serverIP);
+                            IPEndPoint remoteEP = new IPEndPoint(ipAddress, serverIpPort);
 
                             // Create a TCP/IP  socket.
                             Socket sender = new Socket(ipAddress.AddressFamily,

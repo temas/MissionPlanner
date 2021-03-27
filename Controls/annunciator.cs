@@ -56,7 +56,7 @@ namespace MissionPlanner.Controls
                 item.btn.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
                 item.btn.panelName = "EMPTY";
                 item.btn.ContextMenu = contextMenu1;
-                item.setStatus(Stat.NOMINAL);
+                item.setStatus(Stat.ALERT);
 
                 item.name = "EMPTY";
                 item._disabled = true;
@@ -67,7 +67,7 @@ namespace MissionPlanner.Controls
 
             timer1.Interval = 500;
             timer1.Tick += Timer_Tick;
-            timer1.Enabled = false;
+            timer1.Enabled = true;
 
             if (!this.DesignMode)
             {
@@ -98,6 +98,7 @@ namespace MissionPlanner.Controls
             {
                 i.blink(_blinkStat);
             }
+            this.Invalidate();
         }
 
         public Stat getStatus(string panelName)

@@ -196,10 +196,9 @@
             this.gMapControl1 = new MissionPlanner.Controls.myGMAP();
             this.TRK_zoom = new MissionPlanner.Controls.MyTrackBar();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.bCatapultAllocated = new MissionPlanner.Controls.MyButton();
             this.myButton8 = new MissionPlanner.Controls.MyButton();
-            this.bSIM = new MissionPlanner.Controls.MyButton();
-            this.myButton6 = new MissionPlanner.Controls.MyButton();
-            this.myButton5 = new MissionPlanner.Controls.MyButton();
+            this.bCatapultReady = new MissionPlanner.Controls.MyButton();
             this.bHideComm = new MissionPlanner.Controls.MyButton();
             this.coords1 = new MissionPlanner.Controls.Coords();
             this.Zoomlevel = new System.Windows.Forms.NumericUpDown();
@@ -213,6 +212,7 @@
             this.Messagetabtimer = new System.Windows.Forms.Timer(this.components);
             this.bindingSourceGaugesTab = new System.Windows.Forms.BindingSource(this.components);
             this.bindingSourceStatusTab = new System.Windows.Forms.BindingSource(this.components);
+            this.btnMotorMax = new MissionPlanner.Controls.MyButton();
             ((System.ComponentModel.ISupportInitialize)(this.MainH)).BeginInit();
             this.MainH.Panel1.SuspendLayout();
             this.MainH.Panel2.SuspendLayout();
@@ -2500,10 +2500,10 @@
             // panel1
             // 
             resources.ApplyResources(this.panel1, "panel1");
+            this.panel1.Controls.Add(this.btnMotorMax);
+            this.panel1.Controls.Add(this.bCatapultAllocated);
             this.panel1.Controls.Add(this.myButton8);
-            this.panel1.Controls.Add(this.bSIM);
-            this.panel1.Controls.Add(this.myButton6);
-            this.panel1.Controls.Add(this.myButton5);
+            this.panel1.Controls.Add(this.bCatapultReady);
             this.panel1.Controls.Add(this.bHideComm);
             this.panel1.Controls.Add(this.coords1);
             this.panel1.Controls.Add(this.Zoomlevel);
@@ -2512,6 +2512,13 @@
             this.panel1.Controls.Add(this.CB_tuning);
             this.panel1.Name = "panel1";
             // 
+            // bCatapultAllocated
+            // 
+            resources.ApplyResources(this.bCatapultAllocated, "bCatapultAllocated");
+            this.bCatapultAllocated.Name = "bCatapultAllocated";
+            this.bCatapultAllocated.UseVisualStyleBackColor = true;
+            this.bCatapultAllocated.Click += new System.EventHandler(this.bCatapultAllocated_Click);
+            // 
             // myButton8
             // 
             resources.ApplyResources(this.myButton8, "myButton8");
@@ -2519,25 +2526,12 @@
             this.myButton8.UseVisualStyleBackColor = true;
             this.myButton8.Click += new System.EventHandler(this.myButton8_Click);
             // 
-            // bSIM
+            // bCatapultReady
             // 
-            resources.ApplyResources(this.bSIM, "bSIM");
-            this.bSIM.Name = "bSIM";
-            this.bSIM.UseVisualStyleBackColor = true;
-            this.bSIM.Click += new System.EventHandler(this.bSIM_Click);
-            // 
-            // myButton6
-            // 
-            resources.ApplyResources(this.myButton6, "myButton6");
-            this.myButton6.Name = "myButton6";
-            this.myButton6.UseVisualStyleBackColor = true;
-            this.myButton6.Click += new System.EventHandler(this.myButton6_Click);
-            // 
-            // myButton5
-            // 
-            resources.ApplyResources(this.myButton5, "myButton5");
-            this.myButton5.Name = "myButton5";
-            this.myButton5.UseVisualStyleBackColor = true;
+            resources.ApplyResources(this.bCatapultReady, "bCatapultReady");
+            this.bCatapultReady.Name = "bCatapultReady";
+            this.bCatapultReady.UseVisualStyleBackColor = true;
+            this.bCatapultReady.Click += new System.EventHandler(this.bCatapultReady_Click);
             // 
             // bHideComm
             // 
@@ -2641,6 +2635,13 @@
             // bindingSourceStatusTab
             // 
             this.bindingSourceStatusTab.DataSource = typeof(MissionPlanner.CurrentState);
+            // 
+            // btnMotorMax
+            // 
+            resources.ApplyResources(this.btnMotorMax, "btnMotorMax");
+            this.btnMotorMax.Name = "btnMotorMax";
+            this.btnMotorMax.UseVisualStyleBackColor = true;
+            this.btnMotorMax.Click += new System.EventHandler(this.btnMotorMax_Click);
             // 
             // FlightData
             // 
@@ -2920,9 +2921,7 @@
         private System.Windows.Forms.Button bFCClear;
         private System.Windows.Forms.Button bFCExecute;
         private Controls.MyButton bHideComm;
-        private Controls.MyButton bSIM;
-        private Controls.MyButton myButton6;
-        private Controls.MyButton myButton5;
+        private Controls.MyButton bCatapultReady;
         private Controls.MyButton myButton8;
         private System.Windows.Forms.ToolStripMenuItem undockToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripPayloadControl;
@@ -2930,5 +2929,7 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStripFlightControl;
         private System.Windows.Forms.ToolStripMenuItem undockDockToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem undockDockToolStripMenuItem2;
+        private Controls.MyButton bCatapultAllocated;
+        private Controls.MyButton btnMotorMax;
     }
 }

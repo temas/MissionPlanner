@@ -721,6 +721,8 @@ namespace MissionPlanner
 
         public static bool annunciatorUndocked = false;
 
+        public static bool supervisor = false;
+
 
         public MainV2()
         {
@@ -1095,6 +1097,12 @@ namespace MissionPlanner
             catch
             {
             }
+
+            // Config parameters for Portar
+            protarComm.serverIP = Settings.Instance["protarServerIP", "192.168.0.100"];
+            protarComm.serverIpPort = Convert.ToInt32(Settings.Instance["protarServerPort", "11000"]);
+
+
 
             if (CurrentState.rateattitudebackup == 0) // initilised to 10, configured above from save
             {
@@ -1819,7 +1827,7 @@ namespace MissionPlanner
                     }
                 });
 
-                FlightData.CheckBatteryShow();
+                //FlightData.CheckBatteryShow();
 
                 // save the baudrate for this port
                 Settings.Instance[_connectionControl.CMB_serialport.Text + "_BAUD"] = _connectionControl.CMB_baudrate.Text;
@@ -3124,8 +3132,7 @@ namespace MissionPlanner
 
             string[] btnNames = new string[] { "EKF", "ENGINE", "BATT", "GPS", "COMM", "VIBE", "FUEL", "FENCE", "AIRSPD", "MAG", "PAYLD", "ROUTE", "CHUTE", "PRFLT", "START", "MSG" };
             annunciator1.setPanels(btnNames, btnLabels);
-
-            setAnnunciatorInitialState();
+            annunciator1.Enabled = false;
 
 
 
@@ -3276,18 +3283,6 @@ namespace MissionPlanner
             }
 
             */
-
-            log.Info("start protarcomm thread");
-            protarComm.myNodeID = (byte)nodeID.plane1;
-
-            protarcommthread = new Thread(protarComm.ClientThread)
-                {
-                    IsBackground = true,
-                    Name = "protar supervisor client"
-
-                };
-                protarcommthread.Start();
-            protarComm.isRunning = true;
 
 
             ThreadPool.QueueUserWorkItem(LoadGDALImages);
@@ -3579,6 +3574,9 @@ namespace MissionPlanner
 
             */
 
+
+
+
             // play a tlog that was passed to the program/ load a bin log passed
             if (Program.args.Length > 0)
             {
@@ -3598,6 +3596,16 @@ namespace MissionPlanner
                     logbrowse.Show(this);
                     logbrowse.BringToFront();
                 }
+
+
+                if (cmds.ContainsKey("protarserver"))
+                {
+                   supervisor = true;
+                   MainV2.instance.FormBorderStyle = FormBorderStyle.Sizable;
+                    MainV2.instance.WindowState = FormWindowState.Normal;
+
+                }
+
 
                 if (cmds.ContainsKey("script") && File.Exists(cmds["script"]))
                 {
@@ -3757,6 +3765,47 @@ namespace MissionPlanner
                     doConnect(MainV2.comPort, cmds["port"], cmds["baud"]);
                 }
             }
+
+
+
+            if (supervisor)
+            {
+                log.Info("start protarcomm server thread");
+
+                protarcommthread = new Thread(protarComm.ServerThread)
+                {
+                    IsBackground = true,
+                    Name = "protar supervisor server"
+
+                };
+                protarcommthread.Start();
+                protarComm.isRunning = true;
+            }
+            else
+            {
+                log.Info("start protarcomm client thread");
+                protarComm.myNodeID = (byte)nodeID.plane1;
+
+                protarcommthread = new Thread(protarComm.ClientThread)
+                {
+                    IsBackground = true,
+                    Name = "protar supervisor client"
+
+                };
+                protarcommthread.Start();
+                protarComm.isRunning = true;
+            }
+
+
+            setAnnunciatorInitialState();
+
+            if (!supervisor)
+            {
+                MainV2.instance.FormBorderStyle = FormBorderStyle.None;
+                MainV2.instance.WindowState = FormWindowState.Maximized;
+            }
+
+
 
             GMapMarkerBase.length = Settings.Instance.GetInt32("GMapMarkerBase_length", 500);
             GMapMarkerBase.DisplayCOG = Settings.Instance.GetBoolean("GMapMarkerBase_DisplayCOG", true);
@@ -4652,12 +4701,15 @@ namespace MissionPlanner
             {
                 case preflightStatus.notStarted:
                     annunciator1.setStatus("PRFLT", Stat.ALERT);
+                    if (!supervisor) protarComm.outQueue[0].Enqueue(protarComm.createPacket(packetID.preflightChanged,(byte)preflightStatus.notStarted));
                     break;
                 case preflightStatus.inProgress:
                     annunciator1.setStatus("PRFLT", Stat.WARNING);
+                    if (!supervisor) protarComm.outQueue[0].Enqueue(protarComm.createPacket(packetID.preflightChanged, (byte)preflightStatus.inProgress));
                     break;
                 case preflightStatus.finished:
                     annunciator1.setStatus("PRFLT", Stat.NOMINAL);
+                    if (!supervisor) protarComm.outQueue[0].Enqueue(protarComm.createPacket(packetID.preflightChanged, (byte)preflightStatus.finished));
                     break;
                 default:
                     break;
@@ -4675,6 +4727,7 @@ namespace MissionPlanner
                     break;
                 case 2:
                     annunciator1.setStatus("AIRSPD", Stat.NOMINAL);
+                    if (!supervisor) protarComm.outQueue[0].Enqueue(protarComm.createPacket(packetID.airpseedCalibrated));
                     break;
                 default:
                     break;
@@ -4687,6 +4740,11 @@ namespace MissionPlanner
         {
             FlightData.updatePayloadState(payloadForm.plStat);
             //Also update the status
+
+            byte[] setup = new byte[] { 0, 0, 0, 0,
+                                        0, 0, 0, 0,
+                                        0, 0};
+
             foreach (Payload from in payloadForm.plStat)
             {
                 foreach (Payload to in payloadSetup)
@@ -4695,13 +4753,14 @@ namespace MissionPlanner
                     {
                         to.state = from.state;
                         to.type = from.type;
+
+                        setup[(byte)from.pos] = (byte)from.type;
+
                     }
                 }
             }
 
-            //Send out packet to supervisor station about update
-            // TODO: add outbound packet
-
+            protarComm.outQueue[1].Enqueue(protarComm.createPacket(packetID.payloadSetup, setup));
 
         }
 
@@ -4762,7 +4821,7 @@ namespace MissionPlanner
                     f = airspeedForm;
                     break;
                 case "PRFLT":
-                    f = prefForm;
+                    if (!supervisor) f = prefForm;
                     break;
                 case "MSG":
                     f = msgForm;
@@ -4865,15 +4924,55 @@ namespace MissionPlanner
 
         }
 
-
         private void updateSupervisorComms()
+        {
+            if (!protarComm.isRunning) return;
+
+            if (supervisor)
+            {
+                updateSupervisorServerComms();
+            }
+            else
+            {
+                updateSupervisorClientComms();
+            }
+
+
+        }
+
+        private void updateSupervisorServerComms()
+        {
+
+            if (protarComm.inQueue.Count() > 0)
+            {
+                byte[] command;
+                protarComm.inQueue.TryDequeue(out command);
+                Console.WriteLine("Command dequeued");
+
+                if (command[0] == (byte)packetID.airpseedCalibrated)
+                {
+                    airspeedForm.status = 2;
+                    airspeedStatusChanged(null, null);
+                }
+                else if (command[0] == (byte)packetID.preflightChanged)
+                {
+                    PreflightList.stat = (preflightStatus) command[1];
+                    preflightStatusChanged(null, null);
+                }
+
+            }
+
+        }
+
+
+        private void updateSupervisorClientComms()
         {
             if ((DateTime.Now - lastSupervisorHB) >= TimeSpan.FromSeconds(1))
             {
                 lastSupervisorHB = DateTime.Now;
                 if (protarComm.lastConnectOK)
                 {
-                    protarComm.outQueue[0].Enqueue(protarComm.createPacket(packetID.heartBeat));
+                    protarComm.outQueue[0].Enqueue(protarComm.createPacket(packetID.heartBeat, (byte)nodeID.plane1));
                 }
                 else
                 {
@@ -4923,7 +5022,7 @@ namespace MissionPlanner
                             Console.WriteLine("Term Status");
                             break;
                         case packetID.routeApproved:
-                            Console.WriteLine("Rooute approved");
+                            Console.WriteLine("Route approved");
                             break;
                         case packetID.payloadSetup:
                             foreach (Payload pld in payloadSetup)
@@ -4965,10 +5064,14 @@ namespace MissionPlanner
 
         private void setAnnunciatorInitialState()
         {
+
+
+
+
             annunciator1.setStatus("AIRSPD", Stat.ALERT); airspeedForm.addText("AIRSPEED SENSOR NOT CALIBRATED!");
             annunciator1.setStatus("PRFLT", Stat.ALERT);
-            annunciator1.setStatus("ROUTE", Stat.DISABLED);
-            annunciator1.setStatus("FENCE", Stat.DISABLED);
+            if (!supervisor) annunciator1.setStatus("ROUTE", Stat.DISABLED);
+            if (!supervisor) annunciator1.setStatus("FENCE", Stat.DISABLED);
 
 
             MainV2.instance.BeginInvoke((MethodInvoker)(() =>
@@ -5004,24 +5107,55 @@ namespace MissionPlanner
             }
 
 
-            //Connection Check to enable/disable annunciator
+            ////Connection Check to enable/disable annunciator
+            //if ((DateTime.Now - lastConnectCheck) >= TimeSpan.FromSeconds(1))
+            //{
+
+            //    lastConnectCheck = DateTime.Now;
+            //    var c = comPort.MAV.cs.connected;
+
+            //    MainV2.instance.BeginInvoke((MethodInvoker)(() =>
+            //    {
+
+            //        if (annunciator1.Enabled != c)
+            //            annunciator1.Enabled = c;
+
+            //    }));
+            //}
+
             if ((DateTime.Now - lastConnectCheck) >= TimeSpan.FromSeconds(1))
             {
 
                 lastConnectCheck = DateTime.Now;
-                var c = comPort.MAV.cs.connected;
-
                 MainV2.instance.BeginInvoke((MethodInvoker)(() =>
                 {
+                    annunciator1.Enabled = true;
+                    if (comPort.MAV.cs.connected)
+                    {
+                        annunciator1.setStatus("COMM", Stat.NOMINAL);
+                        annunciator1.setStatus("ENGINE", Stat.NOMINAL);
+                        annunciator1.setStatus("FUEL", Stat.NOMINAL);
+                        annunciator1.setStatus("MAG", Stat.NOMINAL);
+                        annunciator1.setStatus("CHUTE", Stat.NOMINAL);
+                        annunciator1.setStatus("MSG", Stat.NOMINAL);
 
-                    if (annunciator1.Enabled != c)
-                            annunciator1.Enabled = c;
 
+                        //annunciator1.Enabled = true;
+                    }
+                    else
+                    {
+                        //annunciator1.Enabled = false;
+                        annunciator1.setStatus("COMM", Stat.ALERT);
+                    }
                 }));
-            }
 
-            //Id we disconnected then all buttons are disabled
-            if (!comPort.MAV.cs.connected) return;
+
+               }
+
+
+
+                //Id we disconnected then all buttons are disabled
+                if (!comPort.MAV.cs.connected) return;
 
             //Status (Safety pin)
 

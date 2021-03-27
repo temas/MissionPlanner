@@ -5598,7 +5598,20 @@ namespace MissionPlanner.GCSViews
             MainH.Panel2.Controls.Add(tableMap);
         }
 
+        private void bCatapultAllocated_Click(object sender, EventArgs e)
+        {
+            if (MainV2.supervisor) protarComm.outQueue[1].Enqueue(protarComm.createPacket(packetID.catapultAssigned));
+        }
 
+        private void bCatapultReady_Click(object sender, EventArgs e)
+        {
+            if (MainV2.supervisor) protarComm.outQueue[1].Enqueue(protarComm.createPacket(packetID.catapultReady));
+        }
 
+        private void btnMotorMax_Click(object sender, EventArgs e)
+        {
+            if (MainV2.supervisor) protarComm.outQueue[1].Enqueue(protarComm.createPacket(packetID.motorAtMax));
+
+        }
     }
 }

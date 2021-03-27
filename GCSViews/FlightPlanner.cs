@@ -704,6 +704,12 @@ namespace MissionPlanner.GCSViews
             frmProgressReporter.Dispose();
 
             MainMap.Focus();
+
+            if (MainV2.supervisor)
+            {
+                protarComm.outQueue[(byte)nodeID.plane1].Enqueue(protarComm.createPacket(packetID.routeUploaded));
+            }
+
         }
 
         /// <summary>
@@ -1842,6 +1848,11 @@ namespace MissionPlanner.GCSViews
             frmProgressReporter.Dispose();
 
             MainMap.Focus();
+
+            if (MainV2.supervisor)
+            {
+                protarComm.outQueue[(byte)nodeID.plane1].Enqueue(protarComm.createPacket(packetID.routeUploaded));
+            }
         }
 
         private double calcpolygonarea(List<PointLatLng> polygon)
@@ -3593,6 +3604,12 @@ namespace MissionPlanner.GCSViews
             {
                 CustomMessageBox.Show("Failed to send new fence points " + ex, Strings.ERROR);
             }
+
+            if (MainV2.supervisor)
+            {
+                protarComm.outQueue[(byte)nodeID.plane1].Enqueue(protarComm.createPacket(packetID.fenceUploaded));
+            }
+
         }
 
         private List<Locationwp> GetCommandList()
