@@ -401,7 +401,7 @@ namespace MissionPlanner.GCSViews
                 }
             }
 
-            CheckBatteryShow();
+            //CheckBatteryShow();
 
             // make sure the hud user items/warnings/checklist are using the current state
             HUD.Custom.src = MainV2.comPort.MAV.cs;
