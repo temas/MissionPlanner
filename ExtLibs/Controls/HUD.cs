@@ -92,7 +92,7 @@ namespace MissionPlanner.Controls
 
         [System.ComponentModel.Browsable(true), DefaultValue(true)]
         public bool displayfuellevel { get; set; }
-        
+
         [System.ComponentModel.Browsable(true), DefaultValue(true)]
         public bool displaysysid { get; set; }
 
@@ -158,7 +158,7 @@ namespace MissionPlanner.Controls
                             displayspeed =
                                 displayalt =
                                     displayconninfo =
-                                      displaysysid = 
+                                      displaysysid =
                                         displayxtrack = displayrollpitch = displaygps = bgon = hudon = batteryon = displayfuellevel = true;
 
             displayAOASSA = false;
@@ -2640,7 +2640,8 @@ namespace MissionPlanner.Controls
                 }
 
                 // battery
-                if (batteryon)
+                //if (batteryon)
+                if (false)
                 {
                     graphicsObject.ResetTransform();
 

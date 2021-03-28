@@ -722,6 +722,7 @@ namespace MissionPlanner
         public static bool annunciatorUndocked = false;
 
         public static bool supervisor = false;
+        public static bool maxim = false;
 
 
         public MainV2()
@@ -3597,6 +3598,10 @@ namespace MissionPlanner
                     logbrowse.BringToFront();
                 }
 
+                if (cmds.ContainsKey("max"))
+                {
+                    maxim = true;
+                }
 
                 if (cmds.ContainsKey("protarserver"))
                 {
@@ -3799,7 +3804,7 @@ namespace MissionPlanner
 
             setAnnunciatorInitialState();
 
-            if (!supervisor)
+            if (!supervisor && maxim)
             {
                 MainV2.instance.FormBorderStyle = FormBorderStyle.None;
                 MainV2.instance.WindowState = FormWindowState.Maximized;
@@ -4791,6 +4796,18 @@ namespace MissionPlanner
 
             //if a button is disabled then we cannot click on the button :)
 
+
+            //Hide fence or Route
+            if (annunciator1.clickedButtonName!= "FENCE" && annunciator1.clickedButtonName!="ROUTE")
+            {
+                if (FlightData.plannerShown)
+                {
+                    FlightData.but_Click(null, EventArgs.Empty);
+                }
+            }
+
+
+
             switch (annunciator1.clickedButtonName)
             {
                 case "EKF":
@@ -4869,6 +4886,7 @@ namespace MissionPlanner
                 }
                 else
                 {
+                    hideAllForms();
                     FlightData.flightPlannerToolStripMenuItem_Click(null, EventArgs.Empty);
                     FlightPlanner.GeoFencedownloadToolStripMenuItem_Click(null, EventArgs.Empty);
                 }
@@ -4884,6 +4902,7 @@ namespace MissionPlanner
                 }
                 else
                 {
+                    hideAllForms();
                     FlightData.flightPlannerToolStripMenuItem_Click(null, EventArgs.Empty);
                     FlightPlanner.cmb_missiontype.SelectedIndex = 0;
                     FlightPlanner.BUT_read_Click(null, EventArgs.Empty);
@@ -5189,7 +5208,7 @@ namespace MissionPlanner
                 }));
 
 
-                
+
 
 
             }
