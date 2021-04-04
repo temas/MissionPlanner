@@ -84,13 +84,13 @@ namespace MissionPlanner.Controls
 
                 LinearGradientBrush linear = new LinearGradientBrush(outside, BGGradTop, BGGradBot, LinearGradientMode.Vertical);
 
-                Pen mypen = new Pen(Outline, 1);
+                Pen mypen;
 
                 GraphicsPath outline = new GraphicsPath();
 
                 float wid = this.Height / 3f;
 
-                wid = 1;
+                //wid = 12;
 
                 int width = this.Width - 1;
                 int height = this.Height - 1;
@@ -110,6 +110,14 @@ namespace MissionPlanner.Controls
                 // left line
                 outline.AddLine(0, height - wid, 0, wid - wid / 2);
 
+                if (_mouseover)
+                {
+                    mypen = new Pen(Color.White, 4);
+                }
+                else
+                {
+                    mypen = new Pen(Outline, 1);
+                }
 
                 gr.FillPath(linear, outline);
 
@@ -117,18 +125,12 @@ namespace MissionPlanner.Controls
 
                 SolidBrush mybrush = new SolidBrush(TextColor);
 
-                if (_mouseover)
-                {
-                    SolidBrush brush = new SolidBrush(ColorMouseOver);
+                //if (_mouseover)
+                //{
+                //    SolidBrush brush = new SolidBrush(ColorMouseOver);
 
-                    gr.FillPath(brush, outline);
-                }
-                if (_mousedown)
-                {
-                    SolidBrush brush = new SolidBrush(ColorMouseDown);
-
-                    gr.FillPath(brush, outline);
-                }
+                //    gr.FillPath(brush, outline);
+                //}
 
                 if (!this.Enabled)
                 {
@@ -138,6 +140,20 @@ namespace MissionPlanner.Controls
                 }
 
 
+                if (_mousedown)
+                {
+                    Image shadow = Image.FromFile("button_shadow_inv.png");
+                    gr.DrawImage(shadow, 0, 0, this.Width, this.Height);
+
+                    //SolidBrush brush = new SolidBrush(ColorMouseDown);
+                    //gr.FillPath(brush, outline);
+                }
+                else
+                {
+                    Image shadow = Image.FromFile("button_shadow.png");
+                    gr.DrawImage(shadow, 0, 0, this.Width, this.Height);
+                }
+
                 StringFormat stringFormat = new StringFormat();
                 stringFormat.Alignment = StringAlignment.Center;
                 stringFormat.LineAlignment = StringAlignment.Center;
@@ -146,7 +162,7 @@ namespace MissionPlanner.Controls
                 int amppos = display.IndexOf('&');
                 if (amppos != -1)
                     display = display.Remove(amppos, 1);
-
+                if (_mousedown) outside = new Rectangle(2, 2, this.Width, this.Height);
                 gr.DrawString(display, this.Font, mybrush, outside, stringFormat);
             }
             catch { }

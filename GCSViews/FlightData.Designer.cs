@@ -196,6 +196,7 @@
             this.gMapControl1 = new MissionPlanner.Controls.myGMAP();
             this.TRK_zoom = new MissionPlanner.Controls.MyTrackBar();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnMotorMax = new MissionPlanner.Controls.MyButton();
             this.bCatapultAllocated = new MissionPlanner.Controls.MyButton();
             this.myButton8 = new MissionPlanner.Controls.MyButton();
             this.bCatapultReady = new MissionPlanner.Controls.MyButton();
@@ -212,7 +213,6 @@
             this.Messagetabtimer = new System.Windows.Forms.Timer(this.components);
             this.bindingSourceGaugesTab = new System.Windows.Forms.BindingSource(this.components);
             this.bindingSourceStatusTab = new System.Windows.Forms.BindingSource(this.components);
-            this.btnMotorMax = new MissionPlanner.Controls.MyButton();
             ((System.ComponentModel.ISupportInitialize)(this.MainH)).BeginInit();
             this.MainH.Panel1.SuspendLayout();
             this.MainH.Panel2.SuspendLayout();
@@ -669,6 +669,7 @@
             // 
             // quickView1
             // 
+            this.quickView1.BackColor = System.Drawing.SystemColors.Control;
             this.quickView1.ContextMenuStrip = this.contextMenuStripQuickView;
             this.quickView1.DataBindings.Add(new System.Windows.Forms.Binding("number", this.bindingSourceQuickTab, "alt", true));
             this.quickView1.desc = "alt";
@@ -2512,6 +2513,13 @@
             this.panel1.Controls.Add(this.CB_tuning);
             this.panel1.Name = "panel1";
             // 
+            // btnMotorMax
+            // 
+            resources.ApplyResources(this.btnMotorMax, "btnMotorMax");
+            this.btnMotorMax.Name = "btnMotorMax";
+            this.btnMotorMax.UseVisualStyleBackColor = true;
+            this.btnMotorMax.Click += new System.EventHandler(this.btnMotorMax_Click);
+            // 
             // bCatapultAllocated
             // 
             resources.ApplyResources(this.bCatapultAllocated, "bCatapultAllocated");
@@ -2635,13 +2643,6 @@
             // bindingSourceStatusTab
             // 
             this.bindingSourceStatusTab.DataSource = typeof(MissionPlanner.CurrentState);
-            // 
-            // btnMotorMax
-            // 
-            resources.ApplyResources(this.btnMotorMax, "btnMotorMax");
-            this.btnMotorMax.Name = "btnMotorMax";
-            this.btnMotorMax.UseVisualStyleBackColor = true;
-            this.btnMotorMax.Click += new System.EventHandler(this.btnMotorMax_Click);
             // 
             // FlightData
             // 

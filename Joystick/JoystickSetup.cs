@@ -281,7 +281,7 @@ namespace MissionPlanner.Joystick
             }
             catch
             {
-                
+
             }
 
             try
@@ -489,7 +489,7 @@ namespace MissionPlanner.Joystick
             }
         }
 
-       
+
         private void JoystickSetup_FormClosed(object sender, FormClosedEventArgs e)
         {
             timer1.Stop();
