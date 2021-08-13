@@ -1458,7 +1458,7 @@ namespace MissionPlanner
             this.MenuConnect.Image = global::MissionPlanner.Properties.Resources.light_connect_icon;
         }
 
-        public void doConnect(MAVLinkInterface comPort, string portname, string baud, bool getparams = true)
+        public void doConnect(MAVLinkInterface comPort, string portname, string baud, bool getparams = false)
         {
             bool skipconnectcheck = false;
             log.Info("We are connecting to " + portname + " " + baud);
@@ -1624,7 +1624,7 @@ namespace MissionPlanner
                     return;
                 }
 
-                if (getparams)
+                if (false && getparams)
                 {
                     var ftpfile = false;
                     if ((MainV2.comPort.MAV.cs.capabilities & (int) MAVLink.MAV_PROTOCOL_CAPABILITY.FTP) > 0)
@@ -2814,8 +2814,8 @@ namespace MissionPlanner
                                     // poll only when not armed
                                     if (!port.MAV.cs.armed)
                                     {
-                                        port.getParamPoll();
-                                        port.getParamPoll();
+                                        //port.getParamPoll();
+                                        //port.getParamPoll();
                                     }
                                 }
                                 catch
