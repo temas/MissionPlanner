@@ -547,17 +547,37 @@ namespace MissionPlanner.ArduPilot.Mavlink
             log.InfoFormat("GetFile {0}-{1} {2}", _sysid, _compid, file);
             Progress?.Invoke("Opening file " + file, -1);
             kCmdResetSessions();
+            uint32_t remote_crc = 0;
+            if (!kCmdCalcFileCRC32(file, ref remote_crc, cancel))
+            {
+                log.Info($"Failed to calculate the CRC for {file}");
+                return null;
+            }
+
             kCmdOpenFileRO(file, out var size, cancel);
             if (size == -1)
                 return null;
+            Progress?.Invoke("opened, starting burst read.", -1);
             MemoryStream answer;
             if (!burst)
                 answer = kCmdReadFile(file, size, cancel, readsize);
             else
                 answer = kCmdBurstReadFile(file, size, cancel, readsize);
+            //if (!VerifyFileCRC(file, answer, remote_crc)) return null;
             return answer;
         }
 
+        public bool VerifyFileCRC(string file, MemoryStream ms, uint32_t good_crc)
+        {
+            uint32_t crc = 0;
+            crc = crc_crc32(crc, ms.ToArray());
+            if (good_crc != crc)
+            {
+                log.Error($"The file {file} did not match its crc {good_crc}:{crc}");
+                return false;
+            }
+            return true;
+        }
         public void UploadFile(string file, string srcfile, CancellationTokenSource cancel)
         {
             var size = 0;
@@ -580,7 +600,7 @@ namespace MissionPlanner.ArduPilot.Mavlink
                 session = 0
             };
             fileTransferProtocol.payload = payload;
-            log.Info("get " + payload.opcode + " " + file);
+            //log.Info("get " + payload.opcode + " " + file);
             var timeout = new RetryTimeout(5, 2000);
             size = -1;
             Exception ex = null;
@@ -642,6 +662,7 @@ namespace MissionPlanner.ArduPilot.Mavlink
                 // only ack's
                 if (ftphead.opcode != FTPOpcode.kRspAck)
                     return true;
+                log.Debug($"FTP RO Resp: {ftphead.data[0]} {ftphead.data[1]} {ftphead.data[2]} {ftphead.data[3]}");
                 localsize = BitConverter.ToInt32(ftphead.data, 0);
                 log.Info(ftphead.req_opcode + " " + file + " " + localsize);
                 timeout.Complete = true;
@@ -682,11 +703,12 @@ namespace MissionPlanner.ArduPilot.Mavlink
                 size = readsize
             };
             fileTransferProtocol.payload = payload;
-            log.Info("get " + payload.opcode + " " + file + " " + size);
-            Progress?.Invoke(file, 0);
+            //log.Info("get " + payload.opcode + " " + file + " " + size);
             Exception ex = null;
+            // Offset to message
             SortedList<uint, uint> chunkSortedList = new SortedList<uint, uint>();
             MemoryStream answer = new MemoryStream(size);
+            uint32_t finalSize = 0;
             var sub = _mavint.SubscribeToPacketType(MAVLink.MAVLINK_MSG_ID.FILE_TRANSFER_PROTOCOL, message =>
             {
                 if (cancel != null && cancel.IsCancellationRequested)
@@ -735,6 +757,7 @@ namespace MissionPlanner.ArduPilot.Mavlink
                     answer.Length == 0 && ftphead.offset > 0 && size < 239)
                     return true;
                 // we have lost data - use retry after timeout
+                /* temas:  Don't bail early, we'll sort and store later
                 if (answer.Position != ftphead.offset)
                 {
                     seq_no = (ushort)(ftphead.seq_number + 1);
@@ -742,16 +765,18 @@ namespace MissionPlanner.ArduPilot.Mavlink
                     fileTransferProtocol.payload = payload;
                     timeout.RetriesCurrent = 0;
                     return true;
-                }
+                }*/
 
                 // got a valid segment, so reset retrys
                 timeout.RetriesCurrent = 0;
                 timeout.ResetTimeout();
 
-                chunkSortedList[ftphead.offset] = ftphead.offset + ftphead.size;
+                chunkSortedList[ftphead.offset] = ftphead.size;
 
                 answer.Seek(ftphead.offset, SeekOrigin.Begin);
                 answer.Write(ftphead.data, 0, ftphead.size);
+                finalSize += ftphead.size;
+                //log.Debug($"Add size {ftphead.size} = {finalSize} @ {ftphead.offset}");
                 timeout.ResetTimeout();
                 //log.Debug(ftphead);
                 seq_no = (ushort)(ftphead.seq_number + 1);
@@ -790,8 +815,54 @@ namespace MissionPlanner.ArduPilot.Mavlink
                 _mavint.sendPacket(fileTransferProtocol, _sysid, _compid);
             };
             timeout.DoWork();
-            Progress?.Invoke(file, 100);
             _mavint.UnSubscribeToPacketType(sub);
+
+            // Reconstruct in here
+            uint offset = 0;
+            var lastEntry = chunkSortedList.Last();
+            uint maxSize = lastEntry.Key + lastEntry.Value;
+            while (offset < size)
+            {
+                Progress?.Invoke($"filling gaps", (int)((float)(offset / maxSize) * 100));
+                var piece = chunkSortedList.ContainsKey(offset);
+                if (piece)
+                {
+                    //log.Debug($"Good at {offset} adding {chunkSortedList[offset]}");
+                    offset += chunkSortedList[offset];
+                    continue;
+                }
+                
+                log.Debug($"Need to get missing burst part at {offset}");
+
+                var resp = kCmdReadFilePiece(file, readsize, cancel, offset, 5, 1000);
+                if (resp.ErrorCode == FTPErrorCode.kErrEOF)
+                {
+                    log.Info("Got EOF, filling done");
+                    break;
+                }
+                if (resp.ErrorCode != FTPErrorCode.kErrNone)
+                {
+                    log.Info($"Error during read file: {resp.ErrorCode}");
+                }
+                if (resp.ms == null)
+                {
+                    log.Info($"Never got data for offset {offset}");
+                    ex = new Exception($"Mavftp failed for offset: {offset}");
+                    break;
+                }
+
+                answer.Seek(offset, SeekOrigin.Begin);
+                resp.ms.CopyTo(answer);
+                finalSize += (uint32_t)resp.ms.Length;
+                //log.Debug($"Added to final {resp.ms.Length} = {finalSize} @ {offset}");
+
+                offset += (uint32_t)resp.ms.Length;
+            }
+
+            answer.SetLength(finalSize);
+            log.Debug($"burst file done, length: {finalSize}");
+
+            Progress?.Invoke("done", 100);
             answer.Position = 0;
             if (ex != null)
                 throw ex;
@@ -1377,19 +1448,19 @@ namespace MissionPlanner.ArduPilot.Mavlink
             return ans;
         }
 
-        public MemoryStream kCmdReadFile(string file, int size, CancellationTokenSource cancel, byte readsize = 239)
+        public MemoryStream kCmdReadFile(string file, int size, CancellationTokenSource cancel, byte readsize = 239, uint offset = 0, int retries=30, int timeout_ms=1000)
         {
-            RetryTimeout timeout = new RetryTimeout();
+            RetryTimeout timeout = new RetryTimeout(retries, timeout_ms);
             var payload = new FTPPayloadHeader()
             {
                 opcode = FTPOpcode.kCmdReadFile,
                 seq_number = seq_no++,
-                offset = 0,
+                offset = offset,
                 session = 0,
                 size = readsize
             };
             fileTransferProtocol.payload = payload;
-            log.Info("get " + payload.ToJSON() + " " + file + " " + size);
+            log.Info("cmdreadfile get " + payload.ToJSON() + " " + file + " " + size);
             Progress?.Invoke(file, 0);
             Exception ex = null;
             MemoryStream answer = new MemoryStream(size);
@@ -1404,7 +1475,7 @@ namespace MissionPlanner.ArduPilot.Mavlink
 
                 var msg = (MAVLink.mavlink_file_transfer_protocol_t) message.data;
                 FTPPayloadHeader ftphead = msg.payload;
-                //log.Debug("got " + ftphead.ToJSON());
+                log.Debug("got " + ftphead.ToJSON());
                 // error at far end
                 if (ftphead.opcode == FTPOpcode.kRspNak)
                 {
@@ -1437,15 +1508,19 @@ namespace MissionPlanner.ArduPilot.Mavlink
 
                 // not for us or bad seq no
                 if (payload.opcode != ftphead.req_opcode || payload.seq_number + 1 != ftphead.seq_number)
+                {
+                    log.Debug("bad seq or target for read file");
                     return true;
+                }
                 // only ack's
                 if (ftphead.opcode != FTPOpcode.kRspAck)
                     return true;
-                // log.Debug(ftphead.req_opcode + " " + file + " " + ftphead.size + " " + ftphead.offset);
+                log.Debug(ftphead.req_opcode + " " + file + " " + ftphead.size + " " + ftphead.offset);
                 // we have lost data - use retry after timeout
-                if (answer.Position != ftphead.offset)
+                if (offset != ftphead.offset)
                 {
-                    timeout.RetriesCurrent = 0;
+                    timeout.RetriesCurrent = 999;
+                    log.Info("Got the wrong offset for a read file");
                     return true;
                 }
 
@@ -1453,9 +1528,9 @@ namespace MissionPlanner.ArduPilot.Mavlink
                 timeout.RetriesCurrent = 0;
                 timeout.ResetTimeout();
 
-                answer.Seek(ftphead.offset, SeekOrigin.Begin);
+                answer.Seek(0, SeekOrigin.Begin);
                 answer.Write(ftphead.data, 0, ftphead.size);
-                Progress?.Invoke(file, (int) ((float) payload.offset / size * 100.0));
+                //Progress?.Invoke(file, (int) ((float) payload.offset / size * 100.0));
                 if (ftphead.offset + ftphead.size >= size)
                 {
                     timeout.Complete = true;
@@ -1489,6 +1564,120 @@ namespace MissionPlanner.ArduPilot.Mavlink
             if (ex != null)
                 throw ex;
             return answer;
+        }
+
+        public (FTPErrorCode ErrorCode, MemoryStream ms) kCmdReadFilePiece(string file, byte size, CancellationTokenSource cancel, uint offset = 0, int retries = 30, int timeout_ms = 1000)
+        {
+            RetryTimeout timeout = new RetryTimeout(retries, timeout_ms);
+            var payload = new FTPPayloadHeader()
+            {
+                opcode = FTPOpcode.kCmdReadFile,
+                seq_number = seq_no++,
+                offset = offset,
+                session = 0,
+                size = size
+            };
+            fileTransferProtocol.payload = payload;
+            log.Info("cmdreadfilepiece get " + payload.ToJSON() + " " + file + " " + size);
+            Progress?.Invoke(file, 0);
+            Exception ex = null;
+            MemoryStream answer = new MemoryStream(size);
+            FTPErrorCode errorcode = FTPErrorCode.kErrNone;
+            
+            var sub = _mavint.SubscribeToPacketType(MAVLink.MAVLINK_MSG_ID.FILE_TRANSFER_PROTOCOL, message =>
+            {
+                if (cancel != null && cancel.IsCancellationRequested)
+                {
+                    timeout.RetriesCurrent = 999;
+                    log.Info($"cancel {payload.opcode}");
+                    return true;
+                }
+
+                var msg = (MAVLink.mavlink_file_transfer_protocol_t)message.data;
+                FTPPayloadHeader ftphead = msg.payload;
+                log.Debug("got " + ftphead.ToJSON());
+                // error at far end
+                if (ftphead.opcode == FTPOpcode.kRspNak)
+                {
+                    errorcode = (FTPErrorCode)ftphead.data[0];
+                    if (errorcode == FTPErrorCode.kErrFailErrno)
+                    {
+                        var _ftp_errno = (errno)ftphead.data[1];
+                        log.Error(ftphead.req_opcode + " " + errorcode + " " + _ftp_errno);
+                        timeout.Retries = 0;
+                        ex = new Exception("Mavftp responded - " + ftphead.req_opcode + " " + errorcode + " " +
+                                           _ftp_errno);
+                    }
+                    else
+                    {
+                        log.Error(ftphead.req_opcode + " " + errorcode);
+                    }
+
+                    if (errorcode == FTPErrorCode.kErrFail)
+                    {
+                        //stop trying
+                        timeout.Retries = 0;
+                        ex = new Exception("Mavftp responded - Err Fail");
+                    }
+
+                    if (errorcode == FTPErrorCode.kErrEOF)
+                        timeout.Complete = true;
+
+                    return true;
+                }
+
+                // not for us or bad seq no
+                if (payload.opcode != ftphead.req_opcode || payload.seq_number + 1 != ftphead.seq_number)
+                {
+                    log.Debug("bad seq or target for read file");
+                    return true;
+                }
+                // only ack's
+                if (ftphead.opcode != FTPOpcode.kRspAck)
+                    return true;
+                log.Debug(ftphead.req_opcode + " " + file + " " + ftphead.size + " " + ftphead.offset);
+                // we have lost data - use retry after timeout
+                if (offset != ftphead.offset)
+                {
+                    timeout.RetriesCurrent = 999;
+                    log.Info("Got the wrong offset for a read file");
+                    return true;
+                }
+
+                // got a valid segment, so reset retrys
+                timeout.RetriesCurrent = 0;
+                timeout.ResetTimeout();
+
+                answer.Seek(0, SeekOrigin.Begin);
+                answer.Write(ftphead.data, 0, ftphead.size);
+                if (ftphead.size < size)
+                {
+                    answer.SetLength(ftphead.size);
+                }
+                timeout.Complete = true;
+
+                return true;
+            }, _sysid, _compid);
+            timeout.WorkToDo = () =>
+            {
+                if (cancel != null && cancel.IsCancellationRequested)
+                {
+                    timeout.RetriesCurrent = 999;
+                    log.Info($"cancel {payload.opcode}");
+                    return;
+                }
+                log.Debug("req " + payload.ToJSON());
+                _mavint.sendPacket(fileTransferProtocol, _sysid, _compid);
+            };
+            timeout.DoWork();
+            Progress?.Invoke(file, 100);
+            _mavint.UnSubscribeToPacketType(sub);
+            answer.Position = 0;
+            if (!timeout.Complete)
+                return (FTPErrorCode.kErrNone, null);
+            if (ex != null)
+                throw ex;
+            return (errorcode, answer);
         }
 
         public bool kCmdRemoveDirectory(string file, CancellationTokenSource cancel)
